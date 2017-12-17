@@ -1,0 +1,25 @@
+# ansible-playbook playbook.yml -i hosts -v
+# or if you want to run specifieds roles:
+# ansible-playbook playbook.yml -i hosts -v --tag common
+
+---
+- name: Install OpenLDAP with EduPerson schema 2016
+  hosts: all
+  become: yes
+  vars:
+    name:   testunical
+    domain1: it
+    domain: "{{ name }}.{{ domain1 }}"
+    
+    fqdn: "ldap.{{ domain }}"
+    
+    ldap_basedc: "dc={{ name }},dc={{ domain1 }}"
+    ldap_basedn: "ou=people,dc={{ name }},dc={{ domain1 }}"
+    ldap_binddn: "cn=search,ou=system,dc={{ name }},dc={{ domain1 }}"
+    ldap_pw: slapdsecret
+    # ldap_bind: localhost
+    cert_path: /etc/ssl/certs
+    
+  roles:
+    - { role: slapd, tags: ["slapd"] }    
+
