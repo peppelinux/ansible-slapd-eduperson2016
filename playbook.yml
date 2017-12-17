@@ -3,22 +3,27 @@
 # ansible-playbook playbook.yml -i hosts -v --tag common
 
 ---
-- name: Install OpenLDAP with EduPerson schema 2016
+- name: OpenLDAP with EduPerson schema 2016 memberOf
   hosts: all
   become: yes
   vars:
-    name:   testunical
+    hostname:   testunical
     domain1: it
-    domain: "{{ name }}.{{ domain1 }}"
+    domain: "{{ hostname }}.{{ domain1 }}"
     
     fqdn: "ldap.{{ domain }}"
     
-    ldap_basedc: "dc={{ name }},dc={{ domain1 }}"
-    ldap_basedn: "ou=people,dc={{ name }},dc={{ domain1 }}"
-    ldap_binddn: "cn=search,ou=system,dc={{ name }},dc={{ domain1 }}"
+    cert_path: "/etc/ssl/certs/{{ domain }}"
+    ldap_ca_cert: slapd-cacert.pem
+    ldap_server_cert: slapd-cert.pem
+    ldap_server_key: slapd-key.pem
+    
+    ldap_backend: "mdb"
+    ldap_basedc: "dc={{ hostname }},dc={{ domain1 }}"
+    ldap_basedn: "ou=people,dc={{ hostname }},dc={{ domain1 }}"
+    ldap_binddn: "cn=search,ou=system,dc={{ hostname }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
     # ldap_bind: localhost
-    cert_path: /etc/ssl/certs
     
   roles:
     - { role: slapd, tags: ["slapd"] }    

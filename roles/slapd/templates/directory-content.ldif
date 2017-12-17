@@ -15,7 +15,7 @@ objectClass: inetOrgPerson
 cn: search
 sn: Search
 givenName: Search
-userPassword: password
+userPassword: {{ ldap_pw }}
 
 dn: cn=lab,ou=groups,{{ ldap_basedc }}
 cn: lab

@@ -13,6 +13,15 @@
   file: path=/var/lib/ldap state=absent
   when: cleanup is defined
 
+- name: Remove certs
+  file: path="{{ cert_path }}" state=absent
+  when: cleanup is defined
+
+- name: Uninstalled
+  #fail: msg="Succesfully purged"
+  meta: end_play
+  when: cleanup is defined
+
   # END CLEANUPS
 
 - name: Check debconf for slapd entries
@@ -35,9 +44,6 @@
 - name: Install slapd
   apt: name=slapd state=present
 
-- name: Add slapd user to ssl-cert group
-  user: name=openldap groups=ssl-cert
-
 - name: Install ldap-utils
   apt: name=ldap-utils state=present
 
@@ -59,7 +65,7 @@
   register: memberof_overlay
 
 - name: Render template memberof-overlay.ldif
-  copy: 
+  template: 
     src: roles/slapd/files/memberof-overlay.ldif
     dest: /tmp/memberof-overlay.ldif
 
@@ -91,20 +97,9 @@
     state: absent
     path: "/tmp/eduperson-201602.ldif"
 
-# next task should return output like:
-# dn: cn=search,ou=system,dc=example,dc=org
-# dn: uid=mario,ou=people,dc=example,dc=org
-# ...
 - name: Search Directory for users
   shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b {{ ldap_basedc }} objectClass=inetOrgPerson dn"
   register: users_in_people_ou
-
-# slapd print all, standard password encoding is SSHA printed in base64 encoding
-# ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b "dc=unical,dc=it" -W "(objectclass=*)"
-
-# fare render template roles/slapd/files/directory-content.ldif PRIMA !
-# fare render template roles/slapd/files/directory-config.ldif PRIMA !
-# con annessi certificati !
 
 - name: Render template directory-content.ldif
   template: 
@@ -123,6 +118,21 @@
 - name: Restart slapd
   service: name=slapd state=restarted enabled=yes
 
+- name: "Ensures {{ cert_path }} dir exists"
+  file: path="{{ cert_path }}" state=directory
+
+- name: Copy certs
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ cert_path }}/"
+    owner: openldap
+    mode: 640
+  with_fileglob:
+    - roles/slapd/files/certs/*
+
+- name: Fix certs permissions
+  file: path="{{ cert_path }}" owner=openldap group=root mode=0740 state=directory recurse=yes
+    
 - name: Render template directory-config-tls.ldif
   template: 
     src: roles/slapd/templates/directory-config-tls.ldif
@@ -130,6 +140,12 @@
 
 - name: Apply Directory config TLS
   command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/directory-config-tls.ldif"
+
+- replace:
+    path: /etc/default/slapd
+    regexp: 'SLAPD_SERVICES="ldap:/// ldapi:///"'
+    replace: 'SLAPD_SERVICES="ldap://127.0.0.1:389/ ldaps:/// ldapi:///"'
+    backup: yes
 
 - name: Restart slapd
   service: name=slapd state=restarted enabled=yes

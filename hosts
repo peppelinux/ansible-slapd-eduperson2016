@@ -1,4 +1,3 @@
-#localhost ansible_connection=local
 # http://docs.ansible.com/ansible/intro_patterns.html#patterns
 # http://docs.ansible.com/ansible/playbooks_best_practices.html
 
@@ -6,11 +5,4 @@
 # ssh-keygen -t rsa
 # ssh-copy-id -i ~/.ssh/id_rsa_idp.pub idp_ip
 
-# ssh-keygen -t rsa
-# ssh-copy-id -i ~/.ssh/id_rsa_sp.pub sp_ip
-
-[idp]
-10.0.3.32
-
-#[sp]
-#10.0.4.22
+localhost ansible_connection=local

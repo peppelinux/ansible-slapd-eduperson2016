@@ -1,13 +1,13 @@
 dn: cn=config
 changetype:modify
 replace: olcTLSCACertificateFile
-olcTLSCACertificateFile: /etc/ssl/certs/cacert.pem
+olcTLSCACertificateFile: {{ cert_path }}/{{ ldap_ca_cert }}
 -
 replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/ssl/certs/{{ fqdn }}-cert.pem
+olcTLSCertificateFile: {{ cert_path }}/{{ ldap_server_cert }}
 -
 replace: olcTLSCertificateKeyFile
-olcTLSCertificateKeyFile: /etc/ssl/private/{{ fqdn }}-key.pem
+olcTLSCertificateKeyFile: {{ cert_path }}/{{ ldap_server_key }}
 -
 replace: olcLogLevel
 olcLogLevel: 256

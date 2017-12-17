@@ -1,18 +1,18 @@
 dn: cn=config
 changetype:modify
 replace: olcTLSCACertificateFile
-olcTLSCACertificateFile: /etc/ssl/certs/cacert.pem
+olcTLSCACertificateFile: {{ cert_path }}/cacert.pem
 -
 replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/ssl/certs/{{ fqdn }}-cert.pem
+olcTLSCertificateFile: {{ cert_path }}/{{ fqdn }}-cert.pem
 -
 replace: olcTLSCertificateKeyFile
-olcTLSCertificateKeyFile: /etc/ssl/private/{{ fqdn }}-key.pem
+olcTLSCertificateKeyFile: {{ cert_path }}/{{ fqdn }}-key.pem
 -
 replace: olcLogLevel
 olcLogLevel: 256
 
-dn: olcDatabase={1}mdb,cn=config
+dn: olcDatabase={1}mdb{{ ldap_backend }},cn=config
 changeType: modify
 replace: olcAccess
 olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred
