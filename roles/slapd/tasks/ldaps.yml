@@ -1,0 +1,30 @@
+- name: "Ensures {{ cert_path }} dir exists"
+  file: path="{{ cert_path }}" state=directory
+
+- name: Copy certs
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ cert_path }}/"
+    owner: openldap
+    group: ssl-cert
+    mode: 660
+  with_fileglob:
+    - roles/slapd/files/certs/*
+
+- name: Fix certs permissions
+  file: path="{{ cert_path }}" owner=openldap group=ssl-cert mode=0740 state=directory recurse=yes
+
+- name: Render template directory-config-tls.ldif
+  template: 
+    src: roles/slapd/templates/directory-config-tls.ldif
+    dest: /tmp/directory-config-tls.ldif
+
+- name: Apply Directory config TLS
+  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/directory-config-tls.ldif"
+
+- name: "Disable ldap:// and enable ldaps://"
+  replace:
+    path: /etc/default/slapd
+    regexp: 'SLAPD_SERVICES="ldap:/// ldapi:///"'
+    replace: 'SLAPD_SERVICES="ldap://127.0.0.1:389/ ldaps:/// ldapi:///"'
+    backup: yes

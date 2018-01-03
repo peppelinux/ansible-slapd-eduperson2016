@@ -1,0 +1,60 @@
+# modules/plugins
+- name: Load LDAP modules
+  ldap_attr:
+    dn: "cn=module{0},cn=config"
+    name: "olcModuleLoad"
+    values: "{{ item }}"
+  with_items:
+    - "{1}memberof"
+    - "{2}ppolicy"
+  notify:
+   - "Restart slapd"
+
+# memberOf
+- name: Search Directory for memberof overlay
+  shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcOverlay=memberof"
+  register: memberof_overlay
+
+- name: Render template memberof-overlay.ldif
+  template: 
+    src: roles/slapd/templates/memberof-overlay.ldif
+    dest: /tmp/memberof-overlay.ldif
+
+- name: Add memberOf overlay to openldap
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/memberof-overlay.ldif"
+  when: memberof_overlay.stdout == ""
+
+# ppolicy schema
+- name: "Check Password Policy schema on openLDAP and store the result on 'ppolicy_schema' ansible variable"
+  shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=schema,cn=config cn=*ppolicy dn"
+  register: ppolicy_schema
+  changed_when: false
+
+- name: "Enable Password Policy Schema on OpenLDAP"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/ppolicy.ldif"
+  when: ppolicy_schema.stdout == ""
+
+# ppolicy overlay configuration
+- name: Search Directory for ppolicy overlay
+  shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcOverlay=ppolicy"
+  register: ppolicy_overlay
+
+- name: Render template ppolicy-overlay.ldif
+  template: 
+    src: roles/slapd/templates/ppolicy-overlay.ldif
+    dest: /tmp/ppolicy-overlay.ldif
+
+- name: Add ppolicy overlay to openldap
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/ppolicy-overlay.ldif"
+  when: ppolicy_overlay.stdout == ""
+
+- name: Render template ppolicy-entry.ldif
+  template: 
+    src: roles/slapd/templates/ppolicy-entry.ldif
+    dest: /tmp/ppolicy-entry.ldif
+
+- name: Add ppolicy entry
+  command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }} -f /tmp/ppolicy-entry.ldif"
+  when: ppolicy_overlay.stdout == ""
+
+  

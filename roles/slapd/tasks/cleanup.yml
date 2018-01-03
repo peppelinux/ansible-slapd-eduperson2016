@@ -1,0 +1,20 @@
+- name: Stop slapd
+  service: name=slapd state=stopped enabled=false
+  when: cleanup is defined
+  ignore_errors: yes
+  
+- name: Uninstall slapd
+  apt: name=slapd state=absent purge=yes
+  when: cleanup is defined
+
+- name: Remove /var/lib/ldap
+  file: path=/var/lib/ldap state=absent
+  when: cleanup is defined
+
+- name: Remove certs
+  file: path="{{ cert_path }}" state=absent
+  when: cleanup is defined
+
+- name: Uninstalled
+  meta: end_play
+  when: cleanup is defined

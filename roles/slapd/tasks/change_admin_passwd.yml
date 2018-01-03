@@ -1,0 +1,15 @@
+- name: "Generate ldap admin password hash"
+  command: "/usr/sbin/slappasswd -s {{ ldap_pw }}"
+  register: slapd_admin_password_hash
+  changed_when: false
+
+- name: "Change cn=admin password"
+  ldap_attr:
+    dn: "olcDatabase={1}{{ ldap_backend }},cn=config"
+    name: "{{ item.key }}"
+    values: "{{ item.value }}"
+    state: exact
+  with_dict:
+    olcRootDN: "{{ ldap_pw }}"
+    olcRootPW: "{{ slapd_admin_password_hash.stdout }}"
+  changed_when: false

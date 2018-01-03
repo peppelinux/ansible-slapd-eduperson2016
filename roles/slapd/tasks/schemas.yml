@@ -1,0 +1,38 @@
+- name: "Put eduPerson and SCHAC schema in /root/ldap-configs directory"
+  copy:
+   src: "files/{{ item }}"
+   dest: "/tmp"
+   owner: "root"
+   group: "root"
+   mode: "0644"
+  with_items:
+   - eduperson-201602.ldif
+   - schac-20150413.ldif
+
+# EduPerson2016
+- name: Search Directory for eduperson schema
+  shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=schema,cn=config  cn=*eduperson dn"
+  register: eduperson_schema
+
+- name: Render template eduperson-201602 schema ldif
+  copy: 
+    src: roles/slapd/files/eduperson-201602.ldif
+    dest: /tmp/eduperson-201602.ldif
+
+- name: Add eduperson-201602 schema ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/eduperson-201602.ldif"
+  when: eduperson_schema.stdout == ""
+  notify:
+   - "Restart slapd"
+
+# SCHAC-2015
+- name: "Check the existance of 'SCHAC' schema on openLDAP and store the result on 'schac_schema' ansible variable"
+  shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=schema,cn=config cn=*schac dn"
+  register: schac_schema
+  changed_when: false
+
+- name: "Add 'schac-20150413' schema"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/schac-20150413.ldif"
+  when: schac_schema.stdout == ""
+  notify:
+   - "Restart slapd"

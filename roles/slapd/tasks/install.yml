@@ -1,0 +1,62 @@
+- name: "Install 'debconf-utils' and 'python-ldap' packages"
+  apt:
+   name: "{{ item }}"
+   state: latest
+   update_cache: yes
+  with_items:
+   - debconf-utils
+   - python-ldap
+   - ldap-utils
+   - ssl-cert
+
+- name: Check debconf for slapd entries
+  shell: (debconf-get-selections | grep -q -s slapd); echo $?
+  register: debconf
+  ignore_errors: yes
+
+# check them with `debconf-get-selections | grep slapd`
+- name: "Set OpenLDAP unattended installation parameters"
+  debconf:
+    name: "slapd"
+    question: "{{ item.key }}"
+    vtype: "{{ item.type }}"
+    value: "{{ item.value }}"
+  with_items:
+    - key: slapd/password1
+      type: password
+      value: "{{ ldap_pw }}"
+    - key: slapd/password2
+      type: password
+      value: "{{ ldap_pw }}"
+    - key: slapd/move_old_database
+      type: boolean
+      value: true
+    - key: slapd/domain
+      type: string
+      value: "{{ domain }}"
+    - key: shared/organization
+      type: string
+      value: "{{ org }}"
+    - key: slapd/no_configuration
+      type: boolean
+      value: false
+    - key: slapd/purge_database
+      type: boolean
+      value: false
+    - key: slapd/allow_ldap_v2
+      type: boolean
+      value: false
+    - key: slapd/backend
+      type: select
+      value: "{{ ldap_backend|upper }}"
+  when: debconf.stdout == "1"
+
+- name: Install slapd
+  apt: name=slapd state=present
+
+- name: "Add 'openldap' user 'ssl-cert' group"
+  user:
+   name: openldap
+   groups: ssl-cert
+  notify:
+   - "Restart slapd"

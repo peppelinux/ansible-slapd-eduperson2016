@@ -1,0 +1,7 @@
+# handlers file for openldap
+- name: "Restart slapd"
+  become: yes
+  become_method: sudo
+  service:
+   name: slapd
+   state: restarted

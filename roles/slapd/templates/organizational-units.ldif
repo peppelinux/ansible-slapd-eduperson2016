@@ -1,0 +1,27 @@
+dn: ou=people,{{ ldap_basedc }}
+ou: people
+objectClass: organizationalUnit
+
+dn: ou=groups,{{ ldap_basedc }}
+ou: groups
+objectClass: organizationalUnit
+
+dn: ou=system,{{ ldap_basedc }}
+ou: system
+objectClass: organizationalUnit
+
+dn: ou=policies,{{ ldap_basedc }}
+ou: policies
+objectClass: organizationalUnit
+
+dn: ou=applications,{{ ldap_basedc }}
+ou: applications
+objectClass: organizationalUnit
+
+dn: ou=embedded,{{ ldap_basedc }}
+ou: embedded
+objectClass: organizationalUnit
+
+dn: ou=staging,{{ ldap_basedc }}
+ou: staging
+objectClass: organizationalUnit

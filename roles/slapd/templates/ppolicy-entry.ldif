@@ -1,0 +1,41 @@
+# add_password_policy_entry
+# Password Policy Rule:
+# - The name of the password attribute is "userPassword". (pwdAttribute: userPassword)
+# - The number of seconds that must elapse between modifications allowed to the password is 0. (pwdMinAge: 0)
+#   The Password may be modified whenever and however often is desired.
+# - The number of seconds after which a modified password will expire. (pwdMaxAge: 0)
+#   The Password will not expire.
+# - The minimum number of characters that will be accepted in a password is 8. (pwdMinLength: 8)
+# - The maximum number of used passwords that will be stored in the pwdHistory attribute is 5. (pwdInHistory: 5)
+# - The Users are allowed to change their own passwords. (pwdAllowUserChange: TRUE)
+# - The Users must change their passwords when they first bind to the directory
+#   after a password is set or reset by the  administrator, or not. (pwdMustChange: TRUE)
+# - The User's Account is locked until the account is unlocked by a LDAP Administrator. (pwdLockout: FALSE)
+# - The User can fail at most 5 times his password before his account is locked. (pwdMaxFailure: 5)
+# - The count of consecutive password failures is reset after 30 seconds. (pwdFailureCountInterval: 30)
+# - The password expiry warning messages are returned in bind responses
+#   from 600 seconds (10 minutes) before the expiration of the password. (pwdExpireWarning: 600)
+# - The user must send the current password during a password modification operation. (pwdSafeModify: TRUE)
+#
+# - The User's Account remain locked until a LDAP Administrator unlocks it.
+#   Only a LDAP Administrator may unlock the accounts. (pwdLockoutDuration: 0)
+
+# passwordPolicy.ldif
+dn: cn=default,ou=policies,{{ ldap_basedc }}
+objectClass: pwdPolicy
+objectClass: person
+objectClass: top
+cn: passwordDefault
+sn: passwordDefault
+pwdAttribute: userPassword
+pwdCheckQuality: 0
+pwdMinAge: 0
+pwdMaxAge: 0
+pwdMinLength: 8
+pwdInHistory: 5
+pwdMaxFailure: 8
+pwdLockout: TRUE
+pwdAllowUserChange: TRUE
+pwdExpireWarning: 600
+pwdMustChange: TRUE
+pwdSafeModify: TRUE

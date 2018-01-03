@@ -1,0 +1,13 @@
+dn: cn=search,ou=system,{{ ldap_basedc }}
+objectClass: inetOrgPerson
+cn: search
+sn: Search
+givenName: Search
+userPassword: {{ ldap_pw }}
+
+dn: olcDatabase={1}{{ ldap_backend }},cn=config
+changeType: modify
+add: olcAccess
+olcAccess: {0}to * by dn.exact="cn=search,ou=system,{{ ldap_basedc }}" read 
+    by anonymous auth
+    by self read

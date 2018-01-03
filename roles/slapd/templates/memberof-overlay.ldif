@@ -1,8 +1,9 @@
-dn: cn=module,cn=config
-cn: module
-objectClass: olcModuleList
-olcModuleLoad: memberof
-olcModulePath: /usr/lib/ldap
+# useless because already imported with ansible ldap_add statement
+# dn: cn=module,cn=config
+# cn: module
+# objectClass: olcModuleList
+# olcModuleLoad: memberof
+# olcModulePath: /usr/lib/ldap
 
 dn: olcOverlay={0}memberof,olcDatabase={1}{{ ldap_backend }},cn=config
 objectClass: olcConfig

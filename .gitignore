@@ -1,3 +1,6 @@
 roles/slapd/files/certs/*
 easy-rsa/*
+CA/*
 playbook.retry
+*.pyc
+*.ldif.test

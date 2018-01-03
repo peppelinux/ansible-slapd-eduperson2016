@@ -7,6 +7,7 @@
   hosts: all
   become: yes
   vars:
+    org: unical
     hostname:   testunical
     domain1: it
     domain: "{{ hostname }}.{{ domain1 }}"
@@ -23,8 +24,6 @@
     ldap_basedn: "ou=people,dc={{ hostname }},dc={{ domain1 }}"
     ldap_binddn: "cn=search,ou=system,dc={{ hostname }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
-    # ldap_bind: localhost
     
   roles:
     - { role: slapd, tags: ["slapd"] }    
-
