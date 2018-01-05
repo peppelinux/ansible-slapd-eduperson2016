@@ -9,9 +9,8 @@ This playbook will install a slapd server with:
  - ppolicy overlay
  - TLS support (ldaps://)
 
-You can even import users from a CSV file.
-Globals parameters can be edited in playbook.yml.
-Other aspects about overlays configuration can be edited in
+You can even import users from a CSV file, globals parameters can also be edited in playbook.yml.
+All about overlays configuration can be found in:
 ````
 roles/slapd/templates/*
 ````
@@ -43,11 +42,9 @@ members on the group entry.
 Setup Certificates
 ------------------
 
-In order to use TLS, you must have a certificate. 
-For testing purposes, a self-signed certificate will suffice. 
-To learn more about certificates, see OpenSSL.
-
-Warning: OpenLDAP cannot use a certificate that has a password associated to it.
+In order to use TLS you must have a certificate, for testing purposes 
+a self-signed certificate will suffice. To learn more about certificates, see OpenSSL.
+Remeber that OpenLDAP cannot use a certificate that has a password associated to it.
 
 First create your certificates and put them in roles/files/certs/.
 Then configure their names in playbook variables.
@@ -118,11 +115,11 @@ Create fake users using CSV file
 It would be also possible to create your own custom fake users using a CSV file
 ![Alt text](images/csv.png)
 
-You can create and Map oid to one, or more then one, csv columns. This can be done in csv2ldif.py file.
-It works that if ('name', 'surname') is present in the value of ATTRIBUTES_MAP the csv columns
-will be merged into one oid value. If csv column value is composed by many values separated by commas
+You can create and Map oid to one or more csv columns, this can be done in csv2ldif.py file.
+Csv2ldif.py works this way: if a value like ('name', 'surname') is present in ATTRIBUTES_MAP these csv columns
+will be merged into one oid value, corrisponding to the relative ATTRIBUTES_MAP key. 
+If csv column value is composed by many values separated by commas instead,
 it will create many ldif rows, according to the number of the splitted csv values.
-
 ````
 # csv2ldif.py
 ATTRIBUTES_MAP=OrderedDict([('dn', 'dn'),
@@ -136,18 +133,16 @@ ATTRIBUTES_MAP=OrderedDict([('dn', 'dn'),
                             ('edupersonAffiliation', 'groups')])
 ````
 
-Also customize csv file and then export it in ldif using csv2ldif.
+Edit the users in the csv file and then export them in ldif format using csv2ldif:
 ````
 cd roles/slapd/templates/entries/
 # edit csv file
 nano entries-people.csv
 python csv2ldif.py entries-people.csv > entries-people.ldif
 python csv2ldif.py entries-people.csv
-
 ````
 
-
-It will printed in stdout
+It simply print in stdout in ldif format
 ````
 dn: uid=mario,dc=testunical,dc=it
 objectClass: inetOrgPerson
@@ -255,11 +250,43 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL "+"
 # The subschema is a representation of the available classes and attributes.
 ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL subschemaSubentry
 
-# bind to ldaps://
+# change a normal ldap user password with admin privileges
+ldappasswd -H ldaps://ldap.testunical.it -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
+
+# ldap user change his password by himself
+ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
+````
+
+Remote connections
+------------------
+````
+# bind to ldaps:// on local
 ldapsearch -H ldaps:/// -b "dc=testunical,dc=it" -LLL -D "cn=admin,dc=testunical,dc=it" -w slapdsecret
 
-# remote client authentication test (pubkey must be propagated to clients, hostname must be resolvend at least in /etc/hosts)
+# remote client authentication test (ldap_ca_cert must be copied to clients, hostname must be resolvend at least in /etc/hosts by them)
 ldapsearch -H ldaps://ldap.testunical.it:636 -b "dc=testunical,dc=it" -LLL -D "cn=admin,dc=testunical,dc=it" -w slapdsecret -d 1
+
+# test remote client connection
+ldapwhoami -x -H ldaps://ldap.testunical.it -D "uid=gino,ou=people,dc=testunical,dc=it" -w geu45 -d 1
+````
+
+PPolicy management
+------------------
+````
+# get all locket out accounts
+ldapsearch -H ldaps://ldap.testunical.it -D "cn=admin,dc=testunical,dc=it" -b "ou=people,dc=testunical,dc=it"  -w slapdsecret "pwdAccountLockedTime=*" pwdAccountLockedTime
+
+# unkock
+dn: cn=gino,ou=people,dc=testunical,dc=it
+changetype: modify
+delete: pwdAccountLockedTime
+
+# or pwdReset. It must be then resetted using ldappasswd
+
+dn: cn=gino,ou=people,dc=testunical,dc=it
+changetype: modify
+add: pwdReset
+pwdReset: TRUE
 
 ````
 
@@ -277,9 +304,6 @@ slapadd -vl /etc/openldap/backup_slapd.ldif
 
 # backup config
 slapcat -F /etc/openldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
-
-
-
 ````
 
 [TODO] SQL as Database backend

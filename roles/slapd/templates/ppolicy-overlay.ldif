@@ -11,4 +11,4 @@ objectClass: olcOverlayConfig
 objectClass: olcPPolicyConfig
 objectClass: top
 olcOverlay: ppolicy
-olcPPolicyDefault: cn=default,ou=policies,{{ ldap_basedn }}
+olcPPolicyDefault: cn=default,ou=policies,{{ ldap_basedc }}

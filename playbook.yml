@@ -22,7 +22,7 @@
     ldap_backend: "mdb"
     ldap_basedc: "dc={{ hostname }},dc={{ domain1 }}"
     ldap_basedn: "ou=people,dc={{ hostname }},dc={{ domain1 }}"
-    ldap_binddn: "cn=search,ou=system,dc={{ hostname }},dc={{ domain1 }}"
+    # ldap_binddn: "cn=search,ou=system,dc={{ hostname }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
     
   roles:
