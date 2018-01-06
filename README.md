@@ -7,7 +7,7 @@ This playbook will install a slapd server with:
  - schac-2015 schema
  - memberOf overlay
  - ppolicy overlay
- - TLS support (ldaps://)
+ - SASL TLS (ldaps://)
 
 You can even import users from a CSV file, globals parameters can also be edited in playbook.yml.
 All about overlays configuration can be found in:
@@ -42,14 +42,13 @@ members on the group entry.
 Setup Certificates
 ------------------
 
-In order to use TLS you must have a certificate, for testing purposes 
+In order to use SASL/TLS  you must have certificates, for testing purposes 
 a self-signed certificate will suffice. To learn more about certificates, see OpenSSL.
 Remeber that OpenLDAP cannot use a certificate that has a password associated to it.
 
-First create your certificates and put them in roles/files/certs/.
-Then configure their names in playbook variables.
-
-A script to create your own self signed keys with easy-rsa could be this:
+First of all create your certificates and put them in roles/files/certs/ then 
+configure their names in playbook variables. A script named make_CA.sh can do this automatically, 
+this create your own self signed keys with easy-rsa. Here it is:
 
 ````
 #!/bin/bash
@@ -115,11 +114,11 @@ Create fake users using CSV file
 It would be also possible to create your own custom fake users using a CSV file
 ![Alt text](images/csv.png)
 
-You can create and Map oid to one or more csv columns, this can be done in csv2ldif.py file.
-Csv2ldif.py works this way: if a value like ('name', 'surname') is present in ATTRIBUTES_MAP these csv columns
-will be merged into one oid value, corrisponding to the relative ATTRIBUTES_MAP key. 
+You can create and Map oid to one or more csv columns in the csv2ldif.py file.
+Csv2ldif.py works this way: if a value contains ('name', 'surname') in ATTRIBUTES_MAP the corrisponding  csv columns
+will be merged into one oid value, named with the relative ATTRIBUTES_MAP key. 
 If csv column value is composed by many values separated by commas instead,
-it will create many ldif rows, according to the number of the splitted csv values.
+it will create many ldif rows how the splitted csv values are.
 ````
 # csv2ldif.py
 ATTRIBUTES_MAP=OrderedDict([('dn', 'dn'),
@@ -142,7 +141,7 @@ python csv2ldif.py entries-people.csv > entries-people.ldif
 python csv2ldif.py entries-people.csv
 ````
 
-It simply print in stdout in ldif format
+It simply print the exported ldif format in stdout:
 ````
 dn: uid=mario,dc=testunical,dc=it
 objectClass: inetOrgPerson
@@ -183,7 +182,6 @@ ansible-playbook -i "localhost," -c local playbook.yml -e '{ cleanup: true }'
 
 Play with LDAP administrative's tasks
 -------------------------------------
-
 Commands related to OpenLDAP that begin with ldap (like ldapsearch) are 
 client-side utilities, while commands that begin with slap (like slapcat) are server-side.
 
@@ -252,9 +250,6 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL subschemaSubent
 
 # change a normal ldap user password with admin privileges
 ldappasswd -H ldaps://ldap.testunical.it -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
-
-# ldap user change his password by himself
-ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
 ````
 
 Remote connections
@@ -268,6 +263,9 @@ ldapsearch -H ldaps://ldap.testunical.it:636 -b "dc=testunical,dc=it" -LLL -D "c
 
 # test remote client connection
 ldapwhoami -x -H ldaps://ldap.testunical.it -D "uid=gino,ou=people,dc=testunical,dc=it" -w geu45 -d 1
+
+# ldap user change his password by himself
+ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
 ````
 
 PPolicy management
@@ -328,12 +326,14 @@ olcSqlHasLDAPinfoDnRu: no
 ````
 - create some conditionals in slapd role to manage this feature
 
+
 Hints
 -----
+- ldap:// is disabled, only ldapi:/// and ldaps:/// will be available;
 - Be aware that ldapmodify is sensitive to (trailing) spaces;
-- Login with SASL/EXTERNAL needs a client certificate to be added in its .ldaprc file;
 - ldapadd, ldapsearch, ldapmodify: set debug level with -d 1 or more. It's the only way to get ldap be more eloquent;
-- every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp)
+- every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp);
+- Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice;
 
 License
 -------
