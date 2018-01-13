@@ -24,8 +24,8 @@ import binascii
 import hashlib
 import os
 import sys
-from base64 import urlsafe_b64encode as encode
-from base64 import urlsafe_b64decode as decode
+from base64 import b64encode as encode
+from base64 import b64decode as decode
 
 def sshaSplit(ssha_password, debug=0):
     payload = decode(ssha_password)[6:-4]
