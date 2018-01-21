@@ -16,5 +16,6 @@ LDAP's
 - https://www.openldap.org/doc/admin24/appendix-common-errors.html
 - https://www.adimian.com/blog/2014/10/how-to-enable-memberof-using-openldap/
 - http://manpages.courier-mta.org/htmlman5/slapo-memberof.5.html
+- https://www.adimian.com/blog/2014/10/how-to-enable-memberof-using-openldap/
 - https://www.openldap.org/doc/admin24/overlays.html
 - https://www.openldap.org/doc/admin24/security.html
