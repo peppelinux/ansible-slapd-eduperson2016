@@ -18,7 +18,11 @@ ATTRIBUTES_MAP=OrderedDict([('dn', 'dn'),
                             ('cn', ('name', 'surname')),
                             ('mail', 'mail'),
                             ('userPassword', 'password'),
-                            ('edupersonAffiliation', 'groups')])
+                            ('edupersonAffiliation', 'groups'),
+                            ('title', 'title'),
+                            ('schacGender', 'schacGender'),
+                            ('schacDateOfBirth', 'schacDateOfBirth'),
+                            ('schacCountryOfCitizenship', 'schacCountryOfCitizenship'])
 
 
 
@@ -47,7 +51,11 @@ ATTRIBUTES_MAP=OrderedDict([('dn', 'dn'),
                             ('cn', ('name', 'surname')),
                             ('mail', 'mail'),
                             ('userPassword', 'password'),
-                            ('edupersonAffiliation', 'groups')])
+                            ('edupersonAffiliation', 'groups'),
+                            ('title', 'title'),
+                            ('schacGender', 'schacGender'),
+                            ('schacDateOfBirth', 'schacDateOfBirth'),
+                            ('schacCountryOfCitizenship', 'schacCountryOfCitizenship')])
 
 MULTIVALUED_DELIM=','
 EXCLUDED_MULTIVALUED=['dc']

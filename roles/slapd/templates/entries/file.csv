@@ -1,4 +1,0 @@
-name;surname;dn;objectClass;mail;groups;password
-mario;Rossi;uid=mario,ou=people,dc=testunical,dc=it;inetOrgPerson,eduPerson;mario.rossi@testunical.it;staff,member;cimpa12
-peppe;Grossi;uid=peppe,ou=people,dc=testunical,dc=it;inetOrgPerson,eduPerson;pgrossi@testunical.it,pgrossi@edu.testunical.it;faculty;roll983
-gino;Groe;uid=gino,ou=people,dc=testunical,dc=it;inetOrgPerson,eduPerson;ggroe@testunical.it,groe@edu.testunical.it;faculty,student;geu45

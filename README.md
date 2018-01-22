@@ -336,6 +336,11 @@ Hints
 - ldapadd, ldapsearch, ldapmodify: set debug level with -d 1 or more. It's the only way to get ldap be more eloquent;
 - every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp);
 - Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice;
+- SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
+
+TODO
+----
+- ldapvi should be tested as well: http://www.lichteblau.com/ldapvi/manual/
 
 License
 -------

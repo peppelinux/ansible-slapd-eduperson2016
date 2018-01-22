@@ -29,7 +29,6 @@
 - name: "Check the existance of 'SCHAC' schema on openLDAP and store the result on 'schac_schema' ansible variable"
   shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=schema,cn=config cn=*schac dn"
   register: schac_schema
-  changed_when: false
 
 - name: "Add 'schac-20150413' schema"
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/schac-20150413.ldif"
