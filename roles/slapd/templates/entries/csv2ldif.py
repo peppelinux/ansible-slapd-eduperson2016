@@ -91,6 +91,8 @@ for row in csv_data:
     nrows = []
     for oid in ATTRIBUTES_MAP:
         value = get_value(oid, row)
+        # this avoids columns without values (otherwise ldapadd will fail!)
+        if not value[0]: continue
         if len(value) == 1:
             nrow = '{}: {}\n'.format(oid, value[0])
         else:
