@@ -4,3 +4,4 @@ CA/*
 playbook.retry
 *.pyc
 *.ldif.test
+*.~*
