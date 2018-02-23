@@ -8,6 +8,7 @@
    - python-ldap
    - ldap-utils
    - ssl-cert
+   - ldapvi
 
 - name: Check debconf for slapd entries
   shell: (debconf-get-selections | grep -q -s slapd); echo $?

@@ -250,6 +250,10 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL subschemaSubent
 
 # change a normal ldap user password with admin privileges
 ldappasswd -H ldaps://ldap.testunical.it -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
+
+# change entries in a interactive way (using a console text editor as vi or nano)
+ldapvi -D "cn=admin,dc=testunical,dc=it" -w slapdsecret -b 'uid=gino,ou=people,dc=testunical,dc=it'
+
 ````
 
 Remote connections
