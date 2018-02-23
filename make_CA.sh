@@ -20,7 +20,7 @@ ln -s openssl-1.0.0.cnf openssl.cnf # won't works with CommonName
 # customize informations in vars file (or override them later with env VAR)
 # remember to configure "Common Name (your server's hostname)" in your certs 
 # to let your client avoids "does not match common name in certificate"
-nano vars
+#nano vars
 
 # then source it
 . ./vars

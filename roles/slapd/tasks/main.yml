@@ -42,12 +42,18 @@
   # with_items:
     # - "entries-system.ldif"
 
-- name: Add OU entries
+- name: Add OU entries (groups)
   command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f /tmp/{{ item }}"
   with_items:
     - "entries-groups.ldif"
-    - "entries-people.ldif"
 
+- name: Add OU entries (peoples)
+  command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f /tmp/{{ item }}"
+  with_items:
+    - "entries-people.ldif"
+  when: import_example_users == True
+
+  
 # overlays
 - name: "Import Overlays"
   import_tasks: overlays.yml

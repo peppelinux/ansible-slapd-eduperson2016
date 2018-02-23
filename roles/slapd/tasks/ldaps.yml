@@ -7,7 +7,7 @@
     dest: "{{ cert_path }}/"
     owner: openldap
     group: ssl-cert
-    mode: 660
+    mode: 640
   with_fileglob:
     - roles/slapd/files/certs/*
 

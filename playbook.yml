@@ -24,6 +24,10 @@
     ldap_basedn: "ou=people,dc={{ hostname }},dc={{ domain1 }}"
     # ldap_binddn: "cn=search,ou=system,dc={{ hostname }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
+
+    # import fake users declared in roles/slapd/templates/entries/entries-people.ldif
+    # you can even import them using csv file and csv2ldif.py script (modify attributes mapping if needed)
+    import_example_users: true
     
   roles:
     - { role: slapd, tags: ["slapd"] }    
