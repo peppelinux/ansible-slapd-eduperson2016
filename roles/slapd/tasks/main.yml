@@ -52,7 +52,6 @@
   with_items:
     - "entries-people.ldif"
   when: import_example_users == True
-
   
 # overlays
 - name: "Import Overlays"

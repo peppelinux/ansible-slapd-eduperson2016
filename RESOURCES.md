@@ -19,3 +19,9 @@ LDAP's
 - https://www.adimian.com/blog/2014/10/how-to-enable-memberof-using-openldap/
 - https://www.openldap.org/doc/admin24/overlays.html
 - https://www.openldap.org/doc/admin24/security.html
+
+Apache Directory Studio (my favourite UI LDAP client)
+- http://directory.apache.org/studio/users-guide/Apache_Directory_Studio_LDAP_Browser_User_Guide.pdf
+- http://directory.apache.org/studio/users-guide/Apache_Directory_Studio_User_Guide.pdf
+- https://cwiki.apache.org/confluence/display/DIRxSTUDIO/Screenshots#Screenshots-ACIEditor
+- http://directory.apache.org/apacheds/advanced-ug/4.2.7.1-enable-authenticated-users-to-browse-and-read-entries.html
