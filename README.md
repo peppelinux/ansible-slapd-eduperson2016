@@ -291,7 +291,7 @@ PPolicy management
 # get all locket out accounts
 ldapsearch -H ldaps://ldap.testunical.it -D "cn=admin,dc=testunical,dc=it" -b "ou=people,dc=testunical,dc=it"  -w slapdsecret "pwdAccountLockedTime=*" pwdAccountLockedTime
 
-# unkock
+# unlock
 dn: cn=gino,ou=people,dc=testunical,dc=it
 changetype: modify
 delete: pwdAccountLockedTime
@@ -312,13 +312,13 @@ and then restore "backup_slapd.ldif", importing it back into the LDAP after
 a system rebuild.
 ````
 # entire backup
-slapcat -vl /etc/openldap/backup_slapd.ldif
+slapcat -vl backup_slapd.ldif
 
 # restore
-slapadd -vl /etc/openldap/backup_slapd.ldif
+slapadd -vl backup_slapd.ldif
 
 # backup config
-slapcat -F /etc/openldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
+slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
 ````
 
 [TODO] SQL as Database backend
@@ -349,16 +349,24 @@ Hints
 - ldap:// is disabled, only ldapi:/// and ldaps:/// will be available;
 - Be aware that ldapmodify is sensitive to (trailing) spaces;
 - https://www.openldap.org/doc/admin24/appendix-common-errors.html
+- https://www.switch.ch/aai/guides/idp/installation/
 - Error 80 (implementation specific error) raises when tls certs doesn't have read permissions or if the ldif used with ldapadd/ldapmodify have some trailing spaces or too many blank lines or some syntax error;
 - ldapadd, ldapsearch, ldapmodify: set debug level with -d 1 or more. It's the only way to get ldap be more eloquent;
 - every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp);
 - Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice;
 - SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
 
-TODO
-----
-- ldapvi should be tested as well: http://www.lichteblau.com/ldapvi/manual/
+Awesome utilities
+-----------------
+Tools to test and use before you die.
 
+- ldapvi makes a query and let us modify its content, and save this in LDAP, using our favorite system text editor (as vi or nano!) : 
+  - http://www.lichteblau.com/ldapvi/manual/
+
+- ldapsh let us navigate the LDAP tree like a filesystem tree, awesome!
+  - http://ldapsh.sourceforge.net/
+  - https://github.com/maufl/ldapsh
+  
 License
 -------
 BSD
