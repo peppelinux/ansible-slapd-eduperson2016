@@ -7,12 +7,16 @@ This playbook will install a slapd server with:
  - schac-2015 schema
  - memberOf overlay
  - ppolicy overlay
- - SASL TLS (ldaps://)
+ - SSL only (ldaps://)
 
 You can even import users from a CSV file, globals parameters can also be edited in playbook.yml.
 All about overlays configuration can be found in:
 ````
 roles/slapd/templates/*
+````
+This behaviour can be suppressed changing this variable in the playbook:
+````
+import_example_users: true
 ````
 
 Tested on
@@ -22,6 +26,7 @@ Tested on
 Requirements
 ------------
 ````
+apt install python3-dev python3-setuptools python3-pip
 pip3 install ansible
 ````
 
@@ -48,66 +53,7 @@ Remeber that OpenLDAP cannot use a certificate that has a password associated to
 
 First of all create your certificates and put them in roles/files/certs/ then 
 configure their names in playbook variables. A script named make_CA.sh can do this automatically, 
-this create your own self signed keys with easy-rsa. Here it is:
-
-````
-#!/bin/bash
-export SLAPKEYNAME="slapd"
-export PEM_PATH="keys/pem"
-export CERT_PATH=`pwd`"/roles/slapd/files/certs"
-export SERVER_FQDN="ldap.testunical.it"
-
-apt install easy-rsa
-rm -f easy-rsa
-cp -Rp /usr/share/easy-rsa/ .
-cd easy-rsa
-
-# link easy-rsa ssl config defaults
-# You can also edit it to change some informations about issuer and remove EASY-Rsa messages
-ln -s openssl-1.0.0.cnf openssl.cnf # won't works with CommonName
-
-# using original openssl file (needs more customizations)
-# cp /etc/ssl/openssl.cnf openssl.cnf
-# sed -i '1s/^/# For use with easy-rsa version 2.0 and OpenSSL 1.0.0*\n/' openssl.cnf
-
-# customize informations in vars file (or override them later with env VAR)
-# remember to configure "Common Name (your server's hostname)" in your certs 
-# to let your client avoids "does not match common name in certificate"
-nano vars
-
-# then source it
-. ./vars
-
-# override for speedup
-export KEY_ALTNAMES=$SERVER_FQDN
-export KEY_OU=$SERVER_FQDN
-export KEY_NAME=$SERVER_FQDN
-
-export KEY_COUNTRY="IT"
-export KEY_PROVINCE="CS"
-export KEY_CITY="Cosenza"
-export KEY_ORG="testunical.it"
-export KEY_EMAIL="me@testunical.it"
-
-./clean-all
-
-./build-ca
-./build-dh
-./build-key $SERVER_FQDN
-
-mkdir -p $PEM_PATH
-
-openssl x509 -inform PEM -in keys/ca.crt > $PEM_PATH/slapd-cacert.pem
-
-openssl x509 -inform PEM -in keys/$SERVER_FQDN.crt > $PEM_PATH/$SLAPKEYNAME-cert.pem
-openssl rsa -in keys/$SERVER_FQDN.key -text > $PEM_PATH/$SLAPKEYNAME-key.pem
-
-mkdir -p $CERT_PATH
-
-cp $PEM_PATH/slapd-cacert.pem $CERT_PATH/
-cp $PEM_PATH/$SLAPKEYNAME-cert.pem $CERT_PATH/
-cp $PEM_PATH/$SLAPKEYNAME-key.pem $CERT_PATH/
-````
+this create your own self signed keys with easy-rsa. 
 
 Create fake users using CSV file
 --------------------------------
@@ -196,7 +142,7 @@ ldapsearch -H ldap:// -x -s base -b "" -LLL "namingContexts"
 ldapsearch -H ldap:// -x -s base -b "" -LLL "configContext"
 
 # read config
-ldapsearch -H ldapi:// -Y EXTERNAL -b "cn=config" -LLL -Q
+ldapsearch -H ldapi:// -Y EXTERNAL -b "cn=config" -LLL
 
 # small config output
 ldapsearch -H ldapi:// -Y EXTERNAL -b "cn=config" -LLL -Q dn
@@ -362,6 +308,8 @@ Tools to test and use before you die.
 
 - ldapvi makes a query and let us modify its content, and save this in LDAP, using our favorite system text editor (as vi or nano!) : 
   - http://www.lichteblau.com/ldapvi/manual/
+
+![Alt text](images/ldapvi.png)
 
 - ldapsh let us navigate the LDAP tree like a filesystem tree, awesome!
   - http://ldapsh.sourceforge.net/

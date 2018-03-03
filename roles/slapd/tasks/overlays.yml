@@ -1,15 +1,3 @@
-# modules/plugins
-- name: Load LDAP modules
-  ldap_attr:
-    dn: "cn=module{0},cn=config"
-    name: "olcModuleLoad"
-    values: "{{ item }}"
-  with_items:
-    - "{1}memberof"
-    - "{2}ppolicy"
-  notify:
-   - "Restart slapd"
-
 # memberOf
 - name: Search Directory for memberof overlay
   shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcOverlay=memberof"
