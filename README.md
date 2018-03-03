@@ -236,6 +236,19 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "olcDatabase={1}mdb,cn=config" -LLL -Q -s 
 ldapsearch -x -H ldapi:/// -b "" -LLL -s base supportedSASLMechanisms
 ````
 
+Access Control lists debug
+--------------------------
+````
+# test ACL
+slapacl -F /etc/ldap/slapd.d/  -b "dc=testunical,dc=it" -D "cn=admin,dc=testunical,dc=it"
+
+# test if a normal user could read data of other users
+slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=mario,ou=people,dc=testunical,dc=it" -d acl 'cn/read'
+
+# test special idp-user in ou=applications with more advanced query
+slapacl -F /etc/ldap/slapd.d/ -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=idp,ou=applications,dc=testunical,dc=it" -d acl 'cn/read'
+````
+
 Play with content data
 ----------------------
 ````
