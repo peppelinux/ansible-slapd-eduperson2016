@@ -21,4 +21,8 @@
   register: user_bind
 - debug: msg="{{ user_bind.stdout }}"
 
+# add user
+
+# add user with a collision with unique value (example: mail)
+
 # add ppolicy overlay unit test (lock, unlock everything needed here)

@@ -9,6 +9,7 @@ This playbook will install a slapd server with:
  - ppolicy overlay
  - pw-sha2 overlay for SSHA-512, SSHA-384, SSHA-256, SHA-512, SHA-384 and SHA-256 passwords
  - Monitor backend
+ - Unique overlay (default field: mail)
  - SSL only (ldaps://)
  - Unit test for ACL and Password Policy overlay (work in progress)
 

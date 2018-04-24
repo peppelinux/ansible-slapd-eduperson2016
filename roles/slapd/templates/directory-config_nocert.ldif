@@ -16,6 +16,7 @@ olcAccess: {1}to *
  by dn.children="ou=applications,dc=testunical,dc=it" read 
  by * break
 -
+# http://www.zytrax.com/books/ldap/apa/indeces.html
 replace: olcDbIndex
 olcDbIndex: objectClass eq
 olcDbIndex: member eq
