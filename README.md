@@ -8,7 +8,9 @@ This playbook will install a slapd server with:
  - memberOf overlay
  - ppolicy overlay
  - pw-sha2 overlay for SSHA-512, SSHA-384, SSHA-256, SHA-512, SHA-384 and SHA-256 passwords
+ - Monitor backend
  - SSL only (ldaps://)
+ - Unit test for ACL and Password Policy overlay (work in progress)
 
 You can even import users from a CSV file, globals parameters can also be edited in playbook.yml.
 All about overlays configuration can be found in:

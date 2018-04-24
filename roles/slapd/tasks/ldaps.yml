@@ -17,10 +17,10 @@
 - name: Render template directory-config-tls.ldif
   template: 
     src: roles/slapd/templates/directory-config-tls.ldif
-    dest: /tmp/directory-config-tls.ldif
+    dest: "{{ tmp_dir }}/directory-config-tls.ldif"
 
 - name: Apply Directory config TLS
-  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/directory-config-tls.ldif"
+  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/directory-config-tls.ldif"
 
 - name: "Disable ldap:// and enable ldaps://"
   replace:

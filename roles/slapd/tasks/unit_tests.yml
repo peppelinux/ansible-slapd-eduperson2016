@@ -1,0 +1,24 @@
+# unit tests
+
+# monitor
+- name: "[Unit test] Search as Monitor user"
+  shell: "ldapsearch -x -D cn=monitor,ou=system,{{ ldap_basedc }} -w {{ ldap_monitor_pw }} -b cn=Uptime,cn=Time,cn=Monitor -s base '(objectClass=*)' '*' '+'"
+  #ignore_errors: true
+  register: monitor_test
+- debug: msg="{{ monitor_test.stdout }}"
+
+# people authentication and ACL
+
+- name: "[Unit test] Log as user and fetch his own"
+  shell: "ldapsearch -x -D uid=mario,ou=people,{{ ldap_basedc }} -w cimpa12 -b 'uid=mario,ou=people,dc=testunical,dc=it'"
+  #ignore_errors: true
+  register: user_bind
+- debug: msg="{{ user_bind.stdout }}"
+
+- name: "[Unit test] Log as user and fetch another user's profile"
+  shell: "ldapsearch -x -D uid=mario,ou=people,{{ ldap_basedc }} -w cimpa12 -b 'uid=gino,ou=people,{{ ldap_basedc }}'"
+  ignore_errors: true
+  register: user_bind
+- debug: msg="{{ user_bind.stdout }}"
+
+# add ppolicy overlay unit test (lock, unlock everything needed here)

@@ -23,6 +23,10 @@
     ldap_basedc: "dc={{ hostname }},dc={{ domain1 }}"
     ldap_basedn: "ou=people,dc={{ hostname }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
+    ldap_monitor_pw: monitorsecret
+
+    # dir where template will be rendered (also for debug purpose)
+    tmp_dir: /tmp/ansible-slapd-tmp
 
     # import fake users declared in roles/slapd/templates/entries/entries-people.ldif
     # you can even import them using csv file and csv2ldif.py script (modify attributes mapping if needed)

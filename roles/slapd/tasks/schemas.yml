@@ -1,7 +1,7 @@
 - name: "Put eduPerson and SCHAC schema in /root/ldap-configs directory"
   copy:
    src: "files/{{ item }}"
-   dest: "/tmp"
+   dest: "{{ tmp_dir }}"
    owner: "root"
    group: "root"
    mode: "0644"
@@ -17,7 +17,7 @@
 - name: Render template eduperson-201602 schema ldif
   copy: 
     src: roles/slapd/files/eduperson-201602.ldif
-    dest: /tmp/eduperson-201602.ldif
+    dest: "{{ tmp_dir }}/eduperson-201602.ldif"
 
 - name: Add eduperson-201602 schema ldif
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/eduperson-201602.ldif"
@@ -31,7 +31,7 @@
   register: schac_schema
 
 - name: "Add 'schac-20150413' schema"
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/schac-20150413.ldif"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/schac-20150413.ldif"
   when: schac_schema.stdout == ""
   notify:
    - "Restart slapd"

@@ -3,6 +3,9 @@
   import_tasks: cleanup.yml
 # END CLEANUPS
 
+- name: "Create {{ tmp_dir }}"
+  file: path={{ tmp_dir }} state=directory
+
 # Dependencies
 - name: "Install and Configure openLDAP"
   import_tasks: install.yml
@@ -10,10 +13,10 @@
 - name: Render template directory-config_nocert.ldif
   template: 
     src: roles/slapd/templates/directory-config_nocert.ldif
-    dest: /tmp/directory-config_nocert.ldif
+    dest: "{{ tmp_dir }}/directory-config_nocert.ldif"
 
 - name: Apply Directory config ldif
-  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/directory-config_nocert.ldif"
+  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/directory-config_nocert.ldif"
 
 # Schemas
 - name: "Import Schemas"
@@ -23,15 +26,15 @@
 - name: Render template organizational-units.ldif
   template: 
     src: roles/slapd/templates/organizational-units.ldif
-    dest: /tmp/organizational-units.ldif
+    dest: "{{ tmp_dir }}/organizational-units.ldif"
 
 - name: Add Directory content ldif
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/organizational-units.ldif"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/organizational-units.ldif"
 
 - name: Render template organizational-units.ldif
   template: 
-    src: roles/slapd/templates/entries/{{ item }}
-    dest: /tmp/{{ item }}
+    src: "roles/slapd/templates/entries/{{ item }}"
+    dest: "{{ tmp_dir }}/{{ item }}"
   with_items:
     - "entries-system.ldif"
     - "entries-people.ldif"
@@ -43,12 +46,12 @@
     # - "entries-system.ldif"
 
 - name: Add OU entries (groups)
-  command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f /tmp/{{ item }}"
+  command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f {{ tmp_dir }}/{{ item }}"
   with_items:
     - "entries-groups.ldif"
 
 - name: Add OU entries (peoples)
-  command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f /tmp/{{ item }}"
+  command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f {{ tmp_dir }}/{{ item }}"
   with_items:
     - "entries-people.ldif"
   when: import_example_users == True
@@ -63,7 +66,10 @@
   import_tasks: ldaps.yml
 # end ldaps
 
+# unit tests
+- name: "Run Unit tests"
+  import_tasks: unit_tests.yml
+# end unit tests
+
 - name: Clean temporary config ldif
-  file:
-    state: absent
-    path: "tmp/*.ldif"
+  file: path="{{ tmp_dir }}" state=absent

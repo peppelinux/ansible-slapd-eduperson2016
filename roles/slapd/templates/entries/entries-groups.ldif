@@ -1,6 +1,11 @@
-dn: cn=lab,ou=groups,{{ ldap_basedc }}
-cn: lab
+dn: cn=employee,ou=groups,{{ ldap_basedc }}
+cn: employee
 objectClass: groupOfNames
 member: uid=mario,ou=people,{{ ldap_basedc }}
 member: uid=gino,ou=people,{{ ldap_basedc }}
 member: uid=peppe,ou=people,{{ ldap_basedc }}
+
+dn: cn=student,ou=groups,{{ ldap_basedc }}
+cn: student
+objectClass: groupOfNames
+member: uid=mario,ou=people,{{ ldap_basedc }}
