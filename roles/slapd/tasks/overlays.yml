@@ -45,4 +45,11 @@
   command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }} -f /tmp/ppolicy-entry.ldif"
   when: ppolicy_overlay.stdout == ""
 
-  
+# pw-sha2 overlay for SHA256 support
+- name: Search Directory for pw-sha2 overlay
+  shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcModuleLoad=pw-sha2"
+  register: pwsha2
+
+- name: Add pw-sha2 overlay for SHA256 support to openldap
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/slapd/files/pw-sha2.ldif"
+  when: pwsha2.stdout == ""

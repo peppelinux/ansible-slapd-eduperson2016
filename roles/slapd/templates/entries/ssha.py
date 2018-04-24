@@ -70,7 +70,7 @@ def checkPassword(password, ssha_password, debug=0):
     if debug > 1: 
         print('[checkPassword debug]\n \tssha_password:    {}\n\t'
               'created_password: {}'.format(ssha_password, ssha_hash))
-    if debug > 2: 
+    elif debug > 2: 
         print('\tsalt: {}\n\tpassword: {}'.format(str(binascii.hexlify(salt), 'ascii'), 
                                       password))
     if ssha_hash == ssha_password: 

@@ -1,9 +1,9 @@
-dn: ou=people,{{ ldap_basedc }}
-ou: people
-objectClass: organizationalUnit
-
 dn: ou=groups,{{ ldap_basedc }}
 ou: groups
+objectClass: organizationalUnit
+
+dn: ou=people,{{ ldap_basedc }}
+ou: people
 objectClass: organizationalUnit
 
 dn: ou=system,{{ ldap_basedc }}
