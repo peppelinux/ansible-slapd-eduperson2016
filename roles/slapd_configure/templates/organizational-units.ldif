@@ -14,7 +14,7 @@ dn: ou=policies,{{ ldap_basedc }}
 ou: policies
 objectClass: organizationalUnit
 
-dn: ou=applications,{{ ldap_basedc }}
+dn: ou=application,{{ ldap_basedc }}
 ou: applications
 objectClass: organizationalUnit
 
