@@ -175,17 +175,21 @@ PPolicy management
 ------------------
 ````
 # lock out an user
+ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
 dn: uid=gino,ou=people,dc=testunical,dc=it
 add: pwdAccountLockedTime
 pwdAccountLockedTime: 20081021135537Z
+EOF
 
 # get all locket out accounts
-ldapsearch -H ldaps://ldap.testunical.it -D "cn=admin,dc=testunical,dc=it" -b "ou=people,dc=testunical,dc=it"  -w slapdsecret "pwdAccountLockedTime=*" pwdAccountLockedTime
+ldapsearch -LLL -H ldapi:// -D "cn=admin,dc=testunical,dc=it" -b "ou=people,dc=testunical,dc=it" "pwdAccountLockedTime=*" pwdAccountLockedTime
 
 # unlock ldif
-dn: cn=gino,ou=people,dc=testunical,dc=it
+ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+dn: uid=gino,ou=people,dc=testunical,dc=it
 changetype: modify
 delete: pwdAccountLockedTime
+EOF
 
 # unlock with ldapvi
 ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=testunical,dc=it' "pwdAccountLockedTime=*" pwdAccountLockedTime
@@ -325,7 +329,7 @@ Tools to test and use before you die.
 - ldapsh let us navigate the LDAP tree like a filesystem tree, awesome!
   - http://ldapsh.sourceforge.net/
 
-- ApacheActiveDirectory is a very good LDAP general purpose navigator. It will not came with support for ppolicy fields, neither with a slapd's ACL editor and Monitor backend navigator but it will be quite good for everything else regarding a standard LDAP OU navigation. You can download it from its official site: http://directory.apache.org/studio/downloads.html
+- ApacheActiveDirectory is a very good LDAP general purpose navigator. You can download it from its official site: http://directory.apache.org/studio/downloads.html
 
 ![Alt text](images/ApacheDirectoryStudio/1.png)
 ![Alt text](images/ApacheDirectoryStudio/2.png)
