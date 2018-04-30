@@ -61,23 +61,114 @@
 - debug: msg="{{ user_bind.stdout | to_nice_yaml }}"
 
 # a user tryes to modify his email and its password
+- name: "[Must-Do] User tryes to modify his email and his password"
+  shell:
+    cmd: |
+      ldapmodify -H ldapi:// -D "uid={{ item }},ou=people,{{ ldap_basedc }}" -w password <<EOF
+      dn: uid={{ item }},ou=people,dc=testunical,dc=it
+      changetype: modify
+      replace: mail
+      mail: newmail@{{ domain }}
+      EOF
+  with_items:
+    - "test2"
 
 # a user tryes to modify another readonly value (codice fiscale or other as matricola)
+- name: "[Must-Fail] User tryes to modify protected fields. Raises: ldap_modify: Insufficient access (50)"
+  shell:
+    cmd: |
+      ldapmodify -H ldapi:// -D "uid=test2,ou=people,{{ ldap_basedc }}" -w password <<EOF
+      dn: uid=test2,ou=people,dc=testunical,dc=it
+      changetype: modify
+      replace: {{ item }}
+      {{ item }}: fakevalue
+      EOF
+  with_items:
+    - "uid"
+    - "gn"
+    - "sn"
+  ignore_errors: true
 
 # people authentication and ACL
-
-- name: "[Must-Fail] Log as user and fetch another user's profile"
+- name: "[Must-Fail] Log as user and fetch another user's profile. Raises: 32 No such object"
   shell: "ldapsearch -x -D uid=test1,ou=people,{{ ldap_basedc }} -w password -b 'uid=test2,ou=people,{{ ldap_basedc }}'"
   ignore_errors: true
   register: user_bind
 - debug: msg="{{ user_bind.stdout | to_nice_yaml }}"
 
 # add user with a collision with unique value (example: mail)
+# add 2 user in uo=people
+- name: "[Must-Fail] Create two user with the same email. Raises: Already exists (68)"
+  shell:
+      cmd: |
+        ldapadd -Y EXTERNAL -H ldapi:/// <<EOF
+        dn: uid={{ item['username'] }},ou=people,{{ ldap_basedc }}
+        objectClass: inetOrgPerson
+        objectClass: eduPerson
+        objectClass: schacPersonalCharacteristics
+        uid: {{ item['username'] }} 
+        sn: {{ item['sn'] }} 
+        givenName: {{ item['gn'] }} 
+        cn: {{ item['cn'] }} 
+        mail: {{ item['mail'] }}@{{ domain }}
+        userPassword: {{ item['password'] }}
+        edupersonAffiliation: staff
+        edupersonAffiliation: member
+        title: dott.
+        schacGender: 1
+        schacDateOfBirth: 19830607
+        schacCountryOfCitizenship: it
+        EOF
+  with_items:
+    - {'username': 'test3', 'password': 'password', 'sn': 'test1 sn', 'gn': 'test1 gn', 'cn': 'test1 cn', 'mail': 'test1@{{ domain }}'}
+    - {'username': 'test4', 'password': 'password', 'sn': 'test2 sn', 'gn': 'test2 gn', 'cn': 'test2 cn', 'mail': 'test1@{{ domain }}'}
+  ignore_errors: true
 
-# add ppolicy overlay unit test (lock, unlock everything needed here)
+# ppolicy overlay unit test (lock, unlock everything needed here)
+- name: "[Must-Fail] Bruteforce, 10 tryes. Raises: Invalid credentials (49)"
+  shell: "ldapsearch -x -D uid={{ item }},ou=people,{{ ldap_basedc }} -w fakepassword -b 'uid={{ item }},ou=people,{{ ldap_basedc }}'"
+  ignore_errors: true
+  with_items:
+    - "test1"
+    - "test1"
+    - "test1"
+    - "test1"
+    - "test1"
+    - "test1"
+    - "test1"
+    - "test1"
+    - "test1"
+    - "test1"
+
+- name: "[Must-Fail] Taste User Lock out, with a good password. Raises: Invalid credentials (49)"
+  shell: "ldapsearch -x -D uid={{ item }},ou=people,{{ ldap_basedc }} -w password -b 'uid={{ item }},ou=people,{{ ldap_basedc }}'"
+  ignore_errors: true
+  with_items:
+    - "test1"
+
+# ppolicy
+- name: "[Must-Do] Unlock a user previously locked"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: uid={{ item }},ou=people,dc=testunical,dc=it
+      changetype: modify
+      delete: pwdAccountLockedTime
+      EOF
+  with_items:
+    - "test1"
+
+- name: "[Must-Do] User Unlocked login test"
+  shell: "ldapsearch -x -D uid={{ item }},ou=people,{{ ldap_basedc }} -w password -b 'uid={{ item }},ou=people,{{ ldap_basedc }}'"
+  ignore_errors: true
+  with_items:
+    - "test1"
+    - "test1"
 
 - name: "[Must-Do] ldapdelete newly created test users!"
   shell: ldapdelete -Y EXTERNAL -H ldapi:/// "uid={{ item }},ou=people,{{ ldap_basedc }}"
   with_items:
     - "test1"
     - "test2"
+    - "test3"
+    - "test4"

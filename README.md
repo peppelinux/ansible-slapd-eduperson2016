@@ -11,7 +11,8 @@ This playbook will install a slapd server with:
  - Monitor backend
  - Unique overlay (default field: mail)
  - SSL only (ldaps://)
- - Unit test for ACL and Password Policy overlay (work in progress)
+ - Unit test for ACL and Password Policy overlay
+ - SyncRepl for a read-only slave (work in progress)
 
 You can also import users from a CSV file, globals parameters can also be edited in playbook.yml.
 This behaviour can be suppressed changing this variable in the playbook:
@@ -31,7 +32,7 @@ Tested on
 Requirements
 ------------
 ````
-apt install python3-dev python3-setuptools python3-pip easy-rsa
+apt install python3-dev python3-setuptools python3-pip easy-rsa expect-dev
 pip3 install ansible
 ````
 
@@ -52,8 +53,8 @@ Running it locally
 ````
 ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
 
-# trick for a pretty print
-ansible-playbook -i "localhost," -c local playbook.yml | sed 's/\\n/\n/g'
+# trick for a pretty print using expect's unbuffer, good for a good unit-test stdout
+unbuffer ansible-playbook -i "localhost," -c local playbook.yml | sed 's/\\n/\n/g'
 ````
 
 Play with LDAP administrative's tasks
