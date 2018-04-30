@@ -35,3 +35,25 @@
   when: schac_schema.stdout == ""
   notify:
    - "Restart slapd"
+
+# freeRadius
+- name: "Put freeRadius schema"
+  shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{ role_name }}/files/freeradius_schema/{{ item }}"
+  with_items:
+   - freeradius.ldif
+   - freeradius-clients.ldif
+   - freeradius-dhcp.ldif
+
+# samba3
+- name: "Put samba3 schema"
+  shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{ role_name }}/files/samba3_schema/{{ item }}"
+  with_items:
+   - samba3.ldif
+
+# pmi
+- name: "Put PMI schema"
+  shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/pmi.ldif"
+
+# misc
+- name: "Put MISC schema"
+  shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/misc.ldif"

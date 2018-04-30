@@ -174,6 +174,11 @@ A special OU called "applications" makes every entry in it to read all attribute
 PPolicy management
 ------------------
 ````
+# lock out an user
+dn: uid=gino,ou=people,dc=testunical,dc=it
+add: pwdAccountLockedTime
+pwdAccountLockedTime: 20081021135537Z
+
 # get all locket out accounts
 ldapsearch -H ldaps://ldap.testunical.it -D "cn=admin,dc=testunical,dc=it" -b "ou=people,dc=testunical,dc=it"  -w slapdsecret "pwdAccountLockedTime=*" pwdAccountLockedTime
 
@@ -243,6 +248,8 @@ Hints
 - every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp);
 - Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice. You can find a good SSHA generator here: https://github.com/peppelinux/pySSHA-slapd
 - SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
+- http://www.openldap.org/doc/admin24/replication.html
+- https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
 
 Create fake users using CSV file
 --------------------------------
