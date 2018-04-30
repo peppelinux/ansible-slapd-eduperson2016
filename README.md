@@ -160,6 +160,10 @@ ldapwhoami -x -H ldaps://ldap.testunical.it -D "uid=gino,ou=people,dc=testunical
 ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
 ````
 
+Shibboleth IDP integration
+--------------------------
+A special OU called "applications" let every entry in it to read all attributes of ou=people entries.
+
 PPolicy management
 ------------------
 ````
@@ -212,7 +216,7 @@ the objectclass (by default groupOfNames) configured to trigger updates.
 Thus, it provides maintenance of the list of groups an entry is a 
 member of, when usual maintenance of groups is done by modifying the 
 members on the group entry.
----------------------------------
+
 
 Hints
 -----

@@ -28,10 +28,34 @@
 - debug: msg="{{ monitor_test.stdout | to_nice_yaml }}"
 
 # add 2 user in uo=people
+- name: "Create two example users"
+  shell:
+      cmd: |
+        ldapadd -Y EXTERNAL -H ldapi:/// <<EOF
+        dn: uid={{ item['username'] }},ou=people,{{ ldap_basedc }}
+        objectClass: inetOrgPerson
+        objectClass: eduPerson
+        objectClass: schacPersonalCharacteristics
+        uid: {{ item['username'] }} 
+        sn: {{ item['sn'] }} 
+        givenName: {{ item['gn'] }} 
+        cn: {{ item['cn'] }} 
+        mail: {{ item['username'] }}@{{ domain }}
+        userPassword: {{ item['password'] }}
+        edupersonAffiliation: staff
+        edupersonAffiliation: member
+        title: dott.
+        schacGender: 1
+        schacDateOfBirth: 19830607
+        schacCountryOfCitizenship: it
+        EOF
+  with_items:
+    - {'username': 'test1', 'password': 'password', 'sn': 'test1 sn', 'gn': 'test1 gn', 'cn': 'test1 cn'}
+    - {'username': 'test2', 'password': 'password', 'sn': 'test2 sn', 'gn': 'test2 gn', 'cn': 'test2 cn'}
 
 # user try to read his data
 - name: "[Must-Do] Log as user and fetch his own"
-  shell: "ldapsearch -x -D uid=mario,ou=people,{{ ldap_basedc }} -w cimpa12 -b 'uid=mario,ou=people,dc=testunical,dc=it'"
+  shell: "ldapsearch -x -D uid=test1,ou=people,{{ ldap_basedc }} -w password -b 'uid=test1,ou=people,{{ ldap_basedc }}'"
   #ignore_errors: true
   register: user_bind
 - debug: msg="{{ user_bind.stdout | to_nice_yaml }}"
@@ -43,7 +67,7 @@
 # people authentication and ACL
 
 - name: "[Must-Fail] Log as user and fetch another user's profile"
-  shell: "ldapsearch -x -D uid=mario,ou=people,{{ ldap_basedc }} -w cimpa12 -b 'uid=gino,ou=people,{{ ldap_basedc }}'"
+  shell: "ldapsearch -x -D uid=test1,ou=people,{{ ldap_basedc }} -w password -b 'uid=test2,ou=people,{{ ldap_basedc }}'"
   ignore_errors: true
   register: user_bind
 - debug: msg="{{ user_bind.stdout | to_nice_yaml }}"
