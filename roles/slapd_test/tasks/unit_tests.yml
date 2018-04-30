@@ -75,3 +75,9 @@
 # add user with a collision with unique value (example: mail)
 
 # add ppolicy overlay unit test (lock, unlock everything needed here)
+
+- name: "[Must-Do] ldapdelete newly created test users!"
+  shell: ldapdelete -Y EXTERNAL -H ldapi:/// "uid={{ item }},ou=people,{{ ldap_basedc }}"
+  with_items:
+    - "test1"
+    - "test2"
