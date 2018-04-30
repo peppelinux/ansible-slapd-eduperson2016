@@ -176,17 +176,25 @@ PPolicy management
 # get all locket out accounts
 ldapsearch -H ldaps://ldap.testunical.it -D "cn=admin,dc=testunical,dc=it" -b "ou=people,dc=testunical,dc=it"  -w slapdsecret "pwdAccountLockedTime=*" pwdAccountLockedTime
 
-# unlock
+# unlock ldif
 dn: cn=gino,ou=people,dc=testunical,dc=it
 changetype: modify
 delete: pwdAccountLockedTime
 
-# or pwdReset. It must be then resetted using ldappasswd
+# unlock with ldapvi
+ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=testunical,dc=it' "pwdAccountLockedTime=*" pwdAccountLockedTime
 
+# or pwdReset. It must be then resetted using ldappasswd
 dn: cn=gino,ou=people,dc=testunical,dc=it
 changetype: modify
 add: pwdReset
 pwdReset: TRUE
+
+# force a pwdReset with ldapvi
+ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=testunical,dc=it' "pwdReset=*" pwdReset
+
+# a user that resets a password by his own
+ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12
 
 ````
 
