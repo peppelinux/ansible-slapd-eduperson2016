@@ -9,14 +9,14 @@
     group: ssl-cert
     mode: 640
   with_fileglob:
-    - roles/slapd/files/certs/*
+    - roles/{{role_name}}/files/certs/*
 
 - name: Fix certs permissions
   file: path="{{ cert_path }}" owner=openldap group=ssl-cert mode=0740 state=directory recurse=yes
 
 - name: Render template directory-config-tls.ldif
   template: 
-    src: roles/slapd/templates/directory-config-tls.ldif
+    src: roles/{{role_name}}/templates/directory-config-tls.ldif
     dest: "{{ tmp_dir }}/directory-config-tls.ldif"
 
 - name: Apply Directory config TLS

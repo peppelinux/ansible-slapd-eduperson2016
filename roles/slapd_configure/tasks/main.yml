@@ -1,22 +1,26 @@
 # CLEANUPS
-- name: "Purge openLDAP"
-  import_tasks: cleanup.yml
+# - name: "Purge openLDAP"
+  # import_tasks: cleanup.yml
 # END CLEANUPS
 
 - name: "Create {{ tmp_dir }}"
   file: path={{ tmp_dir }} state=directory
 
-# Dependencies
-- name: "Install and Configure openLDAP"
-  import_tasks: install.yml
-
-- name: Render template directory-config_nocert.ldif
+- name: Render general_config.ldif
   template: 
-    src: roles/slapd/templates/directory-config_nocert.ldif
-    dest: "{{ tmp_dir }}/directory-config_nocert.ldif"
+    src: "roles/{{role_name}}/templates/general_config.ldif"
+    dest: "{{ tmp_dir }}/general_config.ldif"
 
-- name: Apply Directory config ldif
-  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/directory-config_nocert.ldif"
+- name: Apply general_config.ldif
+  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/general_config.ldif"
+
+- name: Render acl.ldif
+  template: 
+    src: "roles/{{role_name}}/templates/acl.ldif"
+    dest: "{{ tmp_dir }}/acl.ldif"
+
+- name: Apply acl.ldif
+  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/acl.ldif"
 
 # Schemas
 - name: "Import Schemas"
@@ -25,7 +29,7 @@
 
 - name: Render template organizational-units.ldif
   template: 
-    src: roles/slapd/templates/organizational-units.ldif
+    src: roles/{{role_name}}/templates/organizational-units.ldif
     dest: "{{ tmp_dir }}/organizational-units.ldif"
 
 - name: Add Directory content ldif
@@ -33,7 +37,7 @@
 
 - name: Render template organizational-units.ldif
   template: 
-    src: "roles/slapd/templates/entries/{{ item }}"
+    src: "roles/{{role_name}}/templates/entries/{{ item }}"
     dest: "{{ tmp_dir }}/{{ item }}"
   with_items:
     - "entries-system.ldif"
@@ -55,21 +59,16 @@
   with_items:
     - "entries-people.ldif"
   when: import_example_users == True
-  
+
 # overlays
 - name: "Import Overlays"
   import_tasks: overlays.yml
 # end overlays
 
 # ldaps
-- name: "Enable ldaps"
+- name: "Enable ldap TLS"
   import_tasks: ldaps.yml
 # end ldaps
-
-# unit tests
-- name: "Run Unit tests"
-  import_tasks: unit_tests.yml
-# end unit tests
 
 - name: Clean temporary config ldif
   file: path="{{ tmp_dir }}" state=absent

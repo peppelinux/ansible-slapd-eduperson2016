@@ -1,0 +1,16 @@
+- name: Create a backups sub folder
+  file: path="{{ backup_folder }}" state=directory
+
+- name: Copy certs to backup dir
+  shell: "cp -Rp {{ cert_path }} {{ backup_folder }}"
+  ignore_errors: true
+
+# Databases are numbered, with 0 being cn=config, 1 the first back-end you configure, 2 the next etc.
+- name: Do Config backup
+  command: 'slapcat -F /etc/ldap/slapd.d -n 0 -vl {{ backup_folder }}/slapd_config_backup.ldif'
+  ignore_errors: true
+
+- name: Do a DIT OpenLDAP backup
+  # command: 'slapcat -vl {{ backup_folder }}/slapd_ditbackup.ldif'
+  command: 'slapcat -b "{{ ldap_basedc }}" -vl {{ backup_folder }}/slapd_entries_backup.ldif'
+  ignore_errors: true

@@ -31,6 +31,15 @@
     # import fake users declared in roles/slapd/templates/entries/entries-people.ldif
     # you can even import them using csv file and csv2ldif.py script (modify attributes mapping if needed)
     import_example_users: true
-    
+
+    backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
+    restore_ldif_path: "backups/example"
+
   roles:
-    - { role: slapd, tags: ["slapd"] }    
+    - { role: slapd_backup, tags: ["slapd_backup"] }
+    - { role: slapd_uninstall, tags: ["slapd_uninstall"] }
+    - { role: slapd_install, tags: ["slapd_install"] }
+    - { role: slapd_configure, tags: ["slapd_configure"] }
+    # use backup/example structure to restore a complete slapd configuration with entries
+    # - { role: slapd_restore_backup, tags: ["slapd_restore_backup"] }
+    - { role: slapd_test, tags: ["slapd_test"] }  

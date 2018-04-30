@@ -34,20 +34,6 @@ apt install python3-dev python3-setuptools python3-pip
 pip3 install ansible
 ````
 
-MemberOf overlay
-----------------
-MemberOf overlay made a client to be able to determine which groups an entry 
-is a member of, without performing an additional search. Examples of this 
-are applications using the DIT for access control based on group authorization.
-
-The memberof overlay updates an attribute (by default memberOf) whenever 
-changes occur to the membership attribute (by default member) of entries of 
-the objectclass (by default groupOfNames) configured to trigger updates.
-
-Thus, it provides maintenance of the list of groups an entry is a 
-member of, when usual maintenance of groups is done by modifying the 
-members on the group entry.
-
 Setup Certificates
 ------------------
 
@@ -59,75 +45,14 @@ First of all create your certificates and put them in roles/files/certs/ then
 configure their names in playbook variables. A script named make_CA.sh can do this automatically, 
 this create your own self signed keys with easy-rsa. 
 
-Create fake users using CSV file
---------------------------------
-It would be also possible to create your own custom fake users using a CSV file
-![Alt text](images/csv.png)
-
-You can create and Map oid to one or more csv columns in the csv2ldif.py file.
-Csv2ldif.py works this way: if a value contains ('name', 'surname') in ATTRIBUTES_MAP the corrisponding  csv columns
-will be merged into one oid value, named with the relative ATTRIBUTES_MAP key. 
-If csv column value is composed by many values separated by commas instead,
-it will create many ldif rows how the splitted csv values are.
-````
-# csv2ldif.py
-ATTRIBUTES_MAP=OrderedDict([('dn', 'dn'),
-                            ('objectClass', 'objectClass'),
-                            ('uid','dn'),
-                            ('sn', 'surname'),
-                            ('givenName', 'name'),
-                            ('cn', ('name', 'surname')),
-                            ('mail', 'mail'),
-                            ('userPassword', 'password'),
-                            ('edupersonAffiliation', 'groups')])
-````
-
-Edit the users in the csv file and then export them in ldif format using csv2ldif:
-````
-cd roles/slapd/templates/entries/
-# edit csv file
-nano entries-people.csv
-python csv2ldif.py entries-people.csv > entries-people.ldif
-python csv2ldif.py entries-people.csv
-````
-
-It simply print the exported ldif format in stdout:
-````
-dn: uid=mario,dc=testunical,dc=it
-objectClass: inetOrgPerson
-objectClass: eduPerson
-uid: mario
-sn: Rossi
-givenName: mario
-cn: mario Rossi
-mail: mario.rossi@testunical.it
-userPassword: cimpa12
-edupersonAffiliation: staff
-edupersonAffiliation: member
-
-dn: uid=peppe,dc=testunical,dc=it
-objectClass: inetOrgPerson
-objectClass: eduPerson
-uid: peppe
-sn: Grossi
-givenName: peppe
-cn: peppe Grossi
-mail: pgrossi@testunical.it
-mail: pgrossi@edu.testunical.it
-userPassword: roll983
-edupersonAffiliation: faculty
-
-[...]
-````
-
 Play this book
 --------------
 Running it locally
 ````
 ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
 
-# purge all the configuration and the databases as well
-ansible-playbook -i "localhost," -c local playbook.yml -e '{ cleanup: true }'
+# trick for a pretty print
+ansible-playbook -i "localhost," -c local playbook.yml | sed 's/\\n/\n/g'
 ````
 
 Play with LDAP administrative's tasks
@@ -271,28 +196,23 @@ slapadd -vl backup_slapd.ldif
 slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
 ````
 
-[TODO] SQL as Database backend
-------------------------------
-slapd-config sql attributes:
-https://github.com/openldap/openldap/blob/master/servers/slapd/back-sql/config.c#L74
+Schemas and Overlays
+--------------------
 
+MemberOf overlay
 
-- create an ldif to ldapadd, eg:
-````
-dn: olcDatabase=sql,cn=config
-objectClass: olcDatabaseConfig
-objectClass: olcSqlConfig
-olcSuffix: dc=test
-olcDatabase: sql
-olcDbName: ldap
-olcDbPass: ldap
-olcDbUser: ldap
-olcSqlSubtreeCond: "ldap_entries.dn LIKE CONCAT('%',?)"
-olcSqlInsEntryStmt: "INSERT INTO ldap_entries (dn,oc_map_id,parent,keyval) VALUES (?,?,?,?)"
-olcSqlHasLDAPinfoDnRu: no
-````
-- create some conditionals in slapd role to manage this feature
+MemberOf overlay made a client to be able to determine which groups an entry 
+is a member of, without performing an additional search. Examples of this 
+are applications using the DIT for access control based on group authorization.
 
+The memberof overlay updates an attribute (by default memberOf) whenever 
+changes occur to the membership attribute (by default member) of entries of 
+the objectclass (by default groupOfNames) configured to trigger updates.
+
+Thus, it provides maintenance of the list of groups an entry is a 
+member of, when usual maintenance of groups is done by modifying the 
+members on the group entry.
+---------------------------------
 
 Hints
 -----
@@ -303,8 +223,69 @@ Hints
 - Error 80 (implementation specific error) raises when tls certs doesn't have read permissions or if the ldif used with ldapadd/ldapmodify have some trailing spaces or too many blank lines or some syntax error;
 - ldapadd, ldapsearch, ldapmodify: set debug level with -d 1 or more. It's the only way to get ldap be more eloquent;
 - every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp);
-- Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice;
+- Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice. You can find a good SSHA generator here: https://github.com/peppelinux/pySSHA-slapd
 - SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
+
+Create fake users using CSV file
+--------------------------------
+It would be also possible to create your own custom fake users using a CSV file
+![Alt text](images/csv.png)
+
+You can create and Map oid to one or more csv columns in the csv2ldif.py file.
+Csv2ldif.py works this way: if a value contains ('name', 'surname') in ATTRIBUTES_MAP the corrisponding  csv columns
+will be merged into one oid value, named with the relative ATTRIBUTES_MAP key. 
+If csv column value is composed by many values separated by commas instead,
+it will create many ldif rows how the splitted csv values are.
+````
+# csv2ldif.py
+ATTRIBUTES_MAP=OrderedDict([('dn', 'dn'),
+                            ('objectClass', 'objectClass'),
+                            ('uid','dn'),
+                            ('sn', 'surname'),
+                            ('givenName', 'name'),
+                            ('cn', ('name', 'surname')),
+                            ('mail', 'mail'),
+                            ('userPassword', 'password'),
+                            ('edupersonAffiliation', 'groups')])
+````
+
+Edit the users in the csv file and then export them in ldif format using csv2ldif:
+````
+cd roles/slapd/templates/entries/
+# edit csv file
+nano entries-people.csv
+python csv2ldif.py entries-people.csv > entries-people.ldif
+python csv2ldif.py entries-people.csv
+````
+
+It simply print the exported ldif format in stdout:
+````
+dn: uid=mario,dc=testunical,dc=it
+objectClass: inetOrgPerson
+objectClass: eduPerson
+uid: mario
+sn: Rossi
+givenName: mario
+cn: mario Rossi
+mail: mario.rossi@testunical.it
+userPassword: cimpa12
+edupersonAffiliation: staff
+edupersonAffiliation: member
+
+dn: uid=peppe,dc=testunical,dc=it
+objectClass: inetOrgPerson
+objectClass: eduPerson
+uid: peppe
+sn: Grossi
+givenName: peppe
+cn: peppe Grossi
+mail: pgrossi@testunical.it
+mail: pgrossi@edu.testunical.it
+userPassword: roll983
+edupersonAffiliation: faculty
+
+[...]
+````
 
 Awesome utilities
 -----------------
@@ -323,22 +304,6 @@ License
 -------
 BSD
 
-
 Author Information
 ------------------
 Giuseppe De Marco <giuseppe.demarco@unical.it>
-
-
-Special thanks to
------------------
-- Marco Malavolti
-
-  For his awesome repository: https://github.com/malavolti/ansible-shibboleth
-  
-- IDEM:GARR guys
-
-  For Digital Identity Management general knowledge :)
-
-- Unical guys
-
-  For everyday brain crushing

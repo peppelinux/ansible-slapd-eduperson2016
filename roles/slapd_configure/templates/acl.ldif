@@ -1,0 +1,11 @@
+dn: olcDatabase={1}{{ ldap_backend }},cn=config
+changeType: modify
+replace: olcAccess
+olcAccess: {0}to * 
+ by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage 
+ by * break
+olcAccess: {1}to * 
+ by self write 
+ by anonymous auth 
+ by dn.children="ou=applications,{{ ldap_basedc }}" read 
+ by * break

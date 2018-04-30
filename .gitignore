@@ -5,3 +5,5 @@ playbook.retry
 *.pyc
 *.ldif.test
 *.~*
+backups/*
+!backups/example

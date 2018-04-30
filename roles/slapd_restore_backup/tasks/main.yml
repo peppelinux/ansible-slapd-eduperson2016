@@ -1,0 +1,75 @@
+# http://tylersguides.com/articles/backup-restore-openldap/
+
+- name: Stop OpenLDAP
+  service:
+    name: slapd
+    state: stopped
+
+- name: Move existing OpenLDAP configuration DIT, /etc/ldap/slapd.d,  to backup folder
+  shell: "mv /etc/ldap/slapd.d {{ backup_folder }}"
+
+- name: Move existing OpenLDAP database entries, /var/lib/ldap, to backup folder
+  shell: "mv /var/lib/ldap {{ backup_folder }}/"
+
+- name: "Ensures {{ cert_path }} dir exists"
+  file: path="{{ cert_path }}" state=directory
+
+- name: "Move existing OpenLDAP certs, {{ cert_path }}, to backup folder"
+  shell: "mv {{ cert_path }} {{ backup_folder }}/old_certs"
+
+- name: Copy certs
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ cert_path }}/"
+    owner: openldap
+    group: ssl-cert
+    mode: 0640
+  with_fileglob:
+    - "{{ backup_folder }}/{{ domain }}/*"
+
+- name: Restore OpenLDAP storage permission
+  file:
+    path: /var/lib/ldap
+    state: directory
+    owner: openldap
+    group: openldap
+    mode: 0600
+    recurse: yes
+
+- name: Restore OpenLDAP configuration permission
+  file:
+    path: /etc/ldap/slapd.d
+    state: directory
+    owner: openldap
+    group: openldap
+    mode: 0600
+    recurse: yes
+
+- name: Restore a OpenLDAP backup
+  command: 'slapadd -n0 -F /etc/ldap/slapd.d -l {{ restore_ldif_path }}/slapd_config_backup.ldif'
+
+- name: Restore a OpenLDAP backup
+  command: 'slapadd -n1 -F /etc/ldap/slapd.d -l {{ restore_ldif_path }}/slapd_entries_backup.ldif'
+
+- name: Restore OpenLDAP storage permission
+  file:
+    path: /var/lib/ldap
+    state: directory
+    owner: openldap
+    group: openldap
+    mode: 0700
+    recurse: yes
+
+- name: Restore OpenLDAP configuration permission
+  file:
+    path: /etc/ldap/slapd.d
+    state: directory
+    owner: openldap
+    group: openldap
+    mode: 0700
+    recurse: yes
+
+- name: Start OpenLDAP
+  service:
+    name: slapd
+    state: started

@@ -16,11 +16,11 @@
 
 - name: Render template eduperson-201602 schema ldif
   copy: 
-    src: roles/slapd/files/eduperson-201602.ldif
+    src: roles/{{role_name}}/files/eduperson-201602.ldif
     dest: "{{ tmp_dir }}/eduperson-201602.ldif"
 
 - name: Add eduperson-201602 schema ldif
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/eduperson-201602.ldif"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/eduperson-201602.ldif"
   when: eduperson_schema.stdout == ""
   notify:
    - "Restart slapd"

@@ -5,7 +5,7 @@
 
 - name: Render template memberof-overlay.ldif
   template: 
-    src: roles/slapd/templates/memberof-overlay.ldif
+    src: roles/{{role_name}}/templates/memberof-overlay.ldif
     dest: "{{ tmp_dir }}/memberof-overlay.ldif"
 
 - name: Add memberOf overlay to openldap
@@ -29,7 +29,7 @@
 
 - name: Render template ppolicy-overlay.ldif
   template: 
-    src: roles/slapd/templates/ppolicy-overlay.ldif
+    src: roles/{{role_name}}/templates/ppolicy-overlay.ldif
     dest: "{{ tmp_dir }}/ppolicy-overlay.ldif"
 
 - name: Add ppolicy overlay to openldap
@@ -38,7 +38,7 @@
 
 - name: Render template ppolicy-entry.ldif
   template: 
-    src: roles/slapd/templates/ppolicy-entry.ldif
+    src: roles/{{role_name}}/templates/ppolicy-entry.ldif
     dest: "{{ tmp_dir }}/ppolicy-entry.ldif"
 
 - name: Add ppolicy entry
@@ -47,7 +47,7 @@
 
 # unique overlay
 - name: Add unique overlay
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/slapd/files/unique.ldif"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{role_name}}/files/unique.ldif"
 
 # pw-sha2 overlay for SHA256 support
 - name: Search Directory for pw-sha2 overlay
@@ -55,7 +55,7 @@
   register: pwsha2
 
 - name: Add pw-sha2 overlay for SHA256 support to openldap
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/slapd/files/pw-sha2.ldif"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{role_name}}/files/pw-sha2.ldif"
   when: pwsha2.stdout == ""
 
 # monitor overlay
@@ -65,7 +65,7 @@
 
 - name: Render template monitor_backend.ldif
   template: 
-    src: roles/slapd/templates/monitor_backend.ldif
+    src: roles/{{role_name}}/templates/monitor_backend.ldif
     dest: "{{ tmp_dir }}/monitor_backend.ldif"
 
 - name: Add Monitor user entry
