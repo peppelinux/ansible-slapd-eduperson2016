@@ -10,6 +10,9 @@ objectClass: olcMemberOf
 objectClass: olcOverlayConfig
 objectClass: top
 olcOverlay: memberof
+# also tried ignore, error and drop with any real understanding of them :(
+# olcMemberOfDangling: error
+# olcMemberOfDanglingError: 32
 olcMemberOfDangling: ignore
 olcMemberOfRefInt: TRUE
 olcMemberOfGroupOC: groupOfNames

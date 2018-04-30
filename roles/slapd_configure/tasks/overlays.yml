@@ -1,3 +1,7 @@
+# unique overlay
+- name: Add unique overlay
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{role_name}}/files/unique_overlay.ldif"
+
 # memberOf
 - name: Search Directory for memberof overlay
   shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcOverlay=memberof"
@@ -11,6 +15,11 @@
 - name: Add memberOf overlay to openldap
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/memberof-overlay.ldif"
   when: memberof_overlay.stdout == ""
+
+# useless, memberOf also came with refint feature
+# refint refint
+# - name: Add refint overlay
+  # command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{role_name}}/files/refint_overlay.ldif"
 
 # ppolicy schema
 - name: "Check Password Policy schema on openLDAP and store the result on 'ppolicy_schema' ansible variable"
@@ -44,10 +53,6 @@
 - name: Add ppolicy entry
   command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }} -f {{ tmp_dir }}/ppolicy-entry.ldif"
   when: ppolicy_overlay.stdout == ""
-
-# unique overlay
-- name: Add unique overlay
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{role_name}}/files/unique.ldif"
 
 # pw-sha2 overlay for SHA256 support
 - name: Search Directory for pw-sha2 overlay

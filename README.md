@@ -225,8 +225,8 @@ slapadd -vl backup_slapd.ldif
 slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
 ````
 
-Schemas and Overlays
---------------------
+Overlays
+--------
 
 MemberOf overlay
 
@@ -242,6 +242,21 @@ Thus, it provides maintenance of the list of groups an entry is a
 member of, when usual maintenance of groups is done by modifying the 
 members on the group entry.
 
+Important consideration for SQL addicted:
+
+Because of the hierchical approach, the only times when memberOf reference integrity will be funcional is if:
+
+- you add or remove a member in a ou group: the childrens membership would appear or disappear in peoples objects;
+- you modify a cn of a ou group: the membership's cn would change also in peoples objects;
+
+This intelligibly demostrates the top-down approach of the hierchical database.
+An also popular "trick" could be to remove all users from their groups and re-add them to force the syncronization.
+If you change or add a memberOf attribute in a member ldif, example: in uid=mario,ou=people,dc=testunical,dc=it:
+
+- if the corresponding group does not exists the value will be added in a silly multi-valued way (no way to raise exception here!);
+- if it exists in ou=groups it will be linked to memberOf top-down reference integrity. This means that only when changes will be done in ou=groups they will be propagated to uid=mario,ou=people,dc=testunical,dc=it;
+
+Reference Integrity in LDAP is know to be very weak compared to SQL, no more to say.
 
 Hints
 -----
@@ -336,6 +351,17 @@ Tools to test and use before you die.
 ![Alt text](images/ApacheDirectoryStudio/2.png)
 ![Alt text](images/ApacheDirectoryStudio/3.png)
 ![Alt text](images/ApacheDirectoryStudio/4.png)
+
+Knows bugs
+----------
+
+It could be possible to experience this kind of exception at the end of the playbook execution:
+````
+Exception ignored in: <function WeakValueDictionary.__init__.<locals>.remove at 0x7f7c3915dd08>
+Traceback (most recent call last):
+  File "/usr/lib/python3.5/weakref.py", line 117, in remove
+````
+This is a well know bug of Ansible in Python3, nothing important for our needs.
 
 License
 -------

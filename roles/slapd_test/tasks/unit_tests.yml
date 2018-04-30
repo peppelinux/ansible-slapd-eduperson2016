@@ -89,6 +89,17 @@
     - "sn"
   ignore_errors: true
 
+- name: "[Must-Fail] User tryes to modify memberOf value. Raises: ldap_modify: Insufficient access (50)"
+  shell:
+    cmd: |
+      ldapmodify -H ldapi:// -D "uid=test2,ou=people,{{ ldap_basedc }}" -w password <<EOF
+      dn: uid=test2,ou=people,dc=testunical,dc=it
+      changetype: modify
+      replace: memberOf
+      memberOf: cn=test,ou=groups,dc=testunical,dc=it
+      EOF
+  ignore_errors: true
+
 # people authentication and ACL
 - name: "[Must-Fail] Log as user and fetch another user's profile. Raises: 32 No such object"
   shell: "ldapsearch -x -D uid=test1,ou=people,{{ ldap_basedc }} -w password -b 'uid=test2,ou=people,{{ ldap_basedc }}'"
@@ -120,8 +131,8 @@
         schacCountryOfCitizenship: it
         EOF
   with_items:
-    - {'username': 'test3', 'password': 'password', 'sn': 'test1 sn', 'gn': 'test1 gn', 'cn': 'test1 cn', 'mail': 'test1@{{ domain }}'}
-    - {'username': 'test4', 'password': 'password', 'sn': 'test2 sn', 'gn': 'test2 gn', 'cn': 'test2 cn', 'mail': 'test1@{{ domain }}'}
+    - {'username': 'test3', 'password': 'password', 'sn': 'test1 sn', 'gn': 'test1 gn', 'cn': 'test1 cn', 'mail': 'test1'}
+    - {'username': 'test4', 'password': 'password', 'sn': 'test2 sn', 'gn': 'test2 gn', 'cn': 'test2 cn', 'mail': 'test1'}
   ignore_errors: true
 
 # ppolicy overlay unit test (lock, unlock everything needed here)
@@ -170,5 +181,3 @@
   with_items:
     - "test1"
     - "test2"
-    - "test3"
-    - "test4"
