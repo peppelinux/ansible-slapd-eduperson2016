@@ -2,7 +2,7 @@ Ansible slapd
 -------------
 This playbook will install a slapd server with:
 
- - mdb storage
+ - MDB backend
  - eduperson2016 schema
  - schac-2015 schema
  - memberOf overlay
@@ -13,14 +13,15 @@ This playbook will install a slapd server with:
  - SSL only (ldaps://)
  - Unit test for ACL and Password Policy overlay (work in progress)
 
-You can even import users from a CSV file, globals parameters can also be edited in playbook.yml.
-All about overlays configuration can be found in:
-````
-roles/slapd/templates/*
-````
+You can also import users from a CSV file, globals parameters can also be edited in playbook.yml.
 This behaviour can be suppressed changing this variable in the playbook:
 ````
 import_example_users: true
+````
+
+All about overlays configuration can be found in:
+````
+roles/slapd_configuration/templates/*
 ````
 
 Tested on
@@ -30,7 +31,7 @@ Tested on
 Requirements
 ------------
 ````
-apt install python3-dev python3-setuptools python3-pip
+apt install python3-dev python3-setuptools python3-pip easy-rsa
 pip3 install ansible
 ````
 
@@ -42,8 +43,8 @@ a self-signed certificate will suffice. To learn more about certificates, see Op
 Remeber that OpenLDAP cannot use a certificate that has a password associated to it.
 
 First of all create your certificates and put them in roles/files/certs/ then 
-configure their names in playbook variables. A script named make_CA.sh can do this automatically, 
-this create your own self signed keys with easy-rsa. 
+configure the FQDN associated to it in playbook variables. A script named make_CA.sh can do this automatically, 
+it will create your own self signed keys with easy-rsa. 
 
 Play this book
 --------------
@@ -168,7 +169,7 @@ ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc
 
 Shibboleth IDP integration
 --------------------------
-A special OU called "applications" let every entry in it to read all attributes of ou=people entries.
+A special OU called "applications" makes every entry in it to read all attributes of ou=people entries.
 
 PPolicy management
 ------------------
@@ -207,10 +208,10 @@ a system rebuild.
 # entire backup
 slapcat -vl backup_slapd.ldif
 
-# restore
+# restore (you should have to destroy /var/lib/ldap first if you experience DIT collisions)
 slapadd -vl backup_slapd.ldif
 
-# backup config
+# backup config (you should have to destroy /etc/ldap/slapd.d first if you experience DIT collisions)
 slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
 ````
 
@@ -234,7 +235,7 @@ members on the group entry.
 
 Hints
 -----
-- ldap:// is disabled, only ldapi:/// and ldaps:/// will be available;
+- ldap:// is disabled (it will works only in local), only ldapi:/// and ldaps:/// will be available;
 - Be aware that ldapmodify is sensitive to (trailing) spaces;
 - https://www.openldap.org/doc/admin24/appendix-common-errors.html
 - https://www.switch.ch/aai/guides/idp/installation/
@@ -250,7 +251,7 @@ It would be also possible to create your own custom fake users using a CSV file
 ![Alt text](images/csv.png)
 
 You can create and Map oid to one or more csv columns in the csv2ldif.py file.
-Csv2ldif.py works this way: if a value contains ('name', 'surname') in ATTRIBUTES_MAP the corrisponding  csv columns
+Csv2ldif.py works this way: if a value contains ('name', 'surname') in ATTRIBUTES_MAP the corrisponding csv columns
 will be merged into one oid value, named with the relative ATTRIBUTES_MAP key. 
 If csv column value is composed by many values separated by commas instead,
 it will create many ldif rows how the splitted csv values are.
@@ -304,6 +305,7 @@ edupersonAffiliation: faculty
 
 [...]
 ````
+This is not mandatory, probably you'll prefer to use a standard ldif format!
 
 Awesome utilities
 -----------------
@@ -317,7 +319,15 @@ Tools to test and use before you die.
 - ldapsh let us navigate the LDAP tree like a filesystem tree, awesome!
   - http://ldapsh.sourceforge.net/
   - https://github.com/maufl/ldapsh
-  
+
+- ApacheActiveDirectory is a very good LDAP general purpose navigator. It will not came with support for ppolicy fields and specific slapd's ACL editor and Monitor backend but it will be good for everything else. You can download it from its official site: http://directory.apache.org/studio/downloads.html
+
+![Alt text](images/ApacheDirectoryStudio/1.png)
+![Alt text](images/ApacheDirectoryStudio/2.png)
+![Alt text](images/ApacheDirectoryStudio/3.png)
+![Alt text](images/ApacheDirectoryStudio/4.png)
+
+
 License
 -------
 BSD
