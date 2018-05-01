@@ -40,7 +40,7 @@ Setup Certificates
 
 In order to use SASL/TLS  you must have certificates, for testing purposes 
 a self-signed certificate will suffice. To learn more about certificates, see OpenSSL.
-Remeber that OpenLDAP cannot use a certificate that has a password associated to it.
+Remeber that OpenLDAP cannot use a certificate that have a password associated to it.
 
 First of all create your certificates and put them in roles/files/certs/ then 
 configure the FQDN associated to it in playbook variables. A script named make_CA.sh can do this automatically, 
@@ -318,15 +318,13 @@ Tools to test and use before you die.
 
 - ldapsh let us navigate the LDAP tree like a filesystem tree, awesome!
   - http://ldapsh.sourceforge.net/
-  - https://github.com/maufl/ldapsh
 
-- ApacheActiveDirectory is a very good LDAP general purpose navigator. It will not came with support for ppolicy fields and specific slapd's ACL editor and Monitor backend but it will be good for everything else. You can download it from its official site: http://directory.apache.org/studio/downloads.html
+- ApacheActiveDirectory is a very good LDAP general purpose navigator. It will not came with support for ppolicy fields, neither with a slapd's ACL editor and Monitor backend navigator but it will be quite good for everything else regarding a standard LDAP OU navigation. You can download it from its official site: http://directory.apache.org/studio/downloads.html
 
 ![Alt text](images/ApacheDirectoryStudio/1.png)
 ![Alt text](images/ApacheDirectoryStudio/2.png)
 ![Alt text](images/ApacheDirectoryStudio/3.png)
 ![Alt text](images/ApacheDirectoryStudio/4.png)
-
 
 License
 -------
