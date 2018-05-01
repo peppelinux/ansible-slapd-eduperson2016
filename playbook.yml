@@ -25,6 +25,8 @@
     ldap_pw: slapdsecret
     ldap_monitor_pw: monitorsecret
 
+    debug_level: 0
+    
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp
 

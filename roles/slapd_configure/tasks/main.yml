@@ -72,3 +72,12 @@
 
 - name: Clean temporary config ldif
   file: path="{{ tmp_dir }}" state=absent
+
+- name: Set Debug level
+  shell:
+    cmd: |
+        ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+        dn: cn=config
+        replace: olcLogLevel
+        olcLogLevel: {{ debug_level }}
+        EOF
