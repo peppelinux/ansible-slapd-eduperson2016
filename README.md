@@ -238,9 +238,8 @@ Hints
 - ldap:// is disabled (it will works only in local), only ldapi:/// and ldaps:/// will be available;
 - Be aware that ldapmodify is sensitive to (trailing) spaces;
 - https://www.openldap.org/doc/admin24/appendix-common-errors.html
-- https://www.switch.ch/aai/guides/idp/installation/
-- Error 80 (implementation specific error) raises when tls certs doesn't have read permissions or if the ldif used with ldapadd/ldapmodify have some trailing spaces or too many blank lines or some syntax error;
-- ldapadd, ldapsearch, ldapmodify: set debug level with -d 1 or more. It's the only way to get ldap be more eloquent;
+- Error 80 (implementation specific error) raises when tls certs doesn't have read permissions or if the ldif used with ldapadd/ldapmodify have some trailing spaces or too many blank lines or some syntax error. In other words for everything not well undestood, found in a ldif file, by slapd interpreter;
+- ldapadd, ldapsearch, ldapmodify: set debug level with -d 256. It's the only way to get ldap be more eloquent;
 - every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp);
 - Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice. You can find a good SSHA generator here: https://github.com/peppelinux/pySSHA-slapd
 - SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
