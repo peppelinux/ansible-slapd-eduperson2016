@@ -215,18 +215,40 @@ ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12
 
 Backup and restore
 ------------------
-It will extract the entire database contents into the "backup_slapd.ldif" file 
-and then restore "backup_slapd.ldif", importing it back into the LDAP after 
-a system rebuild.
+This playbook, before its execution, will produce a total backup of existing slapd installation, into two separated files.
+One for configuration and another one for data entries. The last role, called slapd_test, is used to backup the latter
+configuration, destroing all and then restore everything to its original state before running all the other unit tests.
+In other words it rebuild all the things done in the tasks, doing a full backup/restore unit test.
+
+The following instruction shows us how to backup and restore slapd by hands.
+Remeber that Databases are numbered, with 0 being cn=config, 1 the first back-end you configure, 2 the next etc.
+
+Configuration:
 ````
-# entire backup
-slapcat -vl backup_slapd.ldif
-
-# restore (you should have to destroy /var/lib/ldap first if you experience DIT collisions)
-slapadd -vl backup_slapd.ldif
-
 # backup config (you should have to destroy /etc/ldap/slapd.d first if you experience DIT collisions)
 slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
+
+# restore configuration
+service slapd stop
+rm -R /etc/ldap/slapd.d/*
+slapadd -n0 -F /etc/ldap/slapd.d -l slapd_config_backup.ldif
+chmod -R 0700 openldap /etc/ldap/slapd.d
+service slapd start
+````
+
+Data entries:
+````
+# data backup
+slapcat -vl slapd_entries_backup.ldif
+# or
+# slapcat -b "{{ ldap_basedc }}" -vl slapd_entries_backup.ldif
+
+# restore (you should have to destroy /var/lib/ldap first if you experience DIT collisions)
+service slapd stop
+rm -R /var/lib/ldap/*
+slapadd -n1 -F /etc/ldap/slapd.d -l slapd_entries_backup.ldif
+chmod -R 0600 /var/lib/ldap
+service slapd start
 ````
 
 Overlays
@@ -261,6 +283,52 @@ If you change or add a memberOf attribute in a member ldif, example: in uid=mari
 - if the cn exists in ou=groups it will be linked to memberOf top-down reference integrity.
 
 Reference Integrity in LDAP is know to be very weak compared to SQL, no more to say.
+
+
+Samba integration
+---------------
+This playbook does not do this but comes with samba3.ldif schema already loaded in, if you need it.
+A more comprehensive reference here:
+- http://pig.made-it.com/samba-accounts.html
+- https://wiki.samba.org/index.php/3.0:_Initialization_LDAP_Database
+
+````
+# silly hints for samba Domain configuration
+apt install samba-common-bin
+
+net getlocalsid
+# SID for domain SLAPD-D9 is: S-1-5-21-373095595-3990083659-665560725
+
+# if you need to change it, example:
+net setlocalsid S-1-5-21-33300351-1172445578-3061011111
+````
+
+
+Radius integration
+------------------
+This playbook came with freeradius schema for radius authentication over LDAP.
+If you need the sambaNTPassword field in your accounts entries you should include a
+sambaSID univoque value for every user, otherwise you'll get this exception:
+
+````
+ldap_add: Object class violation (65)
+	additional info: object class 'sambaSamAccount' requires attribute 'sambaSID'
+
+````
+
+To get some random SID you can use samba_sid.sh script as follows:
+````
+#bash samba_sid.sh 
+S-1-5-21-3029086335-4292621882-1389276266
+````
+
+To get a workin NT-hash you can use smbpassword or the included nt_passwd.py script
+as follows:
+````
+pip3 install passlib
+python3 nt_passwd.py yourpassword
+# 5dfb7533508b0ea192ccf7f6b64427fc
+````
 
 Hints
 -----

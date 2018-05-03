@@ -5,8 +5,7 @@ objectclass: person
 objectclass: userSecurityInformation
 objectclass: eduPerson
 objectclass: radiusprofile
-# objectclass: sambaSidEntry
-# objectclass: sambaSamAccount
+objectclass: sambaSamAccount
 objectclass: schacContactLocation
 objectclass: schacEmployeeInfo
 objectclass: schacEntryConfidentiality
@@ -18,7 +17,8 @@ objectclass: schacPersonalCharacteristics
 objectclass: schacUserEntitlements
 uid: mario
 userpassword: cimpa12
-# sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
+sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
+sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
 cn: mario
 sn: rossi
 givenName: mario
@@ -42,6 +42,7 @@ objectclass: person
 objectclass: userSecurityInformation
 objectclass: eduPerson
 objectclass: radiusprofile
+objectclass: sambaSamAccount
 objectclass: schacContactLocation
 objectclass: schacEmployeeInfo
 objectclass: schacEntryConfidentiality
@@ -53,7 +54,8 @@ objectclass: schacPersonalCharacteristics
 objectclass: schacUserEntitlements
 uid: peppe
 userpassword: roll983
-# sambantpassword: a2137530237ad733fdc26d5d7157d43f
+sambaSID: S-1-5-21-4190670642-642652591-2618390626
+sambaNTpassword: a2137530237ad733fdc26d5d7157d43f
 cn: peppe
 sn: grossi
 givenName: peppe
@@ -78,6 +80,7 @@ objectclass: person
 objectclass: userSecurityInformation
 objectclass: eduPerson
 objectclass: radiusprofile
+objectclass: sambaSamAccount
 objectclass: schacContactLocation
 objectclass: schacEmployeeInfo
 objectclass: schacEntryConfidentiality
@@ -89,7 +92,8 @@ objectclass: schacPersonalCharacteristics
 objectclass: schacUserEntitlements
 uid: gino
 userpassword: geu45
-# sambantpassword: 4836f31fa147adf5fd42dfc52353f1b8
+sambaSID: S-1-5-21-3367172335-543387273-3899206864
+sambaNTpassword: 4836f31fa147adf5fd42dfc52353f1b8
 cn: gino
 sn: groe
 givenName: gino

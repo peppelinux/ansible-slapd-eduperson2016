@@ -36,6 +36,8 @@
     # filename to import, also available: entries-people.ldif
     import_example_users_ldif: entries-people-extended.ldif
 
+    sambaNTpassword_AttrType: true
+    
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"
 

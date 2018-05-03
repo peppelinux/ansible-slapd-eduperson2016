@@ -45,10 +45,10 @@
     mode: 0600
     recurse: yes
 
-- name: Restore a OpenLDAP backup
+- name: Restore OpenLDAP config backup
   command: 'slapadd -n0 -F /etc/ldap/slapd.d -l {{ restore_ldif_path }}/slapd_config_backup.ldif'
 
-- name: Restore a OpenLDAP backup
+- name: Restore a OpenLDAP data entries backup
   command: 'slapadd -n1 -F /etc/ldap/slapd.d -l {{ restore_ldif_path }}/slapd_entries_backup.ldif'
 
 - name: Restore OpenLDAP storage permission
