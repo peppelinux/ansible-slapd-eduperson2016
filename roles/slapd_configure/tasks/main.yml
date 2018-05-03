@@ -41,7 +41,7 @@
     dest: "{{ tmp_dir }}/{{ item }}"
   with_items:
     - "entries-system.ldif"
-    - "entries-people.ldif"
+    - "{{ import_example_users_ldif }}"
     - "entries-groups.ldif"
 
 # - name: Add OU system entries
@@ -57,7 +57,7 @@
 - name: Add OU entries (peoples)
   command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f {{ tmp_dir }}/{{ item }}"
   with_items:
-    - "entries-people.ldif"
+    - "{{ import_example_users_ldif }}"
   when: import_example_users == True
 
 # overlays
@@ -72,12 +72,3 @@
 
 - name: Clean temporary config ldif
   file: path="{{ tmp_dir }}" state=absent
-
-- name: Set Debug level
-  shell:
-    cmd: |
-        ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-        dn: cn=config
-        replace: olcLogLevel
-        olcLogLevel: {{ debug_level }}
-        EOF

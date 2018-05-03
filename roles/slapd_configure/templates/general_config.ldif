@@ -2,7 +2,7 @@
 # users defined in applications would read everything
 dn: cn=config
 replace: olcLogLevel
-olcLogLevel: 256
+olcLogLevel: {{ debug_level }}
 
 # http://www.zytrax.com/books/ldap/apa/indeces.html
 dn: olcDatabase={1}{{ ldap_backend }},cn=config
@@ -16,3 +16,9 @@ olcDbIndex: uid pres,eq
 olcDbIndex: entryUUID eq
 olcDbIndex: sn pres,eq,sub
 olcDbIndex: mail pres,eq,sub
+
+# Create samba indexes
+olcDbIndex: sambaSID              eq
+olcDbIndex: sambaPrimaryGroupSID  eq
+olcDbIndex: sambaDomainName       eq
+olcDbIndex: default               sub
