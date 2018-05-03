@@ -12,10 +12,9 @@ This playbook will install a slapd server with:
  - Unique overlay (default field: mail)
  - SSL only (ldaps://)
  - Unit test for ACL and Password Policy overlay
- - SyncRepl for a read-only slave (work in progress)
 
 You can also import users from a CSV file, globals parameters can also be edited in playbook.yml.
-This behaviour can be suppressed changing this variable in the playbook:
+This behaviour can be suppressed changing this in the playbook:
 ````
 import_example_users: true
 ````
@@ -171,7 +170,12 @@ ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc
 Shibboleth IDP integration
 --------------------------
 A special OU called "applications" makes every entry in it to read all attributes of ou=people entries.
-
+````
+olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}" 
+ by dn.children="ou=application,{{ ldap_basedc }}" read 
+ by self read 
+ by * none
+````
 PPolicy management
 ------------------
 ````
@@ -244,17 +248,17 @@ members on the group entry.
 
 Important consideration for SQL addicted:
 
-Because of the hierchical approach, the only times when memberOf reference integrity will be funcional is if:
+Because of its hierchical approach, the times when memberOf reference integrity will be funcional are when:
 
-- you add or remove a member in a ou group: the childrens membership would appear or disappear in peoples objects;
-- you modify a cn of a ou group: the membership's cn would change also in peoples objects;
+- you add or remove a member in a ou=group: the membership would appear or disappear in ou=people objects;
+- you modify a cn, a name, of a ou=group: the membership's cn would change also in peoples objects;
 
 This intelligibly demostrates the top-down approach of the hierchical database.
 An also popular "trick" could be to remove all users from their groups and re-add them to force the syncronization.
 If you change or add a memberOf attribute in a member ldif, example: in uid=mario,ou=people,dc=testunical,dc=it:
 
-- if the corresponding group does not exists the value will be added in a silly multi-valued way (no way to raise exception here!);
-- if it exists in ou=groups it will be linked to memberOf top-down reference integrity. This means that only when changes will be done in ou=groups they will be propagated to uid=mario,ou=people,dc=testunical,dc=it;
+- if the corresponding group does not exists the value will be added in a silly multi-valued way, even if it doesn't exists in ou=group (no way to raise exception here!);
+- if the cn exists in ou=groups it will be linked to memberOf top-down reference integrity.
 
 Reference Integrity in LDAP is know to be very weak compared to SQL, no more to say.
 
