@@ -1,12 +1,9 @@
 #/usr/bin/env python3
 
 import sys
-from passlib.hash import nthash
+import hashlib,binascii
 
 _help = """
-dependencies:
-    pip3 install passlib
-
 just type:
     python3 nt_hash.py password
 
@@ -15,5 +12,5 @@ just type:
 if len(sys.argv) < 2:
     sys.exit(_help)
 
-nt_hash = nthash.hash(sys.argv[1])
-print(nt_hash)
+hash = hashlib.new('md4', sys.argv[1].encode('utf-16le')).digest()
+print(str(binascii.hexlify(hash), encoding='ascii'))

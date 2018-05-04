@@ -8,9 +8,9 @@
   become: yes
   vars:
     org: unical
-    hostname:   testunical
+    domain2:   testunical
     domain1: it
-    domain: "{{ hostname }}.{{ domain1 }}"
+    domain: "{{ domain2 }}.{{ domain1 }}"
     
     fqdn: "ldap.{{ domain }}"
     
@@ -20,8 +20,8 @@
     ldap_server_key: slapd-key.pem
     
     ldap_backend: "mdb"
-    ldap_basedc: "dc={{ hostname }},dc={{ domain1 }}"
-    ldap_basedn: "ou=people,dc={{ hostname }},dc={{ domain1 }}"
+    ldap_basedc: "dc={{ domain2 }},dc={{ domain1 }}"
+    ldap_basedn: "ou=people,dc={{ domain2 }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
     ldap_monitor_pw: monitorsecret
 

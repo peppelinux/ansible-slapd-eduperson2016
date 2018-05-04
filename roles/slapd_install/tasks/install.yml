@@ -1,15 +1,3 @@
-- name: "Install 'debconf-utils' and 'python-ldap' packages"
-  apt:
-   name: "{{ item }}"
-   state: latest
-   update_cache: yes
-  with_items:
-   - debconf-utils
-   - python-ldap
-   - ldap-utils
-   - ssl-cert
-   - ldapvi
-
 - name: Check debconf for slapd entries
   shell: (debconf-get-selections | grep -q -s slapd); echo $?
   register: debconf
@@ -54,6 +42,19 @@
 
 - name: Install slapd
   apt: name=slapd state=present
+
+- name: "Install 'debconf-utils' and 'python-ldap' packages"
+  apt:
+   name: "{{ item }}"
+   state: latest
+   update_cache: yes
+  with_items:
+   - debconf-utils
+   - python-ldap
+   - ldap-utils
+   - ssl-cert
+   - ldapvi
+   - slapd-smbk5pwd
 
 - name: "Add 'openldap' user 'ssl-cert' group"
   user:

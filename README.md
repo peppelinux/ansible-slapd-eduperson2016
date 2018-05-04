@@ -13,7 +13,7 @@ This playbook will install a slapd server with:
  - SSL only (ldaps://)
  - Unit test for ACL and Password Policy overlay
 
-You can also import users from a CSV file, globals parameters can also be edited in playbook.yml.
+You can also import users from a CSV file, globals parameters can be edited in playbook.yml.
 This behaviour can be suppressed changing this in the playbook:
 ````
 import_example_users: true
@@ -22,6 +22,7 @@ import_example_users: true
 All about overlays configuration can be found in:
 ````
 roles/slapd_configuration/templates/*
+roles/slapd_configuration/files/*
 ````
 
 Tested on

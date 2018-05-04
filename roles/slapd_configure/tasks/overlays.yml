@@ -75,3 +75,12 @@
 
 - name: Add Monitor user entry
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/monitor_backend.ldif"
+
+# smbk5pwd overlay
+- name: Render template smbk5pwd-overlay.ldif
+  template: 
+    src: roles/{{role_name}}/templates/smbk5pwd-overlay.ldif
+    dest: "{{ tmp_dir }}/smbk5pwd-overlay.ldif"
+
+- name: Add smbk5pwd-overlay.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/smbk5pwd-overlay.ldif"
