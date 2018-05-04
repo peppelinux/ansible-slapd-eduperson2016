@@ -24,8 +24,9 @@
     ldap_basedn: "ou=people,dc={{ domain2 }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
     ldap_monitor_pw: monitorsecret
-
-    debug_level: 0
+    ldap_default_passwd_enc: "{SSHA512}"
+    
+    debug_level: 256
     
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp

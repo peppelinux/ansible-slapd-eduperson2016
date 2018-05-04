@@ -10,6 +10,7 @@ This playbook will install a slapd server with:
  - pw-sha2 overlay for SSHA-512, SSHA-384, SSHA-256, SHA-512, SHA-384 and SHA-256 passwords
  - Monitor backend
  - Unique overlay (default field: mail)
+ - smbk5pwd overlay
  - SSL only (ldaps://)
  - Unit test for ACL and Password Policy overlay
 
@@ -210,7 +211,7 @@ pwdReset: TRUE
 ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=testunical,dc=it' "pwdReset=*" pwdReset
 
 # a user that resets a password by his own
-ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12
+ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12 -s newpassword
 
 ````
 
@@ -252,11 +253,8 @@ chmod -R 0600 /var/lib/ldap
 service slapd start
 ````
 
-Overlays
---------
-
-MemberOf overlay
-
+Overlays: MemberOf overlay
+--------------------------
 MemberOf overlay made a client to be able to determine which groups an entry 
 is a member of, without performing an additional search. Examples of this 
 are applications using the DIT for access control based on group authorization.
@@ -285,6 +283,13 @@ If you change or add a memberOf attribute in a member ldif, example: in uid=mari
 
 Reference Integrity in LDAP is know to be very weak compared to SQL, no more to say.
 
+Overlays: smbk5pwd
+------------------
+
+smbk5pwd extends the PasswordModify Extended Operation to update Kerberos keys and Samba
+password hashes for an LDAP user.
+
+It will only works if the password is changed using ldappasswd!
 
 Samba integration
 ---------------

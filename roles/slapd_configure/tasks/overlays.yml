@@ -54,14 +54,28 @@
   command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }} -f {{ tmp_dir }}/ppolicy-entry.ldif"
   when: ppolicy_overlay.stdout == ""
 
-# pw-sha2 overlay for SHA256 support
-- name: Search Directory for pw-sha2 overlay
-  shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcModuleLoad=pw-sha2"
-  register: pwsha2
+# pw-sha2 overlay for SHA512 support
+- name: Render template pw-sha2 overlay for SHA256 support to openldap
+  template: 
+    src: roles/{{role_name}}/templates/pw-sha2.ldif
+    dest: "{{ tmp_dir }}/pw-sha2.ldif"
 
 - name: Add pw-sha2 overlay for SHA256 support to openldap
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{role_name}}/files/pw-sha2.ldif"
-  when: pwsha2.stdout == ""
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/pw-sha2.ldif"
+  # when: pwsha2.stdout == ""
+
+# - name: Search Directory for pw-sha2 overlay
+  # shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcModuleLoad=pw-sha2"
+  # register: pwsha2
+
+- name: "Set default password encoding: {{ ldap_default_passwd_enc }}"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={-1}frontend,cn=config
+      replace: olcPasswordHash
+      olcPasswordHash: {{ ldap_default_passwd_enc }}
+      EOF
 
 # monitor overlay
 - name: Hashing Monitor password
