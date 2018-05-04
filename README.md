@@ -30,6 +30,38 @@ Tested on
 ---------
 - Debian 9
 
+
+Table of contents
+-----------------
+
+<!--ts-->
+   * Installation
+       * [Requirements](#requirements)
+       * [Setup Certificates](#setup-certificates)
+       * [Play this book](#play-this-book)
+   * LDAP admin tasks
+      * [Play with LDAP admin tasks](#play-with-ldap-admin-tasks)
+      * [Access Control lists debug](#access-control-lists-debug)
+      * [Play with content data](#play-with-content-data)
+      * [Remote connections](#remote-connections)
+      * [Backup and restore](#backup-and-restore)
+   * Overlays
+      * [MemberOf overlay](#memberof-overlay)
+      * [smbk5pwd](#smbk5pwd)
+      * [PPolicy management](#ppolicy-management)
+   * Integrations
+      * [Samba integration](#memberof-overlay)
+      * [Radius integration](#smbk5pwd)
+      * [Shibboleth IDP integration](#shibboleth-idp-integration)
+   * Hints
+      * [Hints](#hints)
+      * [Create fake users using CSV file](#create-fake-users-using-csv-file)
+      * [Awesome utilities](#awesome-utilities)
+      * [Knows bugs](#knows-bugs)
+   * [License](#license)
+   * [Author information](#author-information)
+<!--te-->
+
 Requirements
 ------------
 ````
@@ -58,10 +90,11 @@ ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
 unbuffer ansible-playbook -i "localhost," -c local playbook.yml | sed 's/\\n/\n/g'
 ````
 
-Play with LDAP administrative's tasks
--------------------------------------
+Play with LDAP admin tasks
+--------------------------
 Commands related to OpenLDAP that begin with ldap (like ldapsearch) are 
 client-side utilities, while commands that begin with slap (like slapcat) are server-side.
+Also remeber that ldapi:/// works only locally if executed by root user.
 
 ````
 # root DSE
@@ -169,14 +202,42 @@ ldapwhoami -x -H ldaps://ldap.testunical.it -D "uid=gino,ou=people,dc=testunical
 ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
 ````
 
-Shibboleth IDP integration
---------------------------
-A special OU called "applications" makes every entry in it to read all attributes of ou=people entries.
+Backup and restore
+------------------
+This playbook, before its execution, will produce a total backup of existing slapd installation, into two separated files.
+One for configuration and another one for data entries. The last role, called slapd_test, is used to backup the latter
+configuration, destroing all and then restore everything to its original state before running all the other unit tests.
+In other words it rebuild all the things done in the tasks, doing a full backup/restore unit test.
+
+The following instruction shows us how to backup and restore slapd by hands.
+Remeber that Databases are numbered, with 0 being cn=config, 1 the first back-end you configure, 2 the next etc.
+
+Configuration:
 ````
-olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}" 
- by dn.children="ou=application,{{ ldap_basedc }}" read 
- by self read 
- by * none
+# backup config (you should have to destroy /etc/ldap/slapd.d first if you experience DIT collisions)
+slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
+
+# restore configuration
+service slapd stop
+rm -R /etc/ldap/slapd.d/*
+slapadd -n0 -F /etc/ldap/slapd.d -l slapd_config_backup.ldif
+chmod -R 0700 openldap /etc/ldap/slapd.d
+service slapd start
+````
+
+Data entries:
+````
+# data backup
+slapcat -vl slapd_entries_backup.ldif
+# or
+# slapcat -b "{{ ldap_basedc }}" -vl slapd_entries_backup.ldif
+
+# restore (you should have to destroy /var/lib/ldap first if you experience DIT collisions)
+service slapd stop
+rm -R /var/lib/ldap/*
+slapadd -n1 -F /etc/ldap/slapd.d -l slapd_entries_backup.ldif
+chmod -R 0600 /var/lib/ldap
+service slapd start
 ````
 PPolicy management
 ------------------
@@ -215,45 +276,7 @@ ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12 -s
 
 ````
 
-Backup and restore
-------------------
-This playbook, before its execution, will produce a total backup of existing slapd installation, into two separated files.
-One for configuration and another one for data entries. The last role, called slapd_test, is used to backup the latter
-configuration, destroing all and then restore everything to its original state before running all the other unit tests.
-In other words it rebuild all the things done in the tasks, doing a full backup/restore unit test.
-
-The following instruction shows us how to backup and restore slapd by hands.
-Remeber that Databases are numbered, with 0 being cn=config, 1 the first back-end you configure, 2 the next etc.
-
-Configuration:
-````
-# backup config (you should have to destroy /etc/ldap/slapd.d first if you experience DIT collisions)
-slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
-
-# restore configuration
-service slapd stop
-rm -R /etc/ldap/slapd.d/*
-slapadd -n0 -F /etc/ldap/slapd.d -l slapd_config_backup.ldif
-chmod -R 0700 openldap /etc/ldap/slapd.d
-service slapd start
-````
-
-Data entries:
-````
-# data backup
-slapcat -vl slapd_entries_backup.ldif
-# or
-# slapcat -b "{{ ldap_basedc }}" -vl slapd_entries_backup.ldif
-
-# restore (you should have to destroy /var/lib/ldap first if you experience DIT collisions)
-service slapd stop
-rm -R /var/lib/ldap/*
-slapadd -n1 -F /etc/ldap/slapd.d -l slapd_entries_backup.ldif
-chmod -R 0600 /var/lib/ldap
-service slapd start
-````
-
-Overlays: MemberOf overlay
+MemberOf overlay
 --------------------------
 MemberOf overlay made a client to be able to determine which groups an entry 
 is a member of, without performing an additional search. Examples of this 
@@ -283,14 +306,23 @@ If you change or add a memberOf attribute in a member ldif, example: in uid=mari
 
 Reference Integrity in LDAP is know to be very weak compared to SQL, no more to say.
 
-Overlays: smbk5pwd
-------------------
+smbk5pwd
+--------
 
 smbk5pwd extends the PasswordModify Extended Operation to update Kerberos keys and Samba
 password hashes for an LDAP user.
 
 It will only works if the password is changed using ldappasswd!
 
+Shibboleth IDP integration
+--------------------------
+A special OU called "applications" makes every entry in it to read all attributes of ou=people entries.
+````
+olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}" 
+ by dn.children="ou=application,{{ ldap_basedc }}" read 
+ by self read 
+ by * none
+````
 Samba integration
 ---------------
 This playbook does not do this but comes with samba3.ldif schema already loaded in, if you need it.
@@ -308,7 +340,6 @@ net getlocalsid
 # if you need to change it, example:
 net setlocalsid S-1-5-21-33300351-1172445578-3061011111
 ````
-
 
 Radius integration
 ------------------
@@ -443,7 +474,33 @@ This is a well know bug of Ansible in Python3, nothing important for our needs.
 
 License
 -------
-BSD
+Copyright (c) 2018 giuseppe.demarco@unical.it
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. All advertising materials mentioning features or use of this software
+   must display the following acknowledgement:
+   This product includes software developed by the Università della Calabria, unical.it.
+4. Neither the name of the Università della Calabria nor the
+   names of its contributors may be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY giuseppe.demarco@unical.it ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL giuseppe.demarco@unical.it BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Author Information
 ------------------
