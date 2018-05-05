@@ -1,4 +1,7 @@
 # https://www.openldap.org/doc/admin24/access-control.html
+# https://www.openldap.org/faq/data/cache/454.html
+# remember that:
+# none do nothing and default is STOP. BREAK instead continue reading to next rule
 dn: olcDatabase={1}{{ ldap_backend }},cn=config
 changeType: modify
 replace: olcAccess
@@ -10,7 +13,7 @@ olcAccess: to attrs=userPassword,shadowLastChange,mail
  by anonymous auth 
  by * none
 olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}" 
- by dn.children="ou=application,{{ ldap_basedc }}" read 
+ by dn.children="ou=applications,{{ ldap_basedc }}" read 
  by self read 
  by * none
 olcAccess: to * 
