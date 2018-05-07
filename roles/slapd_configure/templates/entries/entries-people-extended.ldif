@@ -31,6 +31,7 @@ edupersonentitlement: urn:mace:terena.org:tcs:escience-user
 edupersonprincipalname: rossi@unical
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
+edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
 schachomeorganizationtype: educationInstitution
@@ -105,7 +106,8 @@ edupersonaffiliation: student
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
 edupersonprincipalname: gino@unical
-edupersonscopedaffiliation: staff@{{ domain }}
+edupersonscopedaffiliation: student@{{ domain }}
+edupersonscopedaffiliation: student@altrocollege.fr
 edupersonscopedaffiliation: member@{{ domain }}
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
