@@ -51,7 +51,7 @@ Table of contents
       * [PPolicy management](#ppolicy-management)
    * Integrations
       * [Samba integration](#samba-integration)
-      * [Radius integration](#freeradius-integration)
+      * [Radius integration](#radius-integration)
       * [Shibboleth IDP integration](#shibboleth-idp-integration)
    * Hints
       * [Hints](#hints)
