@@ -35,25 +35,25 @@ Table of contents
 -----------------
 
 <!--ts-->
-   * ####Installation
+   * #### Installation
        * [Requirements](#requirements)
        * [Setup Certificates](#setup-certificates)
        * [Play this book](#play-this-book)
-   * ####LDAP admin tasks
+   * #### LDAP admin tasks
       * [Play with LDAP admin tasks](#play-with-ldap-admin-tasks)
       * [Access Control lists debug](#access-control-lists-debug)
       * [Play with content data](#play-with-content-data)
       * [Remote connections](#remote-connections)
       * [Backup and restore](#backup-and-restore)
-   * ####Overlays
+   * #### Overlays
       * [MemberOf overlay](#memberof-overlay)
       * [smbk5pwd](#smbk5pwd)
       * [PPolicy management](#ppolicy-management)
-   * ####Integrations
+   * #### Integrations
       * [Samba integration](#samba-integration)
       * [Radius integration](#radius-integration)
       * [Shibboleth IDP integration](#shibboleth-idp-integration)
-   * ####Hints
+   * #### Hints
       * [Hints](#hints)
       * [Create fake users using CSV file](#create-fake-users-using-csv-file)
       * [Awesome utilities](#awesome-utilities)
@@ -212,7 +212,7 @@ In other words it rebuild all the things done in the tasks, doing a full backup/
 The following instruction shows us how to backup and restore slapd by hands.
 Remeber that Databases are numbered, with 0 being cn=config, 1 the first back-end you configure, 2 the next etc.
 
-####Configuration
+#### Configuration
 ````
 # backup config (you should have to destroy /etc/ldap/slapd.d first if you experience DIT collisions)
 slapcat -F /etc/ldap/slapd.d -n 0 -l "$(hostname)-ldap-mdb-config-$(date '+%F').ldif"
@@ -225,7 +225,7 @@ chmod -R 0700 openldap /etc/ldap/slapd.d
 service slapd start
 ````
 
-####Data entries
+#### Data entries
 ````
 # data backup
 slapcat -vl slapd_entries_backup.ldif
