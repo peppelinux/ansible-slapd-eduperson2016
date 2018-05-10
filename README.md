@@ -53,7 +53,7 @@ Table of contents
       * [Samba integration](#samba-integration)
       * [Radius integration](#radius-integration)
       * [Shibboleth IDP integration](#shibboleth-idp-integration)
-   * #### Hints
+   * #### Additional resources
       * [Hints](#hints)
       * [Create fake users using CSV file](#create-fake-users-using-csv-file)
       * [Awesome utilities](#awesome-utilities)
