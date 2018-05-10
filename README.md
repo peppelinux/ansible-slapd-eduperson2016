@@ -50,8 +50,8 @@ Table of contents
       * [smbk5pwd](#smbk5pwd)
       * [PPolicy management](#ppolicy-management)
    * Integrations
-      * [Samba integration](#memberof-overlay)
-      * [Radius integration](#smbk5pwd)
+      * [Samba integration](#samba-integration)
+      * [Radius integration](#freeradius-integration)
       * [Shibboleth IDP integration](#shibboleth-idp-integration)
    * Hints
       * [Hints](#hints)
