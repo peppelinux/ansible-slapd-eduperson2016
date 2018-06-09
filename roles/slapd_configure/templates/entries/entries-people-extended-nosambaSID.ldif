@@ -1,0 +1,118 @@
+dn: uid=mario,ou=people,{{ ldap_basedc }}
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+objectclass: userSecurityInformation
+objectclass: eduPerson
+objectclass: radiusprofile
+objectclass: sambaSamAccount
+objectclass: schacContactLocation
+objectclass: schacEmployeeInfo
+objectclass: schacEntryConfidentiality
+objectclass: schacEntryMetadata
+objectclass: schacExperimentalOC
+objectclass: schacGroupMembership
+objectclass: schacLinkageIdentifiers
+objectclass: schacPersonalCharacteristics
+objectclass: schacUserEntitlements
+uid: mario
+userpassword: cimpa12
+#sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
+sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
+cn: mario
+sn: rossi
+givenName: mario
+mail: mario.rossi@testunical.it
+displayname: Mario Rossi
+edupersonaffiliation: staff
+edupersonaffiliation: member
+edupersonentitlement: urn:mace:terena.org:tcs:personal-user
+edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonprincipalname: rossi@unical
+# edupersonscopedaffiliation: l’accesso è discriminabile in base all’organizzazione di appartenenza dell’utente e al suo tipo di affiliazione con essa
+edupersonscopedaffiliation: staff@{{ domain }}
+edupersonscopedaffiliation: member@{{ domain }}
+edupersonscopedaffiliation: member@altrodominio.it
+schachomeorganization: {{ domain }}
+schachomeorganizationtype: university
+schachomeorganizationtype: educationInstitution
+schacPersonalUniqueID: CODICEFISCALEmario
+
+dn: uid=peppe,ou=people,{{ ldap_basedc }}
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+objectclass: userSecurityInformation
+objectclass: eduPerson
+objectclass: radiusprofile
+objectclass: sambaSamAccount
+objectclass: schacContactLocation
+objectclass: schacEmployeeInfo
+objectclass: schacEntryConfidentiality
+objectclass: schacEntryMetadata
+objectclass: schacExperimentalOC
+objectclass: schacGroupMembership
+objectclass: schacLinkageIdentifiers
+objectclass: schacPersonalCharacteristics
+objectclass: schacUserEntitlements
+uid: peppe
+userpassword: roll983
+#sambaSID: S-1-5-21-4190670642-642652591-2618390626
+sambaNTpassword: a2137530237ad733fdc26d5d7157d43f
+cn: peppe
+sn: grossi
+givenName: peppe
+mail: peppe.grossi@{{ domain }}
+mail: pgrossi@edu.{{ domain }}
+displayname: peppe Rossi
+edupersonaffiliation: faculty
+edupersonaffiliation: member
+edupersonentitlement: urn:mace:terena.org:tcs:personal-user
+edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonprincipalname: grossi@unical
+edupersonscopedaffiliation: staff@{{ domain }}
+edupersonscopedaffiliation: member@{{ domain }}
+schachomeorganization: {{ domain }}
+schachomeorganizationtype: university
+schachomeorganizationtype: educationInstitution
+schacPersonalUniqueID: CODICEFISCALEpeppe
+
+dn: uid=gino,ou=people,{{ ldap_basedc }}
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+objectclass: userSecurityInformation
+objectclass: eduPerson
+objectclass: radiusprofile
+objectclass: sambaSamAccount
+objectclass: schacContactLocation
+objectclass: schacEmployeeInfo
+objectclass: schacEntryConfidentiality
+objectclass: schacEntryMetadata
+objectclass: schacExperimentalOC
+objectclass: schacGroupMembership
+objectclass: schacLinkageIdentifiers
+objectclass: schacPersonalCharacteristics
+objectclass: schacUserEntitlements
+uid: gino
+userpassword: geu45
+#sambaSID: S-1-5-21-3367172335-543387273-3899206864
+sambaNTpassword: 4836f31fa147adf5fd42dfc52353f1b8
+cn: gino
+sn: groe
+givenName: gino
+mail: gino.groe@{{ domain }}
+mail: ggroe@edu.{{ domain }}
+displayname: gino Rossi
+edupersonaffiliation: member
+edupersonaffiliation: student
+edupersonentitlement: urn:mace:terena.org:tcs:personal-user
+edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonprincipalname: gino@unical
+edupersonscopedaffiliation: student@{{ domain }}
+edupersonscopedaffiliation: student@altrocollege.fr
+edupersonscopedaffiliation: member@{{ domain }}
+schachomeorganization: {{ domain }}
+schachomeorganizationtype: university
+schachomeorganizationtype: educationInstitution
+schacPersonalUniqueID: CODICEFISCALEgino

@@ -35,9 +35,11 @@
     # you can even import them using csv file and csv2ldif.py script (modify attributes mapping if needed)
     import_example_users: true
     # filename to import, also available: entries-people.ldif
-    import_example_users_ldif: entries-people-extended.ldif
+    import_example_users_ldif: entries-people-extended-nosambaSID.ldif
 
     sambaNTpassword_AttrType: true
+    # this is a modified schema with MAY on sambaSID (coupled with entries-people-extended-nosambaSID.ldif)
+    samba_schema: samba3-lightAccount.ldif
     
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"

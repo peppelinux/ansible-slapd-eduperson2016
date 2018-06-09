@@ -269,9 +269,11 @@ add: pwdReset
 pwdReset: TRUE
 
 # force a pwdReset with ldapvi
+# WARNING: if admin will change a userpassword this way smbk5pwd overlay will not trigger sambaNTpassword update!
 ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=testunical,dc=it' "pwdReset=*" pwdReset
 
 # a user that resets a password by his own
+# smbk5pwd will trigger sambaNTpassword update
 ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12 -s newpassword
 
 ````
@@ -326,6 +328,24 @@ olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}"
 Samba integration
 ---------------
 This playbook does not do this but comes with samba3.ldif schema already loaded in, if you need it.
+This openldap configuration only needs of sambaNTpassword for freeRadius integration and it implements
+a light samba3 schema that permits us to create accounts with the need of sambaSID attribute.
+
+This option could be reverted to original samba3 schema changing in playbook:
+
+````
+# for example people entries
+    import_example_users_ldif: entries-people-extended-nosambaSID.ldif
+    # to
+    import_example_users_ldif: entries-people-extended.ldif
+
+# and
+    samba_schema: samba3-lightAccount.ldif
+    # to
+    samba_schema: samba3.ldif
+
+````
+
 A more comprehensive reference here:
 - http://pig.made-it.com/samba-accounts.html
 - https://wiki.samba.org/index.php/3.0:_Initialization_LDAP_Database
@@ -344,8 +364,8 @@ net setlocalsid S-1-5-21-33300351-1172445578-3061011111
 Radius integration
 ------------------
 This playbook came with freeradius schema for radius authentication over LDAP.
-If you need the sambaNTPassword field in your accounts entries you should include a
-sambaSID univoque value for every user, otherwise you'll get this exception:
+If you need the sambaNTPassword field in your accounts entries, with a real sambaSAMaccount you should include a
+sambaSID univoque value for every user (read previous paragraph Samba integration), otherwise you'll get this exception:
 
 ````
 ldap_add: Object class violation (65)
@@ -366,6 +386,8 @@ pip3 install passlib
 python3 nt_passwd.py yourpassword
 # 5dfb7533508b0ea192ccf7f6b64427fc
 ````
+
+Default options of this playbook does not implement a full sambaSamAccount but you can change default options as well.
 
 Hints
 -----

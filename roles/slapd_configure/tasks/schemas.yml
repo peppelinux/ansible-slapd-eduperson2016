@@ -48,7 +48,7 @@
 - name: "Put samba3 schema"
   shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{ role_name }}/files/samba3_schema/{{ item }}"
   with_items:
-   - samba3.ldif
+   - "{{ samba_schema }}"
 
 # pmi
 - name: "Put PMI schema"
