@@ -2,7 +2,8 @@
 export SLAPKEYNAME="slapd"
 export PEM_PATH="keys/pem"
 export CERT_PATH=`pwd`"/roles/slapd/files/certs"
-export SERVER_FQDN="ldap.testunical.it"
+export DOMAIN="testunical.it"
+export SERVER_FQDN="ldap.$DOMAIN"
 
 apt install easy-rsa
 rm -f easy-rsa
@@ -34,14 +35,14 @@ export KEY_CN=$SERVER_FQDN
 export KEY_COUNTRY="IT"
 export KEY_PROVINCE="CS"
 export KEY_CITY="Cosenza"
-export KEY_ORG="testunical.it"
-export KEY_EMAIL="me@testunical.it"
+export KEY_ORG="$DOMAIN"
+export KEY_EMAIL="me@$DOMAIN"
 
 ./clean-all
 
 ./build-ca
 ./build-dh
-./build-key $SERVER_FQDN
+./build-key-server $SERVER_FQDN
 
 mkdir -p $PEM_PATH
 
