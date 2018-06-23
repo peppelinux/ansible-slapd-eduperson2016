@@ -150,6 +150,10 @@ ldapsearch -x -H ldapi:/// -b "" -LLL -s base supportedSASLMechanisms
 Access Control lists debug
 --------------------------
 ````
+# view running ACL
+# ldapsearch -H ldapi:// -Y EXTERNAL -b "cn=config" -LLL olcDatabase={1}mdb olcAccess
+ldapsearch -H ldapi:// -Y EXTERNAL -b "cn=config" -LLL olcDatabase=mdb olcAccess
+
 # test ACL
 slapacl -F /etc/ldap/slapd.d/  -b "dc=testunical,dc=it" -D "cn=admin,dc=testunical,dc=it"
 

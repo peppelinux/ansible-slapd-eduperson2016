@@ -41,7 +41,7 @@ export KEY_EMAIL="me@$DOMAIN"
 ./clean-all
 
 ./build-ca
-./build-dh
+#./build-dh
 ./build-key-server $SERVER_FQDN
 
 mkdir -p $PEM_PATH
