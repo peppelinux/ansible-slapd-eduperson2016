@@ -27,6 +27,13 @@
     ldap_default_passwd_enc: "{SSHA512}"
     
     debug_level: 256
+
+    # PPolicy Account Lockout
+    # how many failure before LockOut
+    pwdMinLength: 8
+    pwdMaxFailure: 8
+    # how many seconds an account will be blocked. 0 means infinite -> Pwd reset required
+    pwdLockoutDuration: 240
     
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp

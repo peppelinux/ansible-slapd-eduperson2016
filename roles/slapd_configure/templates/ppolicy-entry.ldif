@@ -31,11 +31,13 @@ pwdAttribute: userPassword
 pwdCheckQuality: 0
 pwdMinAge: 0
 pwdMaxAge: 0
-pwdMinLength: 8
+pwdMinLength: {{ pwdMinLength }}
 pwdInHistory: 5
-pwdMaxFailure: 8
+pwdMaxFailure: {{ pwdMaxFailure }}
 pwdLockout: TRUE
+PwdLockoutDuration: {{ pwdLockoutDuration }}
 pwdAllowUserChange: TRUE
 pwdExpireWarning: 600
+# if the value is "FALSE", users are not required to change their password upon binding after the password administrator sets or resets the password. 
 pwdMustChange: TRUE
 pwdSafeModify: TRUE
