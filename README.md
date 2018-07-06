@@ -245,6 +245,8 @@ service slapd start
 ````
 PPolicy management
 ------------------
+If pwdAccountLockedTime is set to 000001010000Z, the user's account has been permanently locked and may only be unlocked by an administrator.
+
 ````
 # lock out an user
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF

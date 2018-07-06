@@ -34,6 +34,8 @@
     pwdMaxFailure: 8
     # how many seconds an account will be blocked. 0 means infinite -> Pwd reset required
     pwdLockoutDuration: 240
+    # Specify that cleartext passwords present in Add and Modify requests should be hashed before being stored in the database. This violates the X.500/LDAP information model, but may be needed to compensate for LDAP clients that don't use the Password Modify extended operation to manage passwords. 
+    PPolicyHashCleartext: "TRUE"
     
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp
