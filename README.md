@@ -179,6 +179,9 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL
 # query entry set with operational metadata
 ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL "+"
 
+# the same as previous but with both informations
+ldapsearch -H ldapi:// -Y EXTERNAL -b "ou=people,dc=testunical,dc=it" -LLL "*" +
+
 # The subschema is a representation of the available classes and attributes.
 ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL subschemaSubentry
 
