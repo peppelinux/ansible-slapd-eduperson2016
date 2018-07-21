@@ -70,5 +70,19 @@
   import_tasks: ldaps.yml
 # end ldaps
 
+# log file
+- name: "Change rsyslog log file to {{ logfile }}"
+  template: 
+    src: roles/{{role_name}}/templates/10-slapd.conf
+    dest: /etc/rsyslog.d/10-slapd.conf
+
+- name: Restart rsyslog
+  command: service rsyslog restart
+
+- name: "Configure logrotate"
+  template: 
+    src: roles/{{role_name}}/templates/slapd_logrotate
+    dest: /etc/logrotate.d/slapd
+
 - name: Clean temporary config ldif
   file: path="{{ tmp_dir }}" state=absent

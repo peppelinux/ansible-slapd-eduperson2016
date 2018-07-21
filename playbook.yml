@@ -27,7 +27,8 @@
     ldap_default_passwd_enc: "{SSHA512}"
     
     debug_level: 256
-
+    logfile: "/var/log/slapd.log"
+    
     # PPolicy Account Lockout
     # how many failure before LockOut
     pwdMinLength: 8

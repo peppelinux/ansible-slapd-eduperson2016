@@ -4,6 +4,11 @@ dn: cn=config
 replace: olcLogLevel
 olcLogLevel: {{ debug_level }}
 
+# olcLogFile is only used on Windows because it lacks syslog.
+#dn: cn=config
+#replace: olcLogFile
+#olcLogFile: {{ logfile }}
+
 # http://www.zytrax.com/books/ldap/apa/indeces.html
 dn: olcDatabase={1}{{ ldap_backend }},cn=config
 changeType: modify
