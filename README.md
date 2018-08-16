@@ -485,7 +485,7 @@ Tools to test and use before you die.
 - ldapsh let us navigate the LDAP tree like a filesystem tree, awesome!
   - http://ldapsh.sourceforge.net/
 
-- ApacheActiveDirectory is a very good LDAP general purpose navigator. You can download it from its official site: http://directory.apache.org/studio/downloads.html
+- ApacheDirectoryStudio is a very good LDAP general purpose navigator. You can download it from its official site: http://directory.apache.org/studio/downloads.html
 
 ![Alt text](images/ApacheDirectoryStudio/1.png)
 ![Alt text](images/ApacheDirectoryStudio/2.png)
