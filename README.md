@@ -182,6 +182,9 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL "+"
 # the same as previous but with both informations
 ldapsearch -H ldapi:// -Y EXTERNAL -b "ou=people,dc=testunical,dc=it" -LLL "*" +
 
+# complex query with filters
+ldapsearch -H ldapi:// -D "uid=peppe,ou=people,dc=testunical,dc=it" -w pass  -b 'uid=peppe,ou=people,dc=testunical,dc=it' '(&(objectClass=inetOrgPerson)(objectClass=organizationalPerson)(objectClass=person)(objectClass=userSecurityInformation)(objectClass=eduPerson)(objectClass=radiusprofile)(objectClass=sambaSamAccount)(objectClass=schacContactLocation)(objectClass=schacEmployeeInfo)(objectClass=schacEntryConfidentiality)(objectClass=schacEntryMetadata)(objectClass=schacExperimentalOC)(objectClass=schacGroupMembership)(objectClass=schacLinkageIdentifiers)(objectClass=schacPersonalCharacteristics)(objectClass=schacUserEntitlements)(&(pwdChangedTime>=20180701000000Z)(pwdChangedTime<=20180709000000Z)))'
+
 # The subschema is a representation of the available classes and attributes.
 ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL subschemaSubentry
 
