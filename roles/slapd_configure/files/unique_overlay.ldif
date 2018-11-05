@@ -10,3 +10,4 @@ objectClass: olcOverlayConfig
 objectClass: olcUniqueConfig
 olcOverlay: unique
 olcUniqueAttribute: mail
+olcUniqueAttribute: schacPersonalUniqueID

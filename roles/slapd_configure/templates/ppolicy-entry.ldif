@@ -30,7 +30,7 @@ sn: passwordDefault
 pwdAttribute: userPassword
 pwdCheckQuality: 0
 pwdMinAge: 0
-pwdMaxAge: 0
+pwdMaxAge: {{ pwdMaxAge }}
 pwdMinLength: {{ pwdMinLength }}
 pwdInHistory: 5
 pwdMaxFailure: {{ pwdMaxFailure }}

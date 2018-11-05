@@ -28,6 +28,8 @@
     
     debug_level: 256
 
+    # PPolicy password expiration: default 6 month
+    pwdMaxAge : 15780000
     # PPolicy Account Lockout
     # how many failure before LockOut
     pwdMinLength: 8
