@@ -179,6 +179,12 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL
 # query entry set with operational metadata
 ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL "+"
 
+# the same as previous but with both informations
+ldapsearch -H ldapi:// -Y EXTERNAL -b "ou=people,dc=testunical,dc=it" -LLL "*" +
+
+# complex query with filters
+ldapsearch -H ldapi:// -D "uid=peppe,ou=people,dc=testunical,dc=it" -w pass  -b 'uid=peppe,ou=people,dc=testunical,dc=it' '(&(objectClass=inetOrgPerson)(objectClass=organizationalPerson)(objectClass=person)(objectClass=userSecurityInformation)(objectClass=eduPerson)(objectClass=radiusprofile)(objectClass=sambaSamAccount)(objectClass=schacContactLocation)(objectClass=schacEmployeeInfo)(objectClass=schacEntryConfidentiality)(objectClass=schacEntryMetadata)(objectClass=schacExperimentalOC)(objectClass=schacGroupMembership)(objectClass=schacLinkageIdentifiers)(objectClass=schacPersonalCharacteristics)(objectClass=schacUserEntitlements)(&(pwdChangedTime>=20180701000000Z)(pwdChangedTime<=20180709000000Z)))'
+
 # The subschema is a representation of the available classes and attributes.
 ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL subschemaSubentry
 
@@ -245,6 +251,8 @@ service slapd start
 ````
 PPolicy management
 ------------------
+If pwdAccountLockedTime is set to 000001010000Z, the user's account has been permanently locked and may only be unlocked by an administrator.
+
 ````
 # lock out an user
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
@@ -480,7 +488,7 @@ Tools to test and use before you die.
 - ldapsh let us navigate the LDAP tree like a filesystem tree, awesome!
   - http://ldapsh.sourceforge.net/
 
-- ApacheActiveDirectory is a very good LDAP general purpose navigator. You can download it from its official site: http://directory.apache.org/studio/downloads.html
+- ApacheDirectoryStudio is a very good LDAP general purpose navigator. You can download it from its official site: http://directory.apache.org/studio/downloads.html
 
 ![Alt text](images/ApacheDirectoryStudio/1.png)
 ![Alt text](images/ApacheDirectoryStudio/2.png)

@@ -36,7 +36,7 @@ edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
 schachomeorganizationtype: educationInstitution
-schacPersonalUniqueID: CODICEFISCALEmario
+schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEmario
 
 dn: uid=peppe,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -75,7 +75,7 @@ edupersonscopedaffiliation: member@{{ domain }}
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
 schachomeorganizationtype: educationInstitution
-schacPersonalUniqueID: CODICEFISCALEpeppe
+schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEpeppe
 
 dn: uid=gino,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -115,4 +115,4 @@ edupersonscopedaffiliation: member@{{ domain }}
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
 schachomeorganizationtype: educationInstitution
-schacPersonalUniqueID: CODICEFISCALEgino
+schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEgino

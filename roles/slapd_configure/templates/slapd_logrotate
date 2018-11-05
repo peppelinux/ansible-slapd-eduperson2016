@@ -1,0 +1,13 @@
+{{ logfile }} {
+missingok
+notifempty
+compress
+daily
+rotate 33
+size=100M
+sharedscripts
+postrotate
+# OpenLDAP logs via syslog, restart syslog if running
+restart rsyslog
+endscript
+}
