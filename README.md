@@ -413,6 +413,7 @@ Hints
 - SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
 - http://www.openldap.org/doc/admin24/replication.html
 - https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
+- PPolicy: https://tools.ietf.org/id/draft-behera-ldap-password-policy-10.html
 
 Create fake users using CSV file
 --------------------------------
