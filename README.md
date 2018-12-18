@@ -210,6 +210,9 @@ ldapwhoami -x -H ldaps://ldap.testunical.it -D "uid=gino,ou=people,dc=testunical
 
 # ldap user change his password by himself
 ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
+
+# better way, using also the old password to be prompted
+ldappasswd -H ldaps://ldap.testunical.it -D 'uid=peppelinux,ou=people,dc=testunical,dc=it' -W -A  -S -x "uid=peppelinux,ou=people,dc=testunical,dc=it"
 ````
 
 Backup and restore
