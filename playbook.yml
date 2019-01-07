@@ -25,6 +25,9 @@
     ldap_pw: slapdsecret
     ldap_monitor_pw: monitorsecret
     ldap_default_passwd_enc: "{SSHA512}"
+
+    enable_ldaps: true
+    disable_389_port: false
     
     debug_level: 256
     logfile: "/var/log/slapd.log"

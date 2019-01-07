@@ -9,7 +9,7 @@
     group: ssl-cert
     mode: 640
   with_fileglob:
-    - roles/{{role_name}}/files/certs/*
+    - certs/*
 
 - name: Fix certs permissions
   file: path="{{ cert_path }}" owner=openldap group=ssl-cert mode=0740 state=directory recurse=yes
@@ -22,9 +22,18 @@
 - name: Apply Directory config TLS
   command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/directory-config-tls.ldif"
 
+- name: "enable ldaps://"
+  replace:
+    path: /etc/default/slapd
+    regexp: 'ldap:///'
+    replace: 'ldap://127.0.0.1:389/'
+    backup: yes
+  when: disable_389_port == True
+
 - name: "Disable ldap:// and enable ldaps://"
   replace:
     path: /etc/default/slapd
-    regexp: 'SLAPD_SERVICES="ldap:/// ldapi:///"'
-    replace: 'SLAPD_SERVICES="ldap://127.0.0.1:389/ ldaps:/// ldapi:///"'
+    regexp: 'ldapi:///'
+    replace: 'ldapi:/// ldaps:///'
     backup: yes
+  when: enable_ldaps == True
