@@ -58,14 +58,14 @@
 
     # Access log overlay, it keep track of all or selected operations on a particular DIT (the target DIT)
     # read, write, all. See: https://linux.die.net/man/5/slapo-accesslog
-    accesslog_dbname: accesslog
-    accesslog_ops: all
+    accesslog_ops: writes bind
     # 186days+0hours check every day
     accesslog_logpurge: "186+00:00 1+00:00"
     
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"
-
+    clean_temporary_dir: false
+    
   roles:
     - { role: slapd_backup, tags: ["slapd_backup"] }
     - { role: slapd_uninstall, tags: ["slapd_uninstall"] }

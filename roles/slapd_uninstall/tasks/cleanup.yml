@@ -9,7 +9,7 @@
   file: path=/var/lib/ldap state=absent
 
 - name: Remove certs
-  file: path="{{ cert_path }}" state=absent
+  file: path="{{ cert_path }}/slapd*" state=absent
 
 # stop playbook execution
 # - name: Uninstalled

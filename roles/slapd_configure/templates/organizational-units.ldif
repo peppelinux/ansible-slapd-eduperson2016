@@ -2,9 +2,9 @@ dn: ou=groups,{{ ldap_basedc }}
 ou: groups
 objectClass: organizationalUnit
 
-dn: ou=newcomers,{{ ldap_basedc }}
-ou: newcomers
-objectClass: organizationalUnit
+# dn: ou=newcomers,{{ ldap_basedc }}
+# ou: newcomers
+# objectClass: organizationalUnit
 
 dn: ou=people,{{ ldap_basedc }}
 ou: people
@@ -26,9 +26,9 @@ dn: ou=applications,{{ ldap_basedc }}
 ou: applications
 objectClass: organizationalUnit
 
-dn: ou=embedded,{{ ldap_basedc }}
-ou: embedded
-objectClass: organizationalUnit
+# dn: ou=embedded,{{ ldap_basedc }}
+# ou: embedded
+# objectClass: organizationalUnit
 
 dn: ou=staging,{{ ldap_basedc }}
 ou: staging

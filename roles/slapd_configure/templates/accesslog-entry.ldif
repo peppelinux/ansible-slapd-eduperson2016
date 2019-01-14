@@ -1,0 +1,9 @@
+# refers to {1} to audit to
+dn: olcOverlay=accesslog,olcDatabase={1}{{ ldap_backend }},cn=config
+objectClass: olcOverlayConfig
+objectClass: olcAccessLogConfig
+objectClass: top
+olcOverlay: accesslog
+olcAccessLogDB: cn=accesslog
+olcAccessLogOps: {{ accesslog_ops }}
+olcAccessLogPurge: {{ accesslog_logpurge }}

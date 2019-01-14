@@ -49,6 +49,7 @@ Table of contents
       * [MemberOf overlay](#memberof-overlay)
       * [smbk5pwd](#smbk5pwd)
       * [PPolicy management](#ppolicy-management)
+      * [Accesslog](#accesslog-overlay)
    * #### Integrations
       * [Samba integration](#samba-integration)
       * [Radius integration](#radius-integration)
@@ -292,6 +293,28 @@ ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,
 ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12 -s newpassword
 
 ````
+
+Accesslog overlay
+--------------------------
+The  Access  Logging  overlay  can  be used to record all accesses to a
+given backend database on another database.  This  allows  all  of  the
+activity  on  a  given  database  to  be  reviewed using arbitrary LDAP
+queries,  instead  of  just  logging  to   local   flat   text   files.
+Configuration options are available for selecting a subset of operation
+types to log, and to automatically prune older  log  records  from  the
+logging database.  Log records are stored with audit schema (see below)
+to assure their readability whether viewed as LDIF or in raw form.
+
+Customize its attributes in the playbook.yml file:
+
+````
+    # Access log overlay, it keep track of all or selected operations on a particular DIT (the target DIT)
+    # read, write, all. See: https://linux.die.net/man/5/slapo-accesslog
+    accesslog_ops: writes bind
+    # 186days+0hours check every day
+    accesslog_logpurge: "186+00:00 1+00:00"
+````
+
 
 MemberOf overlay
 --------------------------

@@ -86,3 +86,4 @@
 
 - name: Clean temporary config ldif
   file: path="{{ tmp_dir }}" state=absent
+  when: clean_temporary_dir == True
