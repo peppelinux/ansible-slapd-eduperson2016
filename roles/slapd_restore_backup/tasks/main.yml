@@ -45,6 +45,13 @@
     mode: 0600
     recurse: yes
 
+# accesslog overlay
+- name: Create accesslog db folder
+  file: path="/var/lib/ldap/accesslog" state=directory owner=openldap group=root mode=u=rwX,g=rX,o= recurse=yes
+
+# decidere se fare il restore anche del db accesslog
+#
+
 - name: Restore OpenLDAP config backup
   command: 'slapadd -n0 -F /etc/ldap/slapd.d -l {{ restore_ldif_path }}/slapd_config_backup.ldif'
 

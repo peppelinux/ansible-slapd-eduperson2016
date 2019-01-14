@@ -18,6 +18,7 @@ olcDbIndex: member eq
 olcDbIndex: cn pres,eq,sub
 olcDbIndex: ou pres,eq,sub
 olcDbIndex: uid pres,eq
+olcDbIndex: entryCSN eq
 olcDbIndex: entryUUID eq
 olcDbIndex: sn pres,eq,sub
 olcDbIndex: mail pres,eq,sub
