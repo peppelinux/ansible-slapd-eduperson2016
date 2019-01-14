@@ -98,3 +98,12 @@
 
 - name: Add smbk5pwd-overlay.ldif
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/smbk5pwd-overlay.ldif"
+
+# accesslog overlay
+- name: Render template accesslog-overlay.ldif
+  template: 
+    src: roles/{{role_name}}/templates/accesslog-overlay.ldif
+    dest: "{{ tmp_dir }}/accesslog-overlay.ldif"
+
+- name: Add accesslog-overlay.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-overlay.ldif"
