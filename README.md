@@ -11,7 +11,7 @@ This playbook will install a slapd server with:
  - Monitor backend
  - Unique overlay (default field: mail)
  - smbk5pwd overlay
- - SSL only (ldaps://)
+ - accesslog overlay (for delta replications)
  - Unit test for ACL and Password Policy overlay
 
 You can also import users from a CSV file, globals parameters can be edited in playbook.yml.

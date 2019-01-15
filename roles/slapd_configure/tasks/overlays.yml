@@ -107,19 +107,23 @@
 # accesslog overlay
 - name: Create accesslog db folder
   file: path="/var/lib/ldap/accesslog" state=directory owner=openldap group=root mode=u=rwX,g=rX,o= recurse=yes
-
+   
 - name: Render template accesslog-overlay.ldif
   template: 
     src: roles/{{role_name}}/templates/accesslog-overlay.ldif
     dest: "{{ tmp_dir }}/accesslog-overlay.ldif"
+  when: accesslog_enabled == True
 
 - name: Render template accesslog-entry.ldif
   template: 
     src: roles/{{role_name}}/templates/accesslog-entry.ldif
     dest: "{{ tmp_dir }}/accesslog-entry.ldif"
+  when: accesslog_enabled == True
 
 - name: Add accesslog-overlay.ldif
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-overlay.ldif"
+  when: accesslog_enabled == True
 
 - name: Add accesslog-entry.ldif
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-entry.ldif"
+  when: accesslog_enabled == True
