@@ -28,6 +28,9 @@ olcAccess: to attrs=userPassword,shadowLastChange,mail
  by self write 
  by anonymous auth 
  by * break 
+olcAccess: to * 
+ by dn.children="ou=repl,{{ ldap_basedc }}" read 
+ by * break 
 olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}" 
  by dn.children="ou=idp,{{ ldap_basedc }}" read 
  by self read 

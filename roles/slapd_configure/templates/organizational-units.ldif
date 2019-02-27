@@ -25,3 +25,7 @@ objectClass: organizationalUnit
 dn: ou=auth,{{ ldap_basedc }}
 ou: auth
 objectClass: organizationalUnit
+
+dn: ou=repl,{{ ldap_basedc }}
+ou: repl
+objectClass: organizationalUnit
