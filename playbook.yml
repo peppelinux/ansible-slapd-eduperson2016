@@ -11,14 +11,14 @@
     domain2:   testunical
     domain1: it
     domain: "{{ domain2 }}.{{ domain1 }}"
-    
+
     fqdn: "ldap.{{ domain }}"
-    
+
     cert_path: "/etc/ssl/certs/{{ domain }}"
     ldap_ca_cert: slapd-cacert.pem
     ldap_server_cert: slapd-cert.pem
     ldap_server_key: slapd-key.pem
-    
+
     ldap_backend: "mdb"
     ldap_basedc: "dc={{ domain2 }},dc={{ domain1 }}"
     ldap_basedn: "ou=people,dc={{ domain2 }},dc={{ domain1 }}"
@@ -28,10 +28,10 @@
 
     enable_ldaps: true
     disable_389_port: false
-    
+
     debug_level: 256
     logfile: "/var/log/slapd.log"
-    
+
     # PPolicy password expiration: default 6 month
     pwdMaxAge : 15780000
     # PPolicy Account Lockout
@@ -40,9 +40,9 @@
     pwdMaxFailure: 8
     # how many seconds an account will be blocked. 0 means infinite -> Pwd reset required
     pwdLockoutDuration: 240
-    # Specify that cleartext passwords present in Add and Modify requests should be hashed before being stored in the database. This violates the X.500/LDAP information model, but may be needed to compensate for LDAP clients that don't use the Password Modify extended operation to manage passwords. 
+    # Specify that cleartext passwords present in Add and Modify requests should be hashed before being stored in the database. This violates the X.500/LDAP information model, but may be needed to compensate for LDAP clients that don't use the Password Modify extended operation to manage passwords.
     PPolicyHashCleartext: "TRUE"
-    
+
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp
 
@@ -57,16 +57,16 @@
     samba_schema: samba3-lightAccount.ldif
 
     # Access log overlay, it keep track of all or selected operations on a particular DIT (the target DIT)
-    accesslog_enabled: false
+    accesslog_enabled: true
     # read, write, all. See: https://linux.die.net/man/5/slapo-accesslog
     accesslog_ops: writes bind
     # 186days+0hours check every day
     accesslog_logpurge: "7+00:00 1+00:00"
-    
+
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"
     clean_temporary_dir: false
-    
+
   roles:
     - { role: slapd_backup, tags: ["slapd_backup"] }
     - { role: slapd_uninstall, tags: ["slapd_uninstall"] }
@@ -74,4 +74,4 @@
     - { role: slapd_configure, tags: ["slapd_configure"] }
     # use backup/example structure to restore a complete slapd configuration with entries
     # - { role: slapd_restore_backup, tags: ["slapd_restore_backup"] }
-    - { role: slapd_test, tags: ["slapd_test"] }  
+    - { role: slapd_test, tags: ["slapd_test"] }
