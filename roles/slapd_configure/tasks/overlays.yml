@@ -1,9 +1,9 @@
 # unique overlay
 - name: Render template unique-overlay.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/unique-overlay.ldif
     dest: "{{ tmp_dir }}/unique-overlay.ldif"
-    
+
 - name: Add unique overlay
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/unique-overlay.ldif"
 
@@ -13,7 +13,7 @@
   register: memberof_overlay
 
 - name: Render template memberof-overlay.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/memberof-overlay.ldif
     dest: "{{ tmp_dir }}/memberof-overlay.ldif"
 
@@ -42,7 +42,7 @@
   register: ppolicy_overlay
 
 - name: Render template ppolicy-overlay.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/ppolicy-overlay.ldif
     dest: "{{ tmp_dir }}/ppolicy-overlay.ldif"
 
@@ -51,7 +51,7 @@
   when: ppolicy_overlay.stdout == ""
 
 - name: Render template ppolicy-entry.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/ppolicy-entry.ldif
     dest: "{{ tmp_dir }}/ppolicy-entry.ldif"
 
@@ -61,7 +61,7 @@
 
 # pw-sha2 overlay for SHA512 support
 - name: Render template pw-sha2 overlay for SHA256 support to openldap
-  template: 
+  template:
     src: roles/{{role_name}}/templates/pw-sha2.ldif
     dest: "{{ tmp_dir }}/pw-sha2.ldif"
 
@@ -88,7 +88,7 @@
   register: ldap_monitor_pw_hash
 
 - name: Render template monitor_backend.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/monitor_backend.ldif
     dest: "{{ tmp_dir }}/monitor_backend.ldif"
 
@@ -97,7 +97,7 @@
 
 # smbk5pwd overlay
 - name: Render template smbk5pwd-overlay.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/smbk5pwd-overlay.ldif
     dest: "{{ tmp_dir }}/smbk5pwd-overlay.ldif"
 
@@ -107,15 +107,15 @@
 # accesslog overlay
 - name: Create accesslog db folder
   file: path="/var/lib/ldap/accesslog" state=directory owner=openldap group=root mode=u=rwX,g=rX,o= recurse=yes
-   
+
 - name: Render template accesslog-overlay.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/accesslog-overlay.ldif
     dest: "{{ tmp_dir }}/accesslog-overlay.ldif"
   when: accesslog_enabled == True
 
 - name: Render template accesslog-entry.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/accesslog-entry.ldif
     dest: "{{ tmp_dir }}/accesslog-entry.ldif"
   when: accesslog_enabled == True
@@ -127,3 +127,5 @@
 - name: Add accesslog-entry.ldif
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-entry.ldif"
   when: accesslog_enabled == True
+
+# syncrepl overlay
