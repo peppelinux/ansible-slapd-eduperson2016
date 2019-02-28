@@ -12,7 +12,7 @@
     domain1: it
     domain: "{{ domain2 }}.{{ domain1 }}"
 
-    fqdn: "ldap.{{ domain }}"
+    fqdn: "ldap1.{{ domain }}"
 
     cert_path: "/etc/ssl/certs/{{ domain }}"
     ldap_ca_cert: slapd-cacert.pem
@@ -32,6 +32,7 @@
     debug_level: 256
     logfile: "/var/log/slapd.log"
 
+    # General config
     # General config
     # how many entries will be returned by default on each ldapseatch
     olcSizeLimit: 1000
@@ -54,7 +55,7 @@
 
     # import fake users declared in roles/slapd/templates/entries/entries-people.ldif
     # you can even import them using csv file and csv2ldif.py script (modify attributes mapping if needed)
-    import_example_users: true
+    import_example_users: false
     # filename to import, also available: entries-people.ldif
     import_example_users_ldif: entries-people-extended-nosambaSID.ldif
 
@@ -63,7 +64,7 @@
     samba_schema: samba3-lightAccount.ldif
 
     # Access log overlay, it keep track of all or selected operations on a particular DIT (the target DIT)
-    accesslog_enabled: true
+    accesslog_enabled: false
     # read, write, all. See: https://linux.die.net/man/5/slapo-accesslog
     accesslog_ops: writes bind
     # 186days+0hours check every day
