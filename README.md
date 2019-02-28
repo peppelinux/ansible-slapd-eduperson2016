@@ -73,13 +73,13 @@ pip3 install ansible
 Setup Certificates
 ------------------
 
-In order to use SASL/TLS  you must have certificates, for testing purposes 
+In order to use SASL/TLS  you must have certificates, for testing purposes
 a self-signed certificate will suffice. To learn more about certificates, see OpenSSL.
 Remeber that OpenLDAP cannot use a certificate that have a password associated to it.
 
-First of all create your certificates and put them in roles/files/certs/ then 
-configure the FQDN associated to it in playbook variables. A script named make_CA.sh can do this automatically, 
-it will create your own self signed keys with easy-rsa. 
+First of all create your certificates and put them in roles/files/certs/ then
+configure the FQDN associated to it in playbook variables. A script named make_CA.sh can do this automatically,
+it will create your own self signed keys with easy-rsa.
 
 Play this book
 --------------
@@ -93,19 +93,19 @@ unbuffer ansible-playbook -i "localhost," -c local playbook.yml | sed 's/\\n/\n/
 
 Play with LDAP admin tasks
 --------------------------
-Commands related to OpenLDAP that begin with ldap (like ldapsearch) are 
+Commands related to OpenLDAP that begin with ldap (like ldapsearch) are
 client-side utilities, while commands that begin with slap (like slapcat) are server-side.
 Also remeber that ldapi:/// works only locally if executed by root user.
 
 ````
 # root DSE
-ldapsearch -H ldap:// -x -s base -b "" -LLL "+"
+ldapsearch -H ldapi:// -x -s base -b "" -LLL "+"
 
 # DITs
-ldapsearch -H ldap:// -x -s base -b "" -LLL "namingContexts"
+ldapsearch -H ldapi:// -x -s base -b "" -LLL "namingContexts"
 
 # config DIT
-ldapsearch -H ldap:// -x -s base -b "" -LLL "configContext"
+ldapsearch -H ldapi:// -x -s base -b "" -LLL "configContext"
 
 # read config
 ldapsearch -H ldapi:// -Y EXTERNAL -b "cn=config" -LLL
@@ -318,16 +318,16 @@ Customize its attributes in the playbook.yml file:
 
 MemberOf overlay
 --------------------------
-MemberOf overlay made a client to be able to determine which groups an entry 
-is a member of, without performing an additional search. Examples of this 
+MemberOf overlay made a client to be able to determine which groups an entry
+is a member of, without performing an additional search. Examples of this
 are applications using the DIT for access control based on group authorization.
 
-The memberof overlay updates an attribute (by default memberOf) whenever 
-changes occur to the membership attribute (by default member) of entries of 
+The memberof overlay updates an attribute (by default memberOf) whenever
+changes occur to the membership attribute (by default member) of entries of
 the objectclass (by default groupOfNames) configured to trigger updates.
 
-Thus, it provides maintenance of the list of groups an entry is a 
-member of, when usual maintenance of groups is done by modifying the 
+Thus, it provides maintenance of the list of groups an entry is a
+member of, when usual maintenance of groups is done by modifying the
 members on the group entry.
 
 Important consideration for SQL addicted:
@@ -356,13 +356,14 @@ It will only works if the password is changed using ldappasswd!
 
 Shibboleth IDP integration
 --------------------------
-A special OU called "applications" makes every entry in it to read all attributes of ou=people entries.
+A special OU called "idp" makes every entry in it to read all attributes of ou=people entries.
 ````
-olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}" 
- by dn.children="ou=application,{{ ldap_basedc }}" read 
- by self read 
+olcAccess: to dn.subtree="ou=people,{{ ldap_basedc }}"
+ by dn.children="ou=ipd,{{ ldap_basedc }}" read
+ by self read
  by * none
 ````
+
 Samba integration
 ---------------
 This playbook does not do this but comes with samba3.ldif schema already loaded in, if you need it.
@@ -407,13 +408,13 @@ sambaSID univoque value for every user (read previous paragraph Samba integratio
 
 ````
 ldap_add: Object class violation (65)
-	additional info: object class 'sambaSamAccount' requires attribute 'sambaSID'
+    additional info: object class 'sambaSamAccount' requires attribute 'sambaSID'
 
 ````
 
 Get some random SID you can use samba_sid.sh script as follows:
 ````
-#bash samba_sid.sh 
+#bash samba_sid.sh
 S-1-5-21-3029086335-4292621882-1389276266
 ````
 
@@ -429,17 +430,15 @@ Default options of this playbook does not implement a full sambaSamAccount but y
 
 Hints
 -----
-- ldap:// is disabled (it will works only in local), only ldapi:/// and ldaps:/// will be available;
-- Be aware that ldapmodify is sensitive to (trailing) spaces;
+- Be aware that ldapmodify is sensitive to (trailing) spaces, if your editor removes trailing space on save...;
 - https://www.openldap.org/doc/admin24/appendix-common-errors.html
 - Error 80 (implementation specific error) raises when tls certs doesn't have read permissions or if the ldif used with ldapadd/ldapmodify have some trailing spaces or too many blank lines or some syntax error. In other words for everything not well undestood, found in a ldif file, by slapd interpreter;
-- ldapadd, ldapsearch, ldapmodify: set debug level with -d 256. It's the only way to get ldap be more eloquent;
-- every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp);
+- every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp) if a Private CA is used in a ldaps:// connection;
 - Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice. You can find a good SSHA generator here: https://github.com/peppelinux/pySSHA-slapd
 - SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
-- http://www.openldap.org/doc/admin24/replication.html
 - https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
 - PPolicy: https://tools.ietf.org/id/draft-behera-ldap-password-policy-10.html
+- The best examples comes from slapd [unit test suite](https://github.com/benegon/openldap/tree/master/tests/scripts)
 
 Create fake users using CSV file
 --------------------------------
@@ -448,7 +447,7 @@ It would be also possible to create your own custom fake users using a CSV file
 
 You can create and Map oid to one or more csv columns in the csv2ldif.py file.
 Csv2ldif.py works this way: if a value contains ('name', 'surname') in ATTRIBUTES_MAP the corrisponding csv columns
-will be merged into one oid value, named with the relative ATTRIBUTES_MAP key. 
+will be merged into one oid value, named with the relative ATTRIBUTES_MAP key.
 If csv column value is composed by many values separated by commas instead,
 it will create many ldif rows how the splitted csv values are.
 ````
@@ -507,7 +506,7 @@ Awesome utilities
 -----------------
 Tools to test and use before you die.
 
-- ldapvi makes a query and let us modify its content, and save this in LDAP, using our favorite system text editor (as vi or nano!) : 
+- ldapvi makes a query and let us modify its content, and save this in LDAP, using our favorite system text editor (as vi or nano!) :
   - http://www.lichteblau.com/ldapvi/manual/
 
 ![Alt text](images/ldapvi.png)

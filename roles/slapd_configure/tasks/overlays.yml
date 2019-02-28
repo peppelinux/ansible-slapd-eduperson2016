@@ -129,3 +129,57 @@
   when: accesslog_enabled == True
 
 # syncrepl overlay
+- name: Render template syncrepl-overlay.ldif
+  template:
+    src: roles/{{role_name}}/templates/syncrepl-overlay.ldif
+    dest: "{{ tmp_dir }}/syncrepl-overlay.ldif"
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+- name: Add syncrepl-overlay.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/syncrepl-overlay.ldif"
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+- name: Render template syncrepl-entry.ldif
+  template:
+    src: roles/{{role_name}}/templates/syncrepl-entry.ldif
+    dest: "{{ tmp_dir }}/syncrepl-entry.ldif"
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+- name: Add syncrepl-entry.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/syncrepl-entry.ldif"
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+- name: "Set ACL for delta repl consumer to accesslog"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={3}mdb,cn=config
+      changeType: modify
+      replace: olcAccess
+      olcAccess: to * by dn.children="ou=repl,{{ ldap_basedc }}" read by * break
+      EOF
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+# this doesn't works: implementation specific error
+# ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+# dn: olcDatabase={1}mdb,cn=config
+# changetype: modify
+# replace: olcSizeLimit
+# olcSizeLimit: dn.children="ou=repl,dc=testunical,dc=it" size=unlimited
+# EOF
+
+# -
+# replace: olcTimeLimit
+# olcTimeLimit: dn.children="ou=repl,dc=testunical,dc=it" time=unlimited
+# EOF
+# olcLimits: {2}anonymous auth size.pr=500 size.prtotal=unlimited
+# - name: "Set limitless search for repl users"
+  # shell:
+    # cmd: |
+      # ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      # dn: olcDatabase={1}{{ ldap_backend }},cn=config
+      # changetype: modify
+      # replace: olcSizeLimit
+      # olcSizeLimit: dn.exact="ou=repl,{{ ldap_basedc }}" size=unlimited
+      # EOF
+  # when: syncrepl_enabled == True and accesslog_enabled == True

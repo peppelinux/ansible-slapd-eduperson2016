@@ -4,6 +4,10 @@ dn: cn=config
 replace: olcLogLevel
 olcLogLevel: {{ debug_level }}
 
+dn: cn=config
+replace: olcSizeLimit
+olcSizeLimit: {{ olcSizeLimit }}
+
 # olcLogFile is only used on Windows because it lacks syslog.
 #dn: cn=config
 #replace: olcLogFile

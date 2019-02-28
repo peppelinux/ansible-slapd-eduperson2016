@@ -32,6 +32,9 @@
     debug_level: 256
     logfile: "/var/log/slapd.log"
 
+    # General config
+    olcSizeLimit: 1000
+
     # PPolicy password expiration: default 6 month
     pwdMaxAge : 15780000
     # PPolicy Account Lockout
@@ -62,6 +65,10 @@
     accesslog_ops: writes bind
     # 186days+0hours check every day
     accesslog_logpurge: "7+00:00 1+00:00"
+
+    # Syncrepl overlay enabled (delta-repl)
+    syncrepl_enabled : true
+
 
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"

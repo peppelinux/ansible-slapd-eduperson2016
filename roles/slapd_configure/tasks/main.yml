@@ -7,7 +7,7 @@
   file: path={{ tmp_dir }} state=directory
 
 - name: Render general_config.ldif
-  template: 
+  template:
     src: "roles/{{role_name}}/templates/general_config.ldif"
     dest: "{{ tmp_dir }}/general_config.ldif"
 
@@ -15,7 +15,7 @@
   command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/general_config.ldif"
 
 - name: Render acl.ldif
-  template: 
+  template:
     src: "roles/{{role_name}}/templates/acl.ldif"
     dest: "{{ tmp_dir }}/acl.ldif"
 
@@ -28,7 +28,7 @@
 # End Schemas
 
 - name: Render template organizational-units.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/organizational-units.ldif
     dest: "{{ tmp_dir }}/organizational-units.ldif"
 
@@ -36,7 +36,7 @@
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/organizational-units.ldif"
 
 - name: Render template organizational-units.ldif
-  template: 
+  template:
     src: "roles/{{role_name}}/templates/entries/{{ item }}"
     dest: "{{ tmp_dir }}/{{ item }}"
   with_items:
@@ -72,7 +72,7 @@
 
 # log file
 - name: "Change rsyslog log file to {{ logfile }}"
-  template: 
+  template:
     src: roles/{{role_name}}/templates/10-slapd.conf
     dest: /etc/rsyslog.d/10-slapd.conf
 
@@ -80,7 +80,7 @@
   command: service rsyslog restart
 
 - name: "Configure logrotate"
-  template: 
+  template:
     src: roles/{{role_name}}/templates/slapd_logrotate
     dest: /etc/logrotate.d/slapd
 
