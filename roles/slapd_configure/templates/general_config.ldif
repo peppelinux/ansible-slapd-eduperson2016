@@ -8,6 +8,10 @@ dn: cn=config
 replace: olcSizeLimit
 olcSizeLimit: {{ olcSizeLimit }}
 
+dn: cn=config
+replace: olcTimeLimit
+olcTimeLimit: {{ olcTimeLimit }}
+
 # olcLogFile is only used on Windows because it lacks syslog.
 #dn: cn=config
 #replace: olcLogFile

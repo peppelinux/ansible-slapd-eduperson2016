@@ -64,6 +64,7 @@ export USERUID=ldap1
 export USERPWD=thatpassword
 ````
 
+Create the user used for delta repl from consumers
 ````
 ldapadd -Y EXTERNAL -H ldapi:/// <<EOF
 dn: uid=$USERUID,ou=repl,dc=testunical,dc=it
@@ -93,12 +94,13 @@ ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
 dn: olcDatabase={1}mdb,cn=config
 changetype: modify
 add: olcSyncrepl
-olcSyncRepl: {0}rid=000
+olcSyncRepl: rid=1
   provider=ldap://ldap.$D2.$D1
   type=refreshAndPersist
-  retry="5 5 300 +"
+  retry="60 +"
   searchbase="dc=$D2,dc=$D1"
   attrs="*,+"
+  schemachecking=on
   bindmethod=simple
   binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
   credentials=$USERPWD
@@ -109,9 +111,29 @@ EOF
 
 ````
 
+Debug
+-----
+
+check replica index on provider
+````
+ldapsearch -Y EXTERNAL -H ldapi:/// -LLL -s base -b dc=$D2,dc=$D1 contextCSN
+````
+
+check replica index on provider from consumers
+````
+ldapsearch -H ldap://ldap.testunical.it -LLL -w $USERPWD -D uid=$USERUID,ou=repl,dc=$D2,dc=$D1 -s base -b dc=$D2,dc=$D1 contextCSN
+````
+
+then check on the slave, if these two numbers match then we have replication
+TODO: do a unitest script for replication here!
+````
+ldapsearch -Y EXTERNAL -H ldapi:/// -LLL -s base -b dc=$D2,dc=$D1 contextCSN
+````
+
 References
 ----------
 
+- https://icicimov.github.io/blog/devops/LDAP-replication-for-Directory-HA/
 - http://www.openldap.org/doc/admin24/guide.html#delta-syncrepl%20replication
 - http://www.zytrax.com/books/ldap/ch6/syncprov.html
 - http://www.zytrax.com/books/ldap/ch7/#access-log

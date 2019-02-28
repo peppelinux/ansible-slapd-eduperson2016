@@ -33,7 +33,10 @@
     logfile: "/var/log/slapd.log"
 
     # General config
+    # how many entries will be returned by default on each ldapseatch
     olcSizeLimit: 1000
+    # maximum number of seconds (in real time) slapd will spend answering a search request
+    olcTimeLimit: 3600
 
     # PPolicy password expiration: default 6 month
     pwdMaxAge : 15780000
@@ -68,7 +71,6 @@
 
     # Syncrepl overlay enabled (delta-repl)
     syncrepl_enabled : true
-
 
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"
