@@ -133,17 +133,17 @@
   template:
     src: roles/{{role_name}}/templates/syncrepl-overlay.ldif
     dest: "{{ tmp_dir }}/syncrepl-overlay.ldif"
-  when: syncrepl_enabled == True and accesslog_enabled == True
+  when: syncrepl_enabled == True
 
 - name: Add syncrepl-overlay.ldif
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/syncrepl-overlay.ldif"
-  when: syncrepl_enabled == True and accesslog_enabled == True
+  when: syncrepl_enabled == True
 
 - name: Render template syncrepl-entry.ldif
   template:
     src: roles/{{role_name}}/templates/syncrepl-entry.ldif
     dest: "{{ tmp_dir }}/syncrepl-entry.ldif"
-  when: syncrepl_enabled == True and accesslog_enabled == True
+  when: syncrepl_enabled == True
 
 - name: Add syncrepl-entry.ldif
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/syncrepl-entry.ldif"
@@ -158,7 +158,7 @@
       replace: olcAccess
       olcAccess: to * by dn.children="ou=repl,{{ ldap_basedc }}" read by * break
       EOF
-  when: syncrepl_enabled == True and accesslog_enabled == True
+  when: syncrepl_enabled == True
 
 # this doesn't works: implementation specific error
 # ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF

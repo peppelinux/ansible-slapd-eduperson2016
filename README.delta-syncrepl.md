@@ -51,7 +51,9 @@ If the session log does not contain enough information the provider executes a f
 
 Provider slapd configuration
 ----------------------------
-Run the playbook with `accesslog_enabled` and `syncrepl_enabled`.
+Run the playbook with `accesslog_enabled` and `syncrepl_enabled`, remember to
+rename playbook.yml to playbook.production for safety.
+
 Then add the consumer user this way:
 
 ````
@@ -98,7 +100,7 @@ olcSyncRepl: {0}rid=000
   searchbase="dc=$D2,dc=$D1"
   attrs="*,+"
   bindmethod=simple
-  binddn="cn=$USERUID,ou=repl,dc=$D2,dc=$D1"
+  binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
   credentials=$USERPWD
   logbase="cn=accesslog"
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
