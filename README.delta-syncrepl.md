@@ -53,6 +53,9 @@ Provider slapd configuration
 ----------------------------
 Run the playbook with `accesslog_enabled` and `syncrepl_enabled`, remember to
 rename playbook.yml to playbook.production-consumer for safety.
+````
+ansible-playbook -i "localhost," -c local playbook.production-consumer
+````
 
 Then add the consumer user this way:
 
