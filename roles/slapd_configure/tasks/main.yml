@@ -79,27 +79,6 @@
   import_tasks: ldaps.yml
 # end ldaps
 
-# to be fixed
-- name: "Set limitless search for repl users on primary db"
-  shell:
-    cmd: |
-      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-      dn: olcDatabase={1}{{ ldap_backend }},cn=config
-      changetype: modify
-      replace: olcLimits
-      olcLimits: dn.children="ou=repl,{{ ldap_basedc }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited
-      EOF
-
-- name: "Set limitless search for repl users on accesslog"
-  shell:
-    cmd: |
-      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-      dn: olcDatabase={2}{{ ldap_backend }},cn=config
-      changetype: modify
-      replace: olcLimits
-      olcLimits: dn.children="ou=repl,{{ ldap_basedc }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited
-      EOF
-
 # system task
 - name: "Change rsyslog log file to {{ logfile }}"
   template:

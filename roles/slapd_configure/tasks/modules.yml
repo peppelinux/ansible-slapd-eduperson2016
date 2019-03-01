@@ -79,6 +79,28 @@
   command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/ppolicy.ldif"
   when: ppolicy_overlay == True
 
+- name: "Set limitless search for repl users on primary db"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={1}{{ ldap_backend }},cn=config
+      changetype: modify
+      replace: olcLimits
+      olcLimits: dn.children="ou=repl,{{ ldap_basedc }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited
+      EOF
+  when: syncrepl_enabled == True
+
+- name: "Set limitless search for repl users on accesslog"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={2}{{ ldap_backend }},cn=config
+      changetype: modify
+      replace: olcLimits
+      olcLimits: dn.children="ou=repl,{{ ldap_basedc }}" time.soft=unlimited time.hard=unlimited size.soft=unlimited size.hard=unlimited
+      EOF
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
 # ppolicy configuration
 # - name: Search Directory for ppolicy overlay
   # shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcOverlay=ppolicy"
