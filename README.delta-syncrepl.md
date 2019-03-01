@@ -89,26 +89,34 @@ ldapsearch -H ldap://ldap.testunical.it -D "uid=$USERUID,ou=repl,dc=$D2,dc=$D1" 
 
 ````
 
+Execute it, `olcDbIndex: entryUUID` was already configured by playbook,
+so we don't need to configure it again.
 ````
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: syncprov
+
 dn: olcDatabase={1}mdb,cn=config
 changetype: modify
-add: olcSyncrepl
-olcSyncRepl: rid=1
-  provider=ldap://ldap.$D2.$D1
-  type=refreshAndPersist
-  retry="5 5 300 +"
-  searchbase="dc=$D2,dc=$D1"
-  attrs="*,+"
-  schemachecking=on
-  bindmethod=simple
-  binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
-  credentials=$USERPWD
-  logbase="cn=accesslog"
-  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
-  syncdata=accesslog
+add: olcSyncRepl
+olcSyncRepl: rid=0
+    provider=ldap://ldap.$D2.$D1
+    bindmethod=simple
+    binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
+    credentials=$USERPWD
+    searchbase="dc=$D2,dc=$D1"
+    logbase="cn=accesslog"
+    logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
+    schemachecking=on
+    type=refreshAndPersist
+    retry="60 +"
+    syncdata=accesslog
+-
+add: olcUpdateRef
+olcUpdateRef: ldap://ldap.$D2.$D1
 EOF
-
 ````
 
 Debug
