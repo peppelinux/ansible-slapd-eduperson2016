@@ -52,7 +52,7 @@ If the session log does not contain enough information the provider executes a f
 Provider slapd configuration
 ----------------------------
 Run the playbook with `accesslog_enabled` and `syncrepl_enabled`, remember to
-rename playbook.yml to playbook.production for safety.
+rename playbook.yml to playbook.production-consumer for safety.
 
 Then add the consumer user this way:
 
