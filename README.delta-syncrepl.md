@@ -97,7 +97,7 @@ add: olcSyncrepl
 olcSyncRepl: rid=1
   provider=ldap://ldap.$D2.$D1
   type=refreshAndPersist
-  retry="60 +"
+  retry="5 5 300 +"
   searchbase="dc=$D2,dc=$D1"
   attrs="*,+"
   schemachecking=on

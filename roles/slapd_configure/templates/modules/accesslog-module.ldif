@@ -4,10 +4,10 @@ objectClass: olcModuleList
 olcModuleLoad: accesslog
 olcModulePath: /usr/lib/ldap
 
-# We have to setup another database {3} where accesslog will write the information.
-dn: olcDatabase={3}{{ ldap_backend }},cn=config
+# We have to setup another database {2} where accesslog will write the information.
+dn: olcDatabase={2}{{ ldap_backend }},cn=config
 objectClass: olcMdbConfig
-olcDatabase: {3}{{ ldap_backend }}
+olcDatabase: {2}{{ ldap_backend }}
 olcDbDirectory: /var/lib/ldap/accesslog
 olcSuffix: cn=accesslog
 olcRootDN: cn=admin,{{ ldap_basedc }}

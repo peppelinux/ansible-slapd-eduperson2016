@@ -38,7 +38,9 @@
     # maximum number of seconds (in real time) slapd will spend answering a search request
     olcTimeLimit: 3600
 
-    # PPolicy password expiration: default 6 month
+    # PPolicy module
+    ppolicy_overlay: true
+    # password expiration: default 6 month
     pwdMaxAge : 15780000
     # PPolicy Account Lockout
     # how many failure before LockOut
@@ -48,6 +50,19 @@
     pwdLockoutDuration: 240
     # Specify that cleartext passwords present in Add and Modify requests should be hashed before being stored in the database. This violates the X.500/LDAP information model, but may be needed to compensate for LDAP clients that don't use the Password Modify extended operation to manage passwords.
     PPolicyHashCleartext: "TRUE"
+
+    # Accesslog module, it keep track of all or selected operations on a particular DIT (the target DIT)
+    accesslog_enabled: true
+    # read, write, all. See: https://linux.die.net/man/5/slapo-accesslog
+    accesslog_ops: writes bind
+    # scan the accesslog DB every day, and purge entries older than 7 days
+    accesslog_logpurge: "7+00:00 1+00:00"
+
+    # Syncrepl module enabled
+    syncrepl_enabled : true
+
+    # Monitor module
+    monitor: true
 
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp
@@ -62,16 +77,6 @@
     # this is a modified schema with MAY on sambaSID (coupled with entries-people-extended-nosambaSID.ldif)
     samba_schema: samba3-lightAccount.ldif
 
-    # Access log overlay, it keep track of all or selected operations on a particular DIT (the target DIT)
-    accesslog_enabled: true
-    # read, write, all. See: https://linux.die.net/man/5/slapo-accesslog
-    accesslog_ops: writes bind
-    # 186days+0hours check every day
-    accesslog_logpurge: "7+00:00 1+00:00"
-
-    # Syncrepl overlay enabled (delta-repl)
-    syncrepl_enabled : true
-
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"
     clean_temporary_dir: false
@@ -83,4 +88,4 @@
     - { role: slapd_configure, tags: ["slapd_configure"] }
     # use backup/example structure to restore a complete slapd configuration with entries
     # - { role: slapd_restore_backup, tags: ["slapd_restore_backup"] }
-    - { role: slapd_test, tags: ["slapd_test"] }
+    # - { role: slapd_test, tags: ["slapd_test"] }

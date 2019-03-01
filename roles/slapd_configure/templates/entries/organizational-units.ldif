@@ -10,14 +10,6 @@ dn: ou=removed people,{{ ldap_basedc }}
 ou: people
 objectClass: organizationalUnit
 
-dn: ou=system,{{ ldap_basedc }}
-ou: system
-objectClass: organizationalUnit
-
-dn: ou=policies,{{ ldap_basedc }}
-ou: policies
-objectClass: organizationalUnit
-
 dn: ou=idp,{{ ldap_basedc }}
 ou: idp
 objectClass: organizationalUnit

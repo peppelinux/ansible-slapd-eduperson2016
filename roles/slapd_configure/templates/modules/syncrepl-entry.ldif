@@ -1,0 +1,9 @@
+# {2}{{ ldap_backend }} is the accesslog (delta) backend
+dn: olcOverlay=syncprov,olcDatabase={2}{{ ldap_backend }},cn=config
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+# olcSpCheckpoint: 100 10
+# olcSpSessionlog: 500
+olcSpNoPresent: TRUE
+olcSpReloadHint: TRUE

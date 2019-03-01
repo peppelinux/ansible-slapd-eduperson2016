@@ -1,0 +1,3 @@
+dn: ou=monitor,{{ ldap_basedc }}
+ou: monitor
+objectClass: organizationalUnit

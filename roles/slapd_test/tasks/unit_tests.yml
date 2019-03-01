@@ -20,12 +20,16 @@
 - name: "Destroy configuration and entries and restore all"
   include_role:
     name: slapd_restore_backup
-  
+
 # monitor
 - name: "[Must-Do] Search as Monitor user"
-  shell: "ldapsearch -x -D cn=monitor,ou=system,{{ ldap_basedc }} -w {{ ldap_monitor_pw }} -b cn=Uptime,cn=Time,cn=Monitor -s base '(objectClass=*)' '*' '+'"
+  shell: "ldapsearch -x -D cn=monitor,ou=monitor,{{ ldap_basedc }} -w {{ ldap_monitor_pw }} -b cn=Uptime,cn=Time,cn=Monitor -s base '(objectClass=*)' '*' '+'"
   register: monitor_test
+  when: monitor == True
+
 - debug: msg="{{ monitor_test.stdout | to_nice_yaml }}"
+  when: monitor == True
+# end monitor test
 
 # add 2 user in uo=people
 - name: "Create two example users"
@@ -36,10 +40,10 @@
         objectClass: inetOrgPerson
         objectClass: eduPerson
         objectClass: schacPersonalCharacteristics
-        uid: {{ item['username'] }} 
-        sn: {{ item['sn'] }} 
-        givenName: {{ item['gn'] }} 
-        cn: {{ item['cn'] }} 
+        uid: {{ item['username'] }}
+        sn: {{ item['sn'] }}
+        givenName: {{ item['gn'] }}
+        cn: {{ item['cn'] }}
         mail: {{ item['username'] }}@{{ domain }}
         userPassword: {{ item['password'] }}
         edupersonAffiliation: staff
@@ -117,10 +121,10 @@
         objectClass: inetOrgPerson
         objectClass: eduPerson
         objectClass: schacPersonalCharacteristics
-        uid: {{ item['username'] }} 
-        sn: {{ item['sn'] }} 
-        givenName: {{ item['gn'] }} 
-        cn: {{ item['cn'] }} 
+        uid: {{ item['username'] }}
+        sn: {{ item['sn'] }}
+        givenName: {{ item['gn'] }}
+        cn: {{ item['cn'] }}
         mail: {{ item['mail'] }}@{{ domain }}
         userPassword: {{ item['password'] }}
         edupersonAffiliation: staff
