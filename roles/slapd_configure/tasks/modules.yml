@@ -117,14 +117,13 @@
 # end ppolicy
 
 # pw-sha2 module for SHA512 support
-- name: Add pw-sha2 module for SSHA ({{ ldap_default_passwd_enc }}) support to openldap
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/pw-sha2.ldif"
-  # when: pwsha2.stdout == ""
-
 - name: Render template pw-sha2 overlay for SHA256 support to openldap
   template:
     src: roles/{{role_name}}/templates/modules/pw-sha2.ldif
     dest: "{{ tmp_dir }}/pw-sha2.ldif"
+
+- name: Add pw-sha2 module for SSHA ({{ ldap_default_passwd_enc }}) support to openldap
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/pw-sha2.ldif"
 
 - name: "Set default password encoding: {{ ldap_default_passwd_enc }}"
   shell:
