@@ -3,6 +3,7 @@ easy-rsa/*
 easy-rsa
 CA/*
 playbook.retry
+playbook.production
 *.pyc
 *.ldif.test
 *.~*
