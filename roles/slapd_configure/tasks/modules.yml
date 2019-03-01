@@ -1,0 +1,170 @@
+# MODULES
+
+# accesslog module
+- name: Create accesslog db folder
+  file: path="/var/lib/ldap/accesslog" state=directory owner=openldap group=root mode=u=rwX,g=rX,o= recurse=yes
+
+- name: Render template accesslog-module.ldif
+  template:
+    src: roles/{{role_name}}/templates/modules/accesslog-module.ldif
+    dest: "{{ tmp_dir }}/accesslog-module.ldif"
+  when: accesslog_enabled == True
+
+- name: Render template accesslog-entry.ldif
+  template:
+    src: roles/{{role_name}}/templates/modules/accesslog-entry.ldif
+    dest: "{{ tmp_dir }}/accesslog-entry.ldif"
+  when: accesslog_enabled == True
+
+- name: Add accesslog-overlay.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-overlay.ldif"
+  when: accesslog_enabled == True
+
+- name: Add accesslog-entry.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-entry.ldif"
+  when: accesslog_enabled == True
+# end accesslog module
+
+# syncrepl module
+- name: Render template syncrepl-module.ldif
+  template:
+    src: roles/{{role_name}}/templates/modules/syncrepl-module.ldif
+    dest: "{{ tmp_dir }}/syncrepl-module.ldif"
+  when: syncrepl_enabled == True
+
+- name: Add syncrepl-module.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/syncrepl-module.ldif"
+  when: syncrepl_enabled == True
+# end syncrepl module
+
+# Provider Syncprov Overlay Over the Accesslog Database
+# delta sync repl
+- name: Render template syncrepl-entry.ldif
+  template:
+    src: roles/{{role_name}}/templates/modules/syncrepl-entry.ldif
+    dest: "{{ tmp_dir }}/syncrepl-entry.ldif"
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+- name: Add syncrepl-entry.ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/syncrepl-entry.ldif"
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+- name: "Set ACL for delta repl consumer to accesslog"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={2}mdb,cn=config
+      changeType: modify
+      replace: olcAccess
+      olcAccess: to * by dn.children="ou=repl,{{ ldap_basedc }}" read by * break
+      EOF
+  when: syncrepl_enabled == True and accesslog_enabled == True
+
+# Provider Overlays On Primary Database
+# otherwise on replica: got search entry without Sync State control (dc=testunical,dc=it)
+- name: "add the syncprov to the primary DB"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcOverlay=syncprov,olcDatabase={1}{{ ldap_backend }},cn=config
+      changetype: add
+      objectClass: olcOverlayConfig
+      objectClass: olcSyncProvConfig
+      olcOverlay: syncprov
+      olcSpCheckpoint: 500 15
+      EOF
+  when: syncrepl_enabled == True
+
+# ppolicy schema
+# - name: "Check Password Policy schema on openLDAP and store the result on 'ppolicy_schema' ansible variable"
+  # shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=schema,cn=config cn=*ppolicy dn"
+  # register: ppolicy_schema
+  # changed_when: false
+
+- name: "Enable Password Policy Schema on OpenLDAP"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/ldap/schema/ppolicy.ldif"
+  when: ppolicy_overlay == True
+
+# ppolicy configuration
+# - name: Search Directory for ppolicy overlay
+  # shell: "ldapsearch -QLLLY EXTERNAL -H ldapi:/// -b cn=config  olcOverlay=ppolicy"
+  # register: ppolicy_overlay
+  # when: ppolicy_overlay == True
+
+- name: Render template ppolicy-overlay.ldif
+  template:
+    src: roles/{{role_name}}/templates/modules/ppolicy-overlay.ldif
+    dest: "{{ tmp_dir }}/ppolicy-overlay.ldif"
+  when: ppolicy_overlay == True
+
+- name: Add ppolicy overlay to openldap
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/ppolicy-overlay.ldif"
+  when: ppolicy_overlay == True
+
+- name: Render template ppolicy-entry.ldif
+  template:
+    src: roles/{{role_name}}/templates/modules/ppolicy-entry.ldif
+    dest: "{{ tmp_dir }}/ppolicy-entry.ldif"
+  when: ppolicy_overlay == True
+
+- name: Render template ppolicy OU .ldif
+  template:
+    src: "roles/{{role_name}}/templates/entries/ppolicy-ou.ldif"
+    dest: "{{ tmp_dir }}/ppolicy-ou.ldif"
+  when: ppolicy_overlay == True
+
+- name: Add OU entries ppolicy OU .ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/ppolicy-ou.ldif"
+  when: ppolicy_overlay == True
+
+- name: Add ppolicy entry
+  command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }} -f {{ tmp_dir }}/ppolicy-entry.ldif"
+  when: ppolicy_overlay == True
+# end ppolicy
+
+# pw-sha2 module for SHA512 support
+- name: Add pw-sha2 module for SSHA ({{ ldap_default_passwd_enc }}) support to openldap
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/pw-sha2.ldif"
+  # when: pwsha2.stdout == ""
+
+- name: Render template pw-sha2 overlay for SHA256 support to openldap
+  template:
+    src: roles/{{role_name}}/templates/modules/pw-sha2.ldif
+    dest: "{{ tmp_dir }}/pw-sha2.ldif"
+
+- name: "Set default password encoding: {{ ldap_default_passwd_enc }}"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={-1}frontend,cn=config
+      replace: olcPasswordHash
+      olcPasswordHash: {{ ldap_default_passwd_enc }}
+      EOF
+# end pw-sha2
+
+# monitor overlay (it came with an entry too)
+- name: Render template monitor OU .ldif
+  template:
+    src: "roles/{{role_name}}/templates/entries/monitor-ou.ldif"
+    dest: "{{ tmp_dir }}/monitor-ou.ldif"
+  when: monitor == True
+
+- name: Add OU entries monitor OU .ldif
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/monitor-ou.ldif"
+  when: monitor == True
+
+- name: Hashing Monitor password
+  shell: "slappasswd -s {{ ldap_monitor_pw }}"
+  register: ldap_monitor_pw_hash
+  when: monitor == True
+
+- name: Render template monitor_backend.ldif
+  template:
+    src: roles/{{role_name}}/templates/modules/monitor_backend.ldif
+    dest: "{{ tmp_dir }}/monitor_backend.ldif"
+  when: monitor == True
+
+- name: Add Monitor user entry
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/monitor_backend.ldif"
+  when: monitor == True
+# end monitor

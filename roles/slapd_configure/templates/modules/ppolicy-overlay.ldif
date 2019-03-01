@@ -4,7 +4,7 @@ objectClass: olcModuleList
 olcModuleLoad: ppolicy
 olcModulePath: /usr/lib/ldap
 
-dn: olcOverlay={1}ppolicy,olcDatabase={1}{{ ldap_backend }},cn=config
+dn: olcOverlay=ppolicy,olcDatabase={1}{{ ldap_backend }},cn=config
 objectClass: olcConfig
 objectClass: olcOverlayConfig
 objectClass: olcPPolicyConfig

@@ -1,0 +1,3 @@
+dn: ou=policies,{{ ldap_basedc }}
+ou: policies
+objectClass: organizationalUnit

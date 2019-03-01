@@ -7,3 +7,4 @@ olcOverlay: accesslog
 olcAccessLogDB: cn=accesslog
 olcAccessLogOps: {{ accesslog_ops }}
 olcAccessLogPurge: {{ accesslog_logpurge }}
+olcAccessLogSuccess: TRUE

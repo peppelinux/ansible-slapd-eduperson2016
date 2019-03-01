@@ -1,0 +1,19 @@
+dn: cn=module,cn=config
+objectClass: olcModuleList
+cn: module
+olcModuleLoad: back_monitor
+
+dn: cn=monitor,ou=monitor,{{ ldap_basedc }}
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: monitor
+description: LDAP monitor
+userPassword:{{ ldap_monitor_pw_hash.stdout }}
+
+dn: olcDatabase={3}Monitor,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcMonitorConfig
+olcDatabase: {3}Monitor
+olcAccess: {3}to dn.subtree="cn=monitor" 
+ by dn.children="ou=monitor,{{ ldap_basedc }}" read 
+ by * none

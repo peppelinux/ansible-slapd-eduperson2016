@@ -4,7 +4,7 @@ objectClass: olcModuleList
 olcModuleLoad: memberof
 olcModulePath: /usr/lib/ldap
 
-dn: olcOverlay={0}memberof,olcDatabase={1}{{ ldap_backend }},cn=config
+dn: olcOverlay=memberof,olcDatabase={1}{{ ldap_backend }},cn=config
 objectClass: olcConfig
 objectClass: olcMemberOf
 objectClass: olcOverlayConfig

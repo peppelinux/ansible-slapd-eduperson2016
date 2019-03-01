@@ -4,10 +4,10 @@ objectClass: olcModuleList
 olcModuleLoad: smbk5pwd
 olcModulePath: /usr/lib/ldap
 
-dn: olcOverlay={0}smbk5pwd,olcDatabase={1}{{ ldap_backend }},cn=config
+dn: olcOverlay=smbk5pwd,olcDatabase={1}{{ ldap_backend }},cn=config
 objectClass: olcOverlayConfig
 objectClass: olcSmbK5PwdConfig
-olcOverlay: {0}smbk5pwd
+olcOverlay: smbk5pwd
 # olcSmbK5PwdEnable: krb5
 olcSmbK5PwdEnable: samba
 # olcSmbK5PwdMustChange: 2592000
