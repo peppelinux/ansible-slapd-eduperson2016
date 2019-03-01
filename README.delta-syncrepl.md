@@ -89,27 +89,49 @@ ldapsearch -H ldap://ldap.testunical.it -D "uid=$USERUID,ou=repl,dc=$D2,dc=$D1" 
 
 ````
 
-````
-ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-dn: olcDatabase={1}mdb,cn=config
-changetype: modify
-add: olcSyncrepl
-olcSyncRepl: rid=1
-  provider=ldap://ldap.$D2.$D1
-  type=refreshAndPersist
-  retry="5 5 300 +"
-  searchbase="dc=$D2,dc=$D1"
-  attrs="*,+"
-  schemachecking=on
-  bindmethod=simple
-  binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
-  credentials=$USERPWD
-  logbase="cn=accesslog"
-  logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
-  syncdata=accesslog
-EOF
+Execute the following statement to make this server a consumer of a provider,
+remember that `olcDbIndex: entryUUID` was already configured by playbook,
+so we don't need to configure it again.
+
+_Remember:_ To add `starttls=critical tls_reqcert=demand` to the previous ldapmodify command
+to ensure data security and integrity in production context.
 
 ````
+ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: syncprov
+
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+add: olcSyncRepl
+olcSyncRepl: rid=0
+    provider=ldap://ldap.$D2.$D1
+    bindmethod=simple
+    binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
+    credentials=$USERPWD
+    searchbase="dc=$D2,dc=$D1"
+    logbase="cn=accesslog"
+    logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
+    schemachecking=on
+    type=refreshAndPersist
+    retry="60 +"
+    syncdata=accesslog
+-
+add: olcUpdateRef
+olcUpdateRef: ldap://ldap.$D2.$D1
+EOF
+````
+
+About `retry` option:
+1.  "retry" accepts a comma separated list of number pairs
+    (+ may be used in the second value of a pair).
+2.  The first value of the pair is the "retry interval" in seconds
+3.  The second value of the pair is the "number of retries"
+   "+" or "-1" may be used for an infinite number of retries
+
+
 
 Debug
 -----
