@@ -7,11 +7,12 @@ This playbook will install a slapd server with:
  - schac-2015 schema
  - memberOf overlay
  - ppolicy overlay
- - pw-sha2 overlay for SSHA-512, SSHA-384, SSHA-256, SHA-512, SHA-384 and SHA-256 passwords
+ - pw-sha2 module for SSHA-512, SSHA-384, SSHA-256, SHA-512, SHA-384 and SHA-256 passwords
  - Monitor backend
  - Unique overlay (default field: mail)
  - smbk5pwd overlay
- - accesslog overlay (for delta replications)
+ - accesslog module (for delta replications)
+ - syncprov (synrepl) with or without delta replication (delta can be enabled together with accesslog)
  - Unit test for ACL and Password Policy overlay
 
 You can also import users from a CSV file, globals parameters can be edited in playbook.yml.
@@ -26,9 +27,12 @@ roles/slapd_configuration/templates/*
 roles/slapd_configuration/files/*
 ````
 
+For a consumer slapd server please read [_README.delta-syncrepl.md_](README.delta-syncrepl.md).
+
 Tested on
 ---------
 - Debian 9
+- Debian 10
 
 
 Table of contents

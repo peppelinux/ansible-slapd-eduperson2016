@@ -23,7 +23,6 @@
     ldap_basedc: "dc={{ domain2 }},dc={{ domain1 }}"
     ldap_basedn: "ou=people,dc={{ domain2 }},dc={{ domain1 }}"
     ldap_pw: slapdsecret
-    ldap_monitor_pw: monitorsecret
     ldap_default_passwd_enc: "{SSHA512}"
 
     enable_ldaps: true
@@ -63,6 +62,7 @@
 
     # Monitor module
     monitor: true
+    ldap_monitor_pw: monitorsecret
 
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp
@@ -88,4 +88,4 @@
     - { role: slapd_configure, tags: ["slapd_configure"] }
     # use backup/example structure to restore a complete slapd configuration with entries
     # - { role: slapd_restore_backup, tags: ["slapd_restore_backup"] }
-    # - { role: slapd_test, tags: ["slapd_test"] }
+    - { role: slapd_test, tags: ["slapd_test"] }

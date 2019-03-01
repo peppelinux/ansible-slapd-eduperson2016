@@ -11,6 +11,6 @@ objectClass: olcPPolicyConfig
 objectClass: top
 olcOverlay: ppolicy
 olcPPolicyDefault: cn=default,ou=policies,{{ ldap_basedc }}
-#olcPPolicyHashCleartext: {{ PPolicyHashCleartext }}
+olcPPolicyHashCleartext: {{ PPolicyHashCleartext }}
 olcPPolicyUseLockout: FALSE
 #olcPPolicyForwardUpdates: FALSE
