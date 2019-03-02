@@ -155,6 +155,11 @@ TODO: do a unitest script for replication here!
 ldapsearch -Y EXTERNAL -H ldapi:/// -LLL -s base -b dc=$D2,dc=$D1 contextCSN
 ````
 
+TODO
+----
+
+- [ppolicy_forward_updates](https://www.systutorials.com/docs/linux/man/5-slapo-ppolicy/), userlockout should be updated from consumer to provider with a good [updateref]() and [chain overlay](https://linux.die.net/man/5/slapo-chain);
+
 References
 ----------
 
