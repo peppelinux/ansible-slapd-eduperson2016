@@ -162,6 +162,7 @@ TODO
  Additional resources:
   - https://www.openldap.org/lists/openldap-technical/201005/msg00028.html
   - https://www.linuxtopia.org/online_books//network_administration_guides/ldap_administration/overlays_Chaining.html#Chaining
+  - http://www.informatik.uni-bremen.de/~manal/ldap/slaves.conf
 
 References
 ----------
