@@ -132,7 +132,7 @@ About `retry` option:
     (+ may be used in the second value of a pair).
 2.  The first value of the pair is the "retry interval" in seconds
 3.  The second value of the pair is the "number of retries"
-   "+" or "-1" may be used for an infinite number of retries
+   "+" or "-1" may be used for an infinite number of retriess
 
 
 
@@ -158,7 +158,10 @@ ldapsearch -Y EXTERNAL -H ldapi:/// -LLL -s base -b dc=$D2,dc=$D1 contextCSN
 TODO
 ----
 
-- [ppolicy_forward_updates](https://www.systutorials.com/docs/linux/man/5-slapo-ppolicy/), userlockout should be updated from consumer to provider with a good [updateref]() and [chain overlay](https://linux.die.net/man/5/slapo-chain);
+- [ppolicy_forward_updates `olcPPolicyForwardUpdates: TRUE`](https://www.systutorials.com/docs/linux/man/5-slapo-ppolicy/), userlockout should be updated from consumer to provider with a good [updateref](http://www.zytrax.com/books/ldap/ch6/index.html#updateref) and [chain overlay](https://linux.die.net/man/5/slapo-chain);
+ Additional resources:
+  - https://www.openldap.org/lists/openldap-technical/201005/msg00028.html
+  - https://www.linuxtopia.org/online_books//network_administration_guides/ldap_administration/overlays_Chaining.html#Chaining
 
 References
 ----------
