@@ -104,7 +104,6 @@ ldapsearch -H ldap://ldap.testunical.it -D "uid=$USERUID,ou=repl,dc=$D2,dc=$D1" 
 ldapsearch -H ldap://ldap.testunical.it -D "uid=$USERUID,ou=repl,dc=$D2,dc=$D1" -w $USERPWD -b 'cn=accesslog' -LLL
 
 ````
-
 Execute the following statement to make this server a consumer of a provider,
 remember that `olcDbIndex: entryUUID` was already configured by playbook,
 so we don't need to configure it again.
