@@ -16,5 +16,7 @@ olcTLSCertificateKeyFile: {{ cert_path }}/{{ ldap_server_key }}
 # Disable SSLv2/v3 and use strong ciphers.
 # replace: olcTLSCipherSuite
 # olcTLSCipherSuite: HIGH:MEDIUM:-SSLv2:-SSLv3
-# or 
+# or
 # olcTLSCipherSuite: TLS_RSA_CAMELLIA_128_CBC_SHA1:TLS_RSA_CAMELLIA_256_CBC_SHA1:!NULL
+# TLSVerifyClient never
+# TLSCipherSuite HIGH:MEDIUM:+SSLv2

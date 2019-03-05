@@ -13,4 +13,5 @@ olcOverlay: ppolicy
 olcPPolicyDefault: cn=default,ou=policies,{{ ldap_basedc }}
 olcPPolicyHashCleartext: {{ PPolicyHashCleartext }}
 olcPPolicyUseLockout: FALSE
+# only for a consumer behind a syncrepl
 #olcPPolicyForwardUpdates: FALSE

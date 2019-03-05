@@ -79,7 +79,7 @@
 
     backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
     restore_ldif_path: "backups/example"
-    clean_temporary_dir: false
+    clean_temporary_dir: true
 
   roles:
     - { role: slapd_backup, tags: ["slapd_backup"] }
