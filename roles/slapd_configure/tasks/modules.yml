@@ -17,7 +17,7 @@
   when: accesslog_enabled == True
 
 - name: Add accesslog-overlay.ldif
-  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-overlay.ldif"
+  command: "ldapadd -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/accesslog-module.ldif"
   when: accesslog_enabled == True
 
 - name: Add accesslog-entry.ldif

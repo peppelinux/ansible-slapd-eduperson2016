@@ -21,3 +21,7 @@ objectClass: organizationalUnit
 dn: ou=repl,{{ ldap_basedc }}
 ou: repl
 objectClass: organizationalUnit
+
+dn: ou=repl-chain,{{ ldap_basedc }}
+ou: repl-chain
+objectClass: organizationalUnit
