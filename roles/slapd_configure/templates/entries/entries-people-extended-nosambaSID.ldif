@@ -28,7 +28,7 @@ edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
-edupersonprincipalname: rossi@unical
+edupersonprincipalname: mario@{{ domain }}
 # edupersonscopedaffiliation: l’accesso è discriminabile in base all’organizzazione di appartenenza dell’utente e al suo tipo di affiliazione con essa
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
@@ -69,7 +69,7 @@ edupersonaffiliation: faculty
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
-edupersonprincipalname: grossi@unical
+edupersonprincipalname: peppe@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 schachomeorganization: {{ domain }}
@@ -108,7 +108,7 @@ edupersonaffiliation: member
 edupersonaffiliation: student
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
-edupersonprincipalname: gino@unical
+edupersonprincipalname: gino@{{ domain }}
 edupersonscopedaffiliation: student@{{ domain }}
 edupersonscopedaffiliation: student@altrocollege.fr
 edupersonscopedaffiliation: member@{{ domain }}
