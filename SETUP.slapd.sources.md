@@ -12,8 +12,7 @@ make -j 4
 make install
 ````
 
-to uninstall it you should have to purge these by hands because "make uninstall" doens't to it
-
+To uninstall the following files you must delete them, "make uninstall" doesn't do this...
 ````
 /usr/local/share/man/man1/ldapexop.1
 /usr/local/share/man/man1/ldapmodrdn.1
