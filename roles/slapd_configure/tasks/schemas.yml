@@ -15,7 +15,7 @@
   register: eduperson_schema
 
 - name: Render template eduperson-201602 schema ldif
-  copy: 
+  copy:
     src: roles/{{role_name}}/files/eduperson-201602.ldif
     dest: "{{ tmp_dir }}/eduperson-201602.ldif"
 
@@ -24,6 +24,16 @@
   when: eduperson_schema.stdout == ""
   notify:
    - "Restart slapd"
+
+- name: "eduPersonPrincipalName indexed"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={1}{{ ldap_backend }},cn=config
+      changetype: modify
+      add: olcDbIndex
+      olcDbIndex: eduPersonPrincipalName eq
+      EOF
 
 # SCHAC-2015
 - name: "Check the existance of 'SCHAC' schema on openLDAP and store the result on 'schac_schema' ansible variable"
