@@ -2,22 +2,8 @@
 # https://www.openldap.org/faq/data/cache/454.html
 # remember that:
 # none do nothing and default is STOP. BREAK instead continue reading to next rule
-# REMEMBER: a space is needed before EOL!
-# If your editor remove them on save: implementation specific error (80)
-# https://www.openldap.org/doc/admin24/access-control.html
-# https://www.openldap.org/faq/data/cache/454.html
-# remember that:
-# none do nothing and default is STOP. BREAK instead continue reading to next rule
-# https://www.openldap.org/doc/admin24/access-control.html
-# https://www.openldap.org/faq/data/cache/454.html
-# remember that:
-# none do nothing and default is STOP. BREAK instead continue reading to next rule
 # REMEMBER: a space is needed after eol!
 # If your editor remove them on save: implementation specific error (80)
-# https://www.openldap.org/doc/admin24/access-control.html
-# https://www.openldap.org/faq/data/cache/454.html
-# remember that:
-# none do nothing and default is STOP. BREAK instead continue reading to next rule
 dn: olcDatabase={1}{{ ldap_backend }},cn=config
 changeType: modify
 replace: olcAccess
