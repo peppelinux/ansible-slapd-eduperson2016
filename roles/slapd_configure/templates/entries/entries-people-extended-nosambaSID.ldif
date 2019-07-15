@@ -29,7 +29,6 @@ edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
 edupersonprincipalname: mario@{{ domain }}
-# edupersonscopedaffiliation: l’accesso è discriminabile in base all’organizzazione di appartenenza dell’utente e al suo tipo di affiliazione con essa
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
@@ -37,6 +36,10 @@ schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
 schachomeorganizationtype: educationInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEmario
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
+ e:1237403
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
+ 1234er
 
 dn: uid=peppe,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -56,26 +59,30 @@ objectclass: schacLinkageIdentifiers
 objectclass: schacPersonalCharacteristics
 objectclass: schacUserEntitlements
 uid: peppe
-userpassword: roll983
-#sambaSID: S-1-5-21-4190670642-642652591-2618390626
-sambaNTpassword: a2137530237ad733fdc26d5d7157d43f
+userpassword: cimpa12
+#sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
+sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
 cn: peppe
-sn: grossi
+sn: rossi
 givenName: peppe
-mail: peppe.grossi@{{ domain }}
-mail: pgrossi@edu.{{ domain }}
-displayname: peppe Rossi
-edupersonaffiliation: faculty
+mail: peppe.grossi@testunical.it
+displayname: Peppe Grossi
+edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
 edupersonprincipalname: peppe@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
+edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
 schachomeorganizationtype: educationInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEpeppe
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
+ e:121374
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
+ 12333dd
 
 dn: uid=gino,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -95,24 +102,30 @@ objectclass: schacLinkageIdentifiers
 objectclass: schacPersonalCharacteristics
 objectclass: schacUserEntitlements
 uid: gino
-userpassword: geu45
-#sambaSID: S-1-5-21-3367172335-543387273-3899206864
-sambaNTpassword: 4836f31fa147adf5fd42dfc52353f1b8
+userpassword: cimpa12
+#sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
+sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
 cn: gino
-sn: groe
+sn: rossi
 givenName: gino
-mail: gino.groe@{{ domain }}
-mail: ggroe@edu.{{ domain }}
-displayname: gino Rossi
+mail: gino.grossi@testunical.it
+displayname: gino Grossi
+edupersonaffiliation: staff
 edupersonaffiliation: member
-edupersonaffiliation: student
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
 edupersonprincipalname: gino@{{ domain }}
-edupersonscopedaffiliation: student@{{ domain }}
-edupersonscopedaffiliation: student@altrocollege.fr
+edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
+edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: university
 schachomeorganizationtype: educationInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEgino
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
+ e:15432
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
+ 126145
+
+
+
