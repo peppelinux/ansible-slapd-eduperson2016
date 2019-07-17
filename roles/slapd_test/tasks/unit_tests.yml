@@ -69,7 +69,7 @@
   shell:
     cmd: |
       ldapmodify -H ldapi:// -D "uid={{ item }},ou=people,{{ ldap_basedc }}" -w password <<EOF
-      dn: uid={{ item }},ou=people,dc=testunical,dc=it
+      dn: uid={{ item }},ou=people,{{ ldap_basedc }}
       changetype: modify
       replace: mail
       mail: newmail@{{ domain }}
@@ -82,7 +82,7 @@
   shell:
     cmd: |
       ldapmodify -H ldapi:// -D "uid=test2,ou=people,{{ ldap_basedc }}" -w password <<EOF
-      dn: uid=test2,ou=people,dc=testunical,dc=it
+      dn: uid=test2,ou=people,{{ ldap_basedc }}
       changetype: modify
       replace: {{ item }}
       {{ item }}: fakevalue
@@ -97,10 +97,10 @@
   shell:
     cmd: |
       ldapmodify -H ldapi:// -D "uid=test2,ou=people,{{ ldap_basedc }}" -w password <<EOF
-      dn: uid=test2,ou=people,dc=testunical,dc=it
+      dn: uid=test2,ou=people,{{ ldap_basedc }}
       changetype: modify
       replace: memberOf
-      memberOf: cn=test,ou=groups,dc=testunical,dc=it
+      memberOf: cn=test,ou=groups,{{ ldap_basedc }}
       EOF
   ignore_errors: true
 
@@ -166,7 +166,7 @@
   shell:
     cmd: |
       ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-      dn: uid={{ item }},ou=people,dc=testunical,dc=it
+      dn: uid={{ item }},ou=people,{{ ldap_basedc }}
       changetype: modify
       delete: pwdAccountLockedTime
       EOF
