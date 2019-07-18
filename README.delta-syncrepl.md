@@ -109,6 +109,7 @@ remember that `olcDbIndex: entryUUID` was already configured by playbook,
 so we don't need to configure it again.
 
 *Here* would be inserted the chain overlay. See _Chain overlay ISSUES_.
+*REMEMBER* to change `rid` for every replica.
 
 Simple bind (password are in clear during the connection)
 ````
