@@ -443,7 +443,7 @@ Hints
 - Be aware that ldapmodify is sensitive to (trailing) spaces, if your editor removes trailing space on save...;
 - https://www.openldap.org/doc/admin24/appendix-common-errors.html
 - Error 80 (implementation specific error) raises when tls certs doesn't have read permissions or if the ldif used with ldapadd/ldapmodify have some trailing spaces or too many blank lines or some syntax error. In other words for everything not well undestood, found in a ldif file, by slapd interpreter;
-- every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp) if a Private CA is used in a ldaps:// connection;
+- every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp) if a Private CA is used in a ldaps:// connection, OTHERWISE client must put `TLS_REQCERT never` in `/etc/ldap/ldap.conf`...;
 - Passwords in the CSV example file will be stored by LDAP in cleartex format, don't do this in production environment, {SSHA} is a good choice. You can find a good SSHA generator here: https://github.com/peppelinux/pySSHA-slapd
 - SCHACH objectClasses are well listed here: https://wiki.refeds.org/display/STAN/SCHAC+OID+Registry
 - https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
