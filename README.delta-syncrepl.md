@@ -110,7 +110,7 @@ so we don't need to configure it again.
 
 *Here* would be inserted the chain overlay. See _Chain overlay ISSUES_.
 
-_Remember:_ To add `starttls=critical tls_reqcert=demand` to the previous ldapmodify command
+_Remember:_ To add `starttls=critical tls_reqcert=demand` to the following ldapmodify command
 to ensure data security and integrity in production context.
 ````
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
