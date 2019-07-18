@@ -110,8 +110,7 @@ so we don't need to configure it again.
 
 *Here* would be inserted the chain overlay. See _Chain overlay ISSUES_.
 
-_Remember:_ To add `starttls=critical tls_reqcert=demand` to the following ldapmodify command
-to ensure data security and integrity in production context.
+Simple bind (password are in clear during the connection)
 ````
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
 dn: cn=module{0},cn=config
@@ -140,6 +139,35 @@ olcUpdateRef: ldap://ldap.$D2.$D1
 EOF
 ````
 
+If you instead want to have password encrypted without check the validity of the master encryption.
+For a stronger security add `starttls=critical tls_reqcert=demand tls_cacert="$path" tls_key="$path" tls_cert="$path"` to the following ldapmodify command
+to ensure data security and integrity in production context.  
+
+````
+ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+add: olcSyncRepl
+olcSyncRepl: rid=0
+    provider=ldaps://idm.$D2.$D1
+    bindmethod=simple
+    binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
+    credentials=$USERPWD
+    searchbase="dc=$D2,dc=$D1"
+    tls_reqcert=never
+    logbase="cn=accesslog"
+    logfilter="(&(objectClass=auditWriteObject)(reqResult=0))"
+    schemachecking=on
+    type=refreshAndPersist
+    retry="60 +"
+    syncdata=accesslog
+-
+add: olcUpdateRef
+olcUpdateRef: ldaps://idm.$D2.$D1
+EOF
+````
+
+
 _olcUpdateRef_ demand to the master the updates of value.
 Even if you omit this option the consumer cannot update their local
 values, it will get: _ldap_modify: Server is unwilling to perform (53) additional info: shadow context; no update referral_
@@ -152,6 +180,21 @@ About `retry` option:
 3.  The second value of the pair is the "number of retries"
    "+" or "-1" may be used for an infinite number of retriess
 
+
+Turn a Consumer server to standalone
+------------------------------------
+
+This disables syncrepl
+````
+# turn a consumer to standalone
+ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+delete: olcSyncrepl
+-
+delete: olcUpdateRef
+EOF
+````
 
 Debug
 -----
