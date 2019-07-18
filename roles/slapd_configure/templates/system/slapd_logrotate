@@ -8,6 +8,6 @@ size=100M
 sharedscripts
 postrotate
 # OpenLDAP logs via syslog, restart syslog if running
-restart rsyslog
+restart {{ syslog_system }}
 endscript
 }

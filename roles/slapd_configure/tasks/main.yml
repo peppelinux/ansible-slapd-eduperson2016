@@ -85,21 +85,22 @@
   template:
     src: roles/{{role_name}}/templates/system/10-slapd.conf
     dest: /etc/rsyslog.d/10-slapd.conf
-  ignore_errors: true
+  when: syslog_system == "rsyslog"
 
 - name: Restart rsyslog
   command: service rsyslog restart
   ignore_errors: true
+  when: syslog_system == "rsyslog"
 
 - name: "Change syslog-ng log file to {{ logfile }}"
   template:
-    src: roles/{{role_name}}/templates/system/10-slapd.conf
-    dest: /etc/syslog-ng/conf.d/10-slapd.conf
-  ignore_errors: true
+    src: roles/{{role_name}}/templates/system/syslog-slapd.conf
+    dest: /etc/syslog-ng/conf.d/slapd.conf
+  when: syslog_system == "syslog-ng"
 
 - name: Restart syslog-ng
   command: service syslog-ng restart
-  ignore_errors: true
+  when: syslog_system == "syslog-ng"
 
 - name: "Configure logrotate"
   template:

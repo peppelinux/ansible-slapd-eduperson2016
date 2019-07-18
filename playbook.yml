@@ -34,6 +34,7 @@
 
     debug_level: 256
     logfile: "/var/log/slapd.log"
+    syslog_system: rsyslog
 
     # General config
     # how many entries will be returned by default on each ldapseatch
