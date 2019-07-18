@@ -1,9 +1,10 @@
 roles/slapd/files/certs/*
 easy-rsa/*
-easy-rsa
+certs/produzione
 CA/*
 playbook.retry
 playbook.production
+playbook.production-consumer.yml
 *.pyc
 *.ldif.test
 *.~*

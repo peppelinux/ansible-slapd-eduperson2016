@@ -9,15 +9,6 @@ olcTLSCertificateFile: {{ cert_path }}/{{ ldap_server_cert }}
 replace: olcTLSCertificateKeyFile
 olcTLSCertificateKeyFile: {{ cert_path }}/{{ ldap_server_key }}
 -
-# this consent clients that do not verify server's CA
-add: olcTLSCipherSuite
-olcTLSCipherSuite: NORMAL
--
-add: olcTLSCRLCheck
-olcTLSCRLCheck: none
--
-add: olcTLSVerifyClient
-olcTLSVerifyClient: try
 
 # this will produce, even in ldapi: "additional info: TLS confidentiality required"
 # add: olcSecurity

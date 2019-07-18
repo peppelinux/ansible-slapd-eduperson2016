@@ -1,0 +1,12 @@
+# this consent clients that do not verify server's CA
+dn: cn=config
+changetype: modify
+replace: olcTLSCipherSuite
+olcTLSCipherSuite: NORMAL
+-
+replace: olcTLSCRLCheck
+olcTLSCRLCheck: none
+-
+replace: olcTLSVerifyClient
+olcTLSVerifyClient: try
+

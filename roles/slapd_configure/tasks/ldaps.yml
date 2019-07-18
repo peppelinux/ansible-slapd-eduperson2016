@@ -9,7 +9,7 @@
     group: ssl-cert
     mode: 640
   with_fileglob:
-    - certs/*
+    - '{{ local_cert_path }}/*'
 
 - name: Fix certs permissions
   file: path="{{ cert_path }}" owner=openldap group=ssl-cert mode=0740 state=directory recurse=yes
@@ -21,6 +21,14 @@
 
 - name: Apply Directory config TLS
   command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/directory-config-tls.ldif"
+
+- name: Render template directory-config-tls-policy.ldif
+  template: 
+    src: roles/{{role_name}}/templates/directory-config-tls-policy.ldif
+    dest: "{{ tmp_dir }}/directory-config-tls-policy.ldif"
+
+- name: Apply TLS client policy
+  command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/directory-config-tls-policy.ldif"
 
 - name: "enable ldaps://"
   replace:

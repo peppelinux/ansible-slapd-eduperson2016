@@ -84,12 +84,19 @@
   template:
     src: roles/{{role_name}}/templates/system/10-slapd.conf
     dest: /etc/rsyslog.d/10-slapd.conf
+  ignore_errors: true
 
 - name: Restart rsyslog
   command: service rsyslog restart
   ignore_errors: true
 
-- name: Restart rsyslog
+- name: "Change syslog-ng log file to {{ logfile }}"
+  template:
+    src: roles/{{role_name}}/templates/system/10-slapd.conf
+    dest: /etc/syslog-ng/conf.d/10-slapd.conf
+  ignore_errors: true
+
+- name: Restart syslog-ng
   command: service syslog-ng restart
   ignore_errors: true
 

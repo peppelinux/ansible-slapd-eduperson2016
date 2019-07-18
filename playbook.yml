@@ -13,8 +13,12 @@
     domain: "{{ domain2 }}.{{ domain1 }}"
 
     fqdn: "ldap.{{ domain }}"
-
+    
+    # where certificates will be stored
     cert_path: "/etc/ssl/certs/{{ domain }}"
+    
+    # where certificates are
+    local_cert_path: "certs"
     ldap_ca_cert: slapd-cacert.pem
     ldap_server_cert: slapd-cert.pem
     ldap_server_key: slapd-key.pem
