@@ -5,6 +5,12 @@ DigitalOcean's LDAP ordinary administratives
 - https://www.digitalocean.com/community/tutorials/how-to-use-ldif-files-to-make-changes-to-an-openldap-system
 - https://www.digitalocean.com/community/tutorials/how-to-change-account-passwords-on-an-openldap-server
 
+OLC reference
+- https://tylersguides.com/guides/openldap-online-configuration-reference/
+
+Query, filters and tools
+- https://www.digitalocean.com/community/tutorials/how-to-manage-and-use-ldap-servers-with-openldap-utilities
+
 Schemas used in this project
 ----------------------------
 - https://wiki.refeds.org/display/STAN/SCHAC+Releases
@@ -25,3 +31,11 @@ Apache Directory Studio (my favourite UI LDAP client)
 - http://directory.apache.org/studio/users-guide/Apache_Directory_Studio_User_Guide.pdf
 - https://cwiki.apache.org/confluence/display/DIRxSTUDIO/Screenshots#Screenshots-ACIEditor
 - http://directory.apache.org/apacheds/advanced-ug/4.2.7.1-enable-authenticated-users-to-browse-and-read-entries.html
+
+Slapd-meta
+- https://blog.oddbit.com/post/2010-02-16-merging-directories-with-openldap-meta/
+- https://serverfault.com/questions/883452/using-meta-database-backend-to-combine-active-directory-db-and-openldap-local-db
+- https://www.pixelstech.net/article/1517623155-OpenLDAP-Proxy----rwm-map-vs-map
+- https://linux.die.net/man/5/slapo-rwm
+- https://www.systutorials.com/docs/linux/man/5-slapo-rwm/
+- https://www.openldap.org/lists/openldap-technical/201107/msg00084.html
