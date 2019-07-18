@@ -52,9 +52,9 @@ If the session log does not contain enough information the provider executes a f
 Provider slapd configuration
 ----------------------------
 Run the playbook with `accesslog_enabled` and `syncrepl_enabled`, remember to
-rename playbook.yml to playbook.production-consumer for safety.
+rename playbook.production-consumer to playbook.production-consumer.yml for safety.
 ````
-ansible-playbook -i "localhost," -c local playbook.production-consumer
+ansible-playbook -i "localhost," -c local playbook.production-consumer.yml
 ````
 
 Then add the consumer user this way:
