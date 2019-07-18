@@ -1,4 +1,4 @@
-# this consent clients that do not verify server's CA
+# The server never asks the client for a valid certificate
 dn: cn=config
 changetype: modify
 replace: olcTLSCipherSuite
