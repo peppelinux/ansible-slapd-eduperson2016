@@ -1,7 +1,7 @@
 #!/bin/bash
 export SLAPKEYNAME="slapd"
 export PEM_PATH="keys/pem"
-export CERT_PATH=`pwd`"/roles/slapd/files/certs"
+export CERT_PATH=`pwd`"/certs"
 export DOMAIN="testunical.it"
 export SERVER_FQDN="ldap.$DOMAIN"
 

@@ -87,6 +87,11 @@
 
 - name: Restart rsyslog
   command: service rsyslog restart
+  ignore_errors: true
+
+- name: Restart rsyslog
+  command: service syslog-ng restart
+  ignore_errors: true
 
 - name: "Configure logrotate"
   template:
