@@ -61,6 +61,7 @@
   command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f {{ tmp_dir }}/{{ item }}"
   with_items:
     - "entries-groups.ldif"
+  when: import_example_users == True
 
 - name: Add OU entries (peoples)
   command: "ldapadd -x -D 'cn=admin,{{ ldap_basedc }}' -w {{ ldap_pw }}  -H ldapi:/// -f {{ tmp_dir }}/{{ item }}"
