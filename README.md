@@ -90,12 +90,11 @@ _Remember_ that every client must have `slapd-cacert.pem` path configured in /et
 
 If you don't want to validate the certificates in a ldaps:// connection just put `TLS_REQCERT never` in `/etc/ldap/ldap.conf`...;
 
-To read SSL in uso on your slapd server type:
+Check certificate validity with:
 
 `sudo openssl s_client -host idm.unical.it -port 636 -CAfile /etc/ssl/certs/unical.it/slapd-cacert.pem`
 
-
-If you need to upgrade your certificates you can do as follow without restart slapd (olc behaviour):
+If you need to upgrade your certificates you can do as follow, without restart slapd (olc behaviour):
 
 ````
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
