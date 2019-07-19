@@ -78,28 +78,35 @@ Setup Certificates
 ------------------
 
 In order to use SASL/TLS  you must have certificates, for testing purposes
-a self-signed certificate will suffice. To learn more about certificates, see OpenSSL.
-Remeber that OpenLDAP cannot use a certificate that have a password associated to it.
+a self-signed certificate will suffice. To learn more about certificates see OpenSSL.
 
 First of all create your certificates and put them in roles/files/certs/ then
 configure the FQDN associated to it in playbook variables. A script named make_CA.sh can do this automatically,
 it will create your own self signed keys with easy-rsa.
 
-_Remember_ that every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp) if a Private CA is used OR appending this variable as environment variable like `LDAPTLS_CACERT=/path/cacerts/redhat1.pem ldapsearch -x -H ldaps://thathost.com -b dc=testunical,dc=com 'uid=peppe' -d1`. If you don't want to validate the certificates in a ldaps:// connection just put `TLS_REQCERT never` in `/etc/ldap/ldap.conf`...;
+_Remember_ that every client must have `slapd-cacert.pem` path configured in /etc/ldap.conf (pem file could be copied with scp or via web repository) or appending this information as environment variable:
 
-If you need to upgrad your certificates you can do as follow without restart slapd (olc behaviour):
+`LDAPTLS_CACERT=/path/cacerts/redhat1.pem ldapsearch -x -H ldaps://thathost.com -b dc=testunical,dc=com 'uid=peppe' -d1`. 
+
+If you don't want to validate the certificates in a ldaps:// connection just put `TLS_REQCERT never` in `/etc/ldap/ldap.conf`...;
+
+To read SSL in uso on your slapd server type:
+`sudo openssl s_client -host idm.unical.it -port 636 -CAfile /etc/ssl/certs/unical.it/slapd-cacert.pem`
+
+
+If you need to upgrade your certificates you can do as follow without restart slapd (olc behaviour):
 ````
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
 dn: cn=config
 changetype:modify
 replace: olcTLSCACertificateFile
-olcTLSCACertificateFile: /etc/ssl/certs/unical.it/slapd-cacert.pem
+olcTLSCACertificateFile: /path/slapd-cacert.pem
 -
 replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/ssl/certs/unical.it/slapd-cert.pem
+olcTLSCertificateFile: /path/slapd-cert.pem
 -
 replace: olcTLSCertificateKeyFile
-olcTLSCertificateKeyFile: /etc/ssl/certs/unical.it/slapd-key.pem
+olcTLSCertificateKeyFile: /path/slapd-key.pem
 EOF
 ````
 
