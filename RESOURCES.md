@@ -39,3 +39,4 @@ Slapd-meta
 - https://linux.die.net/man/5/slapo-rwm
 - https://www.systutorials.com/docs/linux/man/5-slapo-rwm/
 - https://www.openldap.org/lists/openldap-technical/201107/msg00084.html
+- https://gist.github.com/pbruna/7229c3e99dd4bf57b73c
