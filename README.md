@@ -87,6 +87,22 @@ it will create your own self signed keys with easy-rsa.
 
 _Remember_ that every client must have slapd-cacert.pem configured in /etc/ldap.conf (pem file could be copied with scp) if a Private CA is used OR appending this variable as environment variable like `LDAPTLS_CACERT=/path/cacerts/redhat1.pem ldapsearch -x -H ldaps://thathost.com -b dc=testunical,dc=com 'uid=peppe' -d1`. If you don't want to validate the certificates in a ldaps:// connection just put `TLS_REQCERT never` in `/etc/ldap/ldap.conf`...;
 
+If you need to upgrad your certificates you can do as follow without restart slapd (olc behaviour):
+````
+ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+dn: cn=config
+changetype:modify
+replace: olcTLSCACertificateFile
+olcTLSCACertificateFile: /etc/ssl/certs/unical.it/slapd-cacert.pem
+-
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/ssl/certs/unical.it/slapd-cert.pem
+-
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/ssl/certs/unical.it/slapd-key.pem
+EOF
+````
+
 Play this book
 --------------
 Running it locally
