@@ -176,6 +176,12 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "olcDatabase={1}mdb,cn=config" -LLL -Q -s 
 
 # view SASL supporthem mechanisms
 ldapsearch -x -H ldapi:/// -b "" -LLL -s base supportedSASLMechanisms
+
+# view monitor statistics
+LDAPTLS_CACERT=/etc/ssl/certs/unical.it/ca.crt  ldapsearch -LLL -H ldaps://ldap.testunical.it  -D 'cn=monitor,ou=monitor,dc=unical,dc=it' -w monitosecret -b 'cn=Monitor' -s base '(objectClass=*)' '*' '+'
+
+LDAPTLS_CACERT=/etc/ssl/certs/unical.it/ca.crt  ldapsearch -LLL -H ldaps://ldap.testunical.it  -D "cn=monitor,ou=monitor,dc=unical,dc=it"   -w monitorsecret -b "cn=monitor"
+
 ````
 
 Access Control lists debug
