@@ -480,6 +480,8 @@ Hints
 - https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
 - PPolicy: https://tools.ietf.org/id/draft-behera-ldap-password-policy-10.html
 - The best examples comes from slapd [unit test suite](https://github.com/benegon/openldap/tree/master/tests/scripts)
+- Connect to a remote slapd server tcp/tls with a local socket, reachable via local ldapi socket:
+  `socat -s UNIX-LISTEN:/var/run/ldapi,unlink-early,fork OPENSSL:ldap.local:8443,cafile=/etc/pki/ca-trust/source/anchors/ca.crt,verify=0,keepalive,reuseaddr`
 
 Create fake users using CSV file
 --------------------------------
