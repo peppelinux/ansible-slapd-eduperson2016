@@ -33,7 +33,7 @@ Tested on
 ---------
 - Debian 9
 - Debian 10
-
+- Ubuntu 16.04 (apparmor needs some rules before starting installation)
 
 Table of contents
 -----------------
