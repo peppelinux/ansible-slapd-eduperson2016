@@ -33,7 +33,16 @@ Tested on
 ---------
 - Debian 9
 - Debian 10
-- Ubuntu 16.04 (apparmor needs some rules before starting installation)
+- Ubuntu 16.04* 
+
+*apparmor needs to have this added in `/etc/apparmor.d/usr.sbin.slapd`, where testunical must be your path:
+````
+/etc/ssl/certs/testunical.it/** rw,
+````
+
+then reload apparmor rules:
+`cat /etc/apparmor.d/usr.sbin.slapd |  apparmor_parser -a `
+
 
 Table of contents
 -----------------
