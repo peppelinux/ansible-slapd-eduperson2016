@@ -33,7 +33,7 @@ Tested on
 ---------
 - Debian 9
 - Debian 10
-- Ubuntu 16.04* 
+- Ubuntu 16.04*
 
 *apparmor needs to have this added in `/etc/apparmor.d/usr.sbin.slapd`, where testunical must be your path:
 ````
@@ -79,8 +79,8 @@ Table of contents
 Requirements
 ------------
 ````
-apt install python3-dev python3-setuptools python3-pip easy-rsa expect-dev
-pip3 install ansible
+sudo apt install python3-dev python3-setuptools python3-pip easy-rsa expect-dev
+sudo pip3 install ansible
 ````
 
 Setup Certificates
@@ -90,12 +90,12 @@ In order to use SASL/TLS  you must have certificates, for testing purposes
 a self-signed certificate will suffice. To learn more about certificates see OpenSSL.
 
 First of all create your certificates and put them in roles/files/certs/ then
-configure the FQDN associated to it in playbook variables. A script named make_CA.sh can do this automatically,
-it will create your own self signed keys with easy-rsa.
+configure the FQDN associated to it in playbook variables. A script named make_CA.3.sh can do this automatically,
+it will create your own self signed keys with easy-rsa (use make_CA.sh if you have easy-rsa2).
 
 _Remember_ that every client must have `slapd-cacert.pem` path configured in /etc/ldap.conf (pem file could be copied with scp or via web repository) or appending this information as environment variable:
 
-`LDAPTLS_CACERT=/path/cacert.pem ldapsearch -x -H ldaps://thathost.com -b dc=testunical,dc=com 'uid=peppe' -d1`. 
+`LDAPTLS_CACERT=/path/cacert.pem ldapsearch -x -H ldaps://thathost.com -b dc=testunical,dc=com 'uid=peppe' -d1`.
 
 If you don't want to validate the certificates in a ldaps:// connection just put `TLS_REQCERT never` in `/etc/ldap/ldap.conf`...;
 
@@ -124,7 +124,7 @@ Play this book
 --------------
 Running it locally
 ````
-ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
+sudo ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
 
 # trick for a pretty print using expect's unbuffer, good for a good unit-test stdout
 unbuffer ansible-playbook -i "localhost," -c local playbook.yml | sed 's/\\n/\n/g'

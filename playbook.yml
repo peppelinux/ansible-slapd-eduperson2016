@@ -8,15 +8,16 @@
   become: yes
   vars:
     org: unical
-    domain2:   testunical
+    domain3: aai-test
+    domain2: garr
     domain1: it
-    domain: "{{ domain2 }}.{{ domain1 }}"
+    domain: "{{ domain3 }}.{{ domain2 }}.{{ domain1 }}"
 
     fqdn: "ldap.{{ domain }}"
-    
+
     # where certificates will be stored
     cert_path: "/etc/ssl/certs/{{ domain }}"
-    
+
     # where certificates are
     local_cert_path: "certs"
     ldap_ca_cert: slapd-cacert.pem
@@ -24,8 +25,8 @@
     ldap_server_key: slapd-key.pem
 
     ldap_backend: "mdb"
-    ldap_basedc: "dc={{ domain2 }},dc={{ domain1 }}"
-    ldap_basedn: "ou=people,dc={{ domain2 }},dc={{ domain1 }}"
+    ldap_basedc: "dc={{ domain3 }},dc={{ domain2 }},dc={{ domain1 }}"
+    ldap_basedn: "ou=people,{{ ldap_basedc }}"
     ldap_pw: slapdsecret
     ldap_default_passwd_enc: "{SSHA512}"
 
@@ -37,7 +38,8 @@
     syslog_system: rsyslog
 
     # General config
-    # how many entries will be returned by default on each ldapseatch
+    # how many entries will be returned by default on each ldapsearch
+    # set to -1 for unlimited
     olcSizeLimit: 1000
     # maximum number of seconds (in real time) slapd will spend answering a search request
     olcTimeLimit: 3600

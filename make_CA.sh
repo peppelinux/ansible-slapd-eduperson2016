@@ -2,8 +2,8 @@
 export SLAPKEYNAME="slapd"
 export PEM_PATH="keys/pem"
 export CERT_PATH=`pwd`"/certs"
-export DOMAIN="testunical.it"
-export SERVER_FQDN="ldap.$DOMAIN"
+export DOMAIN="garr.it"
+export SERVER_FQDN="aai-test.$DOMAIN"
 
 apt install easy-rsa
 rm -f easy-rsa
@@ -19,7 +19,7 @@ ln -s openssl-1.0.0.cnf openssl.cnf # won't works with CommonName
 # sed -i '1s/^/# For use with easy-rsa version 2.0 and OpenSSL 1.0.0*\n/' openssl.cnf
 
 # customize informations in vars file (or override them later with env VAR)
-# remember to configure "Common Name (your server's hostname)" in your certs 
+# remember to configure "Common Name (your server's hostname)" in your certs
 # to let your client avoids "does not match common name in certificate"
 #nano vars
 
