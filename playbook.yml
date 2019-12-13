@@ -8,10 +8,12 @@
   become: yes
   vars:
     org: unical
-    domain3: aai-test
-    domain2: garr
+    #domain3: aai-test
+    domain2: testunical
     domain1: it
-    domain: "{{ domain3 }}.{{ domain2 }}.{{ domain1 }}"
+    #domain: "{{ domain3 }}.{{ domain2 }}.{{ domain1 }}"
+    domain: "{{ domain2 }}.{{ domain1 }}"
+
 
     fqdn: "ldap.{{ domain }}"
 
@@ -25,7 +27,8 @@
     ldap_server_key: slapd-key.pem
 
     ldap_backend: "mdb"
-    ldap_basedc: "dc={{ domain3 }},dc={{ domain2 }},dc={{ domain1 }}"
+    #ldap_basedc: "dc={{ domain3 }},dc={{ domain2 }},dc={{ domain1 }}"
+    ldap_basedc: "dc={{ domain2 }},dc={{ domain1 }}"
     ldap_basedn: "ou=people,{{ ldap_basedc }}"
     ldap_pw: slapdsecret
     ldap_default_passwd_enc: "{SSHA512}"
