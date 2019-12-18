@@ -127,6 +127,9 @@ EOF
 
 Play this book
 --------------
+First of all remember to edit playbook.yml with your fqdn and all your desidered paramenters.
+Check that your fqdns matches with those configured in your certs common name (CN).
+
 Running it locally
 ````
 sudo ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
