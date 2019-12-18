@@ -15,8 +15,7 @@ This playbook will install a slapd server with:
  - syncprov (synrepl) with or without delta replication (delta can be enabled together with accesslog)
  - Unit test for ACL and Password Policy overlay
 
-You can also import users from a CSV file, globals parameters can be edited in playbook.yml.
-This behaviour can be suppressed changing this in the playbook:
+You can even import [example users](https://github.com/ConsortiumGARR/ansible-slapd-eduperson2016/blob/master/roles/slapd_configure/templates/entries/entries-people-extended-nosambaSID.ldif), global parameters can be edited in `playbook.yml`. This behaviour can be suppressed changing this in the playbook:
 ````
 import_example_users: true
 ````
@@ -79,8 +78,14 @@ Table of contents
 Requirements
 ------------
 ````
-sudo apt install python3-dev python3-setuptools python3-pip easy-rsa expect-dev
+sudo apt install python3-dev python3-setuptools python3-pip easy-rsa expect-dev git
 sudo pip3 install ansible
+````
+
+then install this playbook
+````
+git clone https://github.com/ConsortiumGARR/ansible-slapd-eduperson2016.git
+cd ansible-slapd-eduperson2016
 ````
 
 Setup Certificates
