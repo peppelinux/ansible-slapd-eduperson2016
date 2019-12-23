@@ -128,7 +128,7 @@ schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  126145
 
 # ldapsearch  -H ldap://127.0.0.1 -D "uid=idp,ou=idp,{{ ldap_basedc }}" -w idpsecret  -b 'ou=people,{{ ldap_basedc }}'
-dn: uid=idp,ou=idp,{{ ldap_basedc }}
+dn: uid=idpuser,ou=idp,{{ ldap_basedc }}
 objectClass: inetOrgPerson
 cn: idpuser
 sn: shibboleth
