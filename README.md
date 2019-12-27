@@ -98,7 +98,7 @@ First of all create your certificates and put them in roles/files/certs/ then
 configure the FQDN associated to it in playbook variables. A script named make_CA.3.sh can do this automatically,
 it will create your own self signed keys with easy-rsa (use make_CA.sh if you have easy-rsa2).
 
-_Remember_ that every client must have `slapd-cacert.pem` path configured in /etc/ldap.conf (pem file could be copied with scp or via web repository) or appending this information as environment variable:
+_Remember_ that every client must have `slapd-cacert.pem` path configured in /etc/ldap/ldap.conf (pem file could be copied with scp or via web repository) or appending this information as environment variable:
 
 `LDAPTLS_CACERT=/path/cacert.pem ldapsearch -x -H ldaps://thathost.com -b dc=aai-test,dc=garr,dc=com 'uid=peppe' -d1`.
 
