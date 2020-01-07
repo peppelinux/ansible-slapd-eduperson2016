@@ -7,7 +7,7 @@
   hosts: all
   become: yes
   vars:
-    org: unical
+    org: idp-0
     domain3: aai-test
     domain2: garr
     domain1: it
@@ -27,7 +27,7 @@
     ldap_backend: "mdb"
     ldap_basedc: "dc={{ domain3 }},dc={{ domain2 }},dc={{ domain1 }}"
     ldap_basedn: "ou=people,{{ ldap_basedc }}"
-    ldap_pw: slapdsecret
+    ldap_pw: ciaoldap!
     ldap_default_passwd_enc: "{SSHA512}"
 
     enable_ldaps: true
@@ -69,7 +69,7 @@
 
     # Monitor module
     monitor: true
-    ldap_monitor_pw: monitorsecret
+    ldap_monitor_pw: ciaomonitor!
 
     # dir where template will be rendered (also for debug purpose)
     tmp_dir: /tmp/ansible-slapd-tmp
