@@ -20,7 +20,7 @@ uid: mario
 userpassword: cimpa12
 #sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
 sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
-cn: mario
+cn: mario rossi
 sn: rossi
 givenName: mario
 mail: mario.rossi@testunical.it
@@ -64,7 +64,7 @@ uid: peppe
 userpassword: cimpa12
 #sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
 sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
-cn: peppe
+cn: peppe rossi
 sn: rossi
 givenName: peppe
 mail: peppe.grossi@testunical.it
@@ -108,7 +108,7 @@ uid: gino
 userpassword: cimpa12
 #sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
 sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
-cn: gino
+cn: gino rossi
 sn: rossi
 givenName: gino
 mail: gino.grossi@testunical.it
@@ -136,14 +136,13 @@ objectclass: inetOrgPerson
 objectclass: organizationalPerson
 objectclass: person
 objectclass: eduPerson
-objectclass: userSecurityInformation
 uid: luigi
 userpassword: cimpa12
-cn: luigi
+cn: luigi martire
 sn: martire
 givenName: luigi
 mail: luigi@testunical.it
-title: studente
+title: dirigente
 
 # ldapsearch  -H ldap://ldap.aai-test.garr.it -D 'uid=idpuser,ou=idp,dc=aai-test,dc=garr,dc=it' -w 'idpsecret'  -b "ou=people,dc=aai-test,dc=garr,dc=it"
 dn: uid=idpuser,ou=idp,{{ ldap_basedc }}
