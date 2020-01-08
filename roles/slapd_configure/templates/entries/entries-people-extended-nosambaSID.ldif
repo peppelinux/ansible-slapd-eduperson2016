@@ -41,6 +41,7 @@ schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:1237403
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  1234er
+title: dottorando
 
 dn: uid=peppe,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -85,6 +86,7 @@ schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:121374
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  12333dd
+title: studente
 
 dn: uid=gino,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -129,6 +131,7 @@ schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:15432
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  126145
+title: ospite
 
 # ldapsearch  -H ldap://ldap.aai-test.garr.it -D 'uid=idpuser,ou=idp,dc=aai-test,dc=garr,dc=it' -w 'idpsecret'  -b "ou=people,dc=aai-test,dc=garr,dc=it"
 dn: uid=idpuser,ou=idp,{{ ldap_basedc }}
