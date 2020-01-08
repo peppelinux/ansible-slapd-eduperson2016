@@ -1,3 +1,4 @@
+# https://wiki.refeds.org/pages/viewpage.action?pageId=44957715
 dn: uid=mario,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
 objectclass: organizationalPerson
@@ -34,8 +35,7 @@ edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
-schachomeorganizationtype: university
-schachomeorganizationtype: educationInstitution
+schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEmario
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:1237403
@@ -79,8 +79,7 @@ edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
-schachomeorganizationtype: university
-schachomeorganizationtype: educationInstitution
+schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEpeppe
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:121374
@@ -124,14 +123,27 @@ edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
-schachomeorganizationtype: university
-schachomeorganizationtype: educationInstitution
+schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEgino
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:15432
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  126145
 title: ospite
+
+dn: uid=luigi,ou=people,{{ ldap_basedc }}
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+objectclass: eduPerson
+objectclass: userSecurityInformation
+uid: luigi
+userpassword: cimpa12
+cn: luigi
+sn: martire
+givenName: luigi
+mail: luigi@testunical.it
+title: studente
 
 # ldapsearch  -H ldap://ldap.aai-test.garr.it -D 'uid=idpuser,ou=idp,dc=aai-test,dc=garr,dc=it' -w 'idpsecret'  -b "ou=people,dc=aai-test,dc=garr,dc=it"
 dn: uid=idpuser,ou=idp,{{ ldap_basedc }}
