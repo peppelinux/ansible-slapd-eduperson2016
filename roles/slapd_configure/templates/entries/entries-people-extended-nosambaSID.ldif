@@ -28,6 +28,7 @@ edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonentitlement: urn:mace:dir:entitlement:common-lib-terms
 edupersonprincipalname: mario@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
@@ -71,6 +72,7 @@ edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonentitlement: urn:mace:dir:entitlement:common-lib-terms
 edupersonprincipalname: peppe@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
@@ -114,6 +116,7 @@ edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonentitlement: urn:mace:dir:entitlement:common-lib-terms
 edupersonprincipalname: gino@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
