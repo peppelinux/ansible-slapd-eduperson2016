@@ -214,8 +214,8 @@ slapacl -F /etc/ldap/slapd.d/  -b "dc=aai-test,dc=garr,dc=it" -D "cn=admin,dc=aa
 # test if a normal user could read data of other users
 slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=mario,ou=people,dc=aai-test,dc=garr,dc=it" -d acl 'cn/read'
 
-# test special idp-user in ou=applications with more advanced query
-slapacl -F /etc/ldap/slapd.d/ -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=idp,ou=applications,dc=aai-test,dc=garr,dc=it" -d acl 'cn/read'
+# test special idp-user in ou=idp with more advanced query
+slapacl -F /etc/ldap/slapd.d/ -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=idp,ou=idp,dc=aai-test,dc=garr,dc=it" -d acl 'cn/read'
 
 # test single field read/write
 slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -d acl 'cn/write'

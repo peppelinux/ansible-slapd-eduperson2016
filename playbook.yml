@@ -7,7 +7,7 @@
   hosts: all
   become: yes
   vars:
-    org: idp-0
+    org: garr
     domain3: aai-test
     domain2: garr
     domain1: it
