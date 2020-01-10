@@ -27,7 +27,7 @@
     ldap_backend: "mdb"
     ldap_basedc: "dc={{ domain3 }},dc={{ domain2 }},dc={{ domain1 }}"
     ldap_basedn: "ou=people,{{ ldap_basedc }}"
-    ldap_pw: ciaoldap!
+    ldap_pw: slapdsecret
     ldap_default_passwd_enc: "{SSHA512}"
 
     enable_ldaps: true
