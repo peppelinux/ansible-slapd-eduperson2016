@@ -2,8 +2,8 @@
 export SLAPKEYNAME="slapd"
 export PEM_PATH="pki/pem"
 export CERT_PATH=`pwd`"/certs"
-export DOMAIN="testunical.it"
-export SERVER_FQDN="ldap.$DOMAIN"
+export DOMAIN="garr.it"
+export SERVER_FQDN="ldap.aai-test.$DOMAIN"
 
 # CA AUTHORITY
 export EASYRSA_REQ_CN="$SERVER_FQDN"

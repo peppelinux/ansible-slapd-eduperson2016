@@ -1,3 +1,4 @@
+# https://wiki.refeds.org/pages/viewpage.action?pageId=44957715
 dn: uid=mario,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
 objectclass: organizationalPerson
@@ -19,7 +20,7 @@ uid: mario
 userpassword: cimpa12
 #sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
 sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
-cn: mario
+cn: mario rossi
 sn: rossi
 givenName: mario
 mail: mario.rossi@testunical.it
@@ -28,18 +29,19 @@ edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonentitlement: urn:mace:dir:entitlement:common-lib-terms
 edupersonprincipalname: mario@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
-schachomeorganizationtype: university
-schachomeorganizationtype: educationInstitution
+schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEmario
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:1237403
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  1234er
+title: dottorando
 
 dn: uid=peppe,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -62,7 +64,7 @@ uid: peppe
 userpassword: cimpa12
 #sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
 sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
-cn: peppe
+cn: peppe rossi
 sn: rossi
 givenName: peppe
 mail: peppe.grossi@testunical.it
@@ -71,18 +73,19 @@ edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonentitlement: urn:mace:dir:entitlement:common-lib-terms
 edupersonprincipalname: peppe@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
-schachomeorganizationtype: university
-schachomeorganizationtype: educationInstitution
+schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEpeppe
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:121374
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  12333dd
+title: studente
 
 dn: uid=gino,ou=people,{{ ldap_basedc }}
 objectclass: inetOrgPerson
@@ -105,7 +108,7 @@ uid: gino
 userpassword: cimpa12
 #sambaSID: S-1-5-21-1654374101-3569970681-3921896634-500
 sambantpassword: 24cec09b7ced05ea259a94ae51306e6e
-cn: gino
+cn: gino rossi
 sn: rossi
 givenName: gino
 mail: gino.grossi@testunical.it
@@ -114,18 +117,37 @@ edupersonaffiliation: staff
 edupersonaffiliation: member
 edupersonentitlement: urn:mace:terena.org:tcs:personal-user
 edupersonentitlement: urn:mace:terena.org:tcs:escience-user
+edupersonentitlement: urn:mace:dir:entitlement:common-lib-terms
 edupersonprincipalname: gino@{{ domain }}
 edupersonscopedaffiliation: staff@{{ domain }}
 edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
-schachomeorganizationtype: university
-schachomeorganizationtype: educationInstitution
+schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
 schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEgino
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
  e:15432
 schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
  126145
+title: ospite
 
+dn: uid=luigi,ou=people,{{ ldap_basedc }}
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: person
+objectclass: eduPerson
+uid: luigi
+userpassword: cimpa12
+cn: luigi martire
+sn: martire
+givenName: luigi
+mail: luigi@testunical.it
+title: dirigente
 
-
+# ldapsearch  -H ldap://ldap.aai-test.garr.it -D 'uid=idpuser,ou=idp,dc=aai-test,dc=garr,dc=it' -w 'idpsecret'  -b "ou=people,dc=aai-test,dc=garr,dc=it"
+dn: uid=idpuser,ou=idp,{{ ldap_basedc }}
+objectClass: inetOrgPerson
+cn: idpuser
+sn: shibboleth
+uid: idpuser
+userPassword: idpsecret

@@ -2,7 +2,7 @@
   file: path="{{ cert_path }}" state=directory
 
 - name: Copy certs
-  copy: 
+  copy:
     src: "{{ item }}"
     dest: "{{ cert_path }}/"
     owner: openldap
@@ -15,7 +15,7 @@
   file: path="{{ cert_path }}" owner=openldap group=ssl-cert mode=0740 state=directory recurse=yes
 
 - name: Render template directory-config-tls.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/directory-config-tls.ldif
     dest: "{{ tmp_dir }}/directory-config-tls.ldif"
 
@@ -23,7 +23,7 @@
   command: "ldapmodify -Y EXTERNAL -H ldapi:/// -f {{ tmp_dir }}/directory-config-tls.ldif"
 
 - name: Render template directory-config-tls-policy.ldif
-  template: 
+  template:
     src: roles/{{role_name}}/templates/directory-config-tls-policy.ldif
     dest: "{{ tmp_dir }}/directory-config-tls-policy.ldif"
 
@@ -37,6 +37,13 @@
     replace: 'ldap://127.0.0.1:389/'
     backup: yes
   when: disable_389_port == True
+
+- name: "TLS_CACERT in /etc/ldap/ldap.conf"
+  replace:
+    path: /etc/ldap/ldap.conf
+    regexp: 'TLS_CACERT.*'
+    replace: 'TLS_CACERT {{ cert_path }}/{{ ldap_ca_cert }}'
+    backup: yes
 
 - name: "Disable ldap:// and enable ldaps://"
   replace:

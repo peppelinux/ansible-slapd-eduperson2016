@@ -11,3 +11,4 @@ playbook.production-consumer.yml
 backups/*
 !backups/example
 idp/
+certs/old/*
