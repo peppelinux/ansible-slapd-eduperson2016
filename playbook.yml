@@ -43,6 +43,8 @@
     olcSizeLimit: 1000
     # maximum number of seconds (in real time) slapd will spend answering a search request
     olcTimeLimit: 3600
+    # MDB max Database size: apt install lmdb-utils && mdb_stat -e /var/lib/ldap
+    olcDbMaxSize: 101073741824
 
     # PPolicy module
     ppolicy_overlay: true
