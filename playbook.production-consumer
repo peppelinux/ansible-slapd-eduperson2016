@@ -20,8 +20,8 @@
     # where certificates are
     local_cert_path: "certs"
     ldap_ca_cert: slapd-cacert.pem
-    ldap_server_cert: slapd-cert.pem
-    ldap_server_key: slapd-key.pem
+    ldap_server_cert: ldap1-cert.pem
+    ldap_server_key: ldap1-key.pem
 
     ldap_backend: "mdb"
     ldap_basedc: "dc={{ domain2 }},dc={{ domain1 }}"
@@ -41,6 +41,8 @@
     olcSizeLimit: 1000
     # maximum number of seconds (in real time) slapd will spend answering a search request
     olcTimeLimit: 3600
+    # MDB max Database size: apt install lmdb-utils && mdb_stat -e /var/lib/ldap
+    olcDbMaxSize: 101073741824
 
     # PPolicy module
     ppolicy_overlay: true

@@ -168,9 +168,10 @@ git clone https://github.com/peppelinux/ansible-slapd-eduperson2016.git
 sudo su
 
 CONTAINER_NAME="lxc_debian10_slapd_master"
+CONTAINER_PATH='/var/lib/lxc/'
 
 # use -P /home/al/lxc to change installation path
-lxc-create -t download -n $CONTAINER_NAME -- -d debian -r buster -a amd64
+lxc-create -P $CONTAINER_PATH -t download -n $CONTAINER_NAME -- -d debian -r buster -a amd64
 
 # CONTAINER_ROOT_PASSWD="slapdsecret"
 # lxc-execute -n lxc_debian10_slapd_master -- echo -e "$CONTAINER_ROOT_PASSWD\n$CONTAINER_ROOT_PASSWD" | passwd root
@@ -182,7 +183,7 @@ lxc-start -n $CONTAINER_NAME
 lxc-ls --fancy
 
 # copy your configured ansible playbook
-cp -R ansible-slapd-eduperson2016/ /var/lib/lxc/lxc_debian10_slapd_master/rootfs/root/
+cp -R ansible-slapd-eduperson2016/ $CONTAINER_PATH/lxc_debian10_slapd_master/rootfs/root/
 
 # enter
 # lxc-attach $CONTAINER_NAME
@@ -195,6 +196,11 @@ lxc-attach $CONTAINER_NAME -- pip3 install ansible
 lxc-attach $CONTAINER_NAME -- bash -c "cd /root/ansible-slapd-eduperson2016 && \
                               bash make_CA.production.sh && \
                               ansible-playbook -i "localhost," -c local playbook.production.yml"
+
+lxc-info $CONTAINER_NAME
+
+# server tuning
+/sys/fs/cgroup/memory/lxc/$CONTAINER_NAME
 ````
 
 
