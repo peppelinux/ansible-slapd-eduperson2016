@@ -38,7 +38,6 @@
     - key: slapd/backend
       type: select
       value: "{{ ldap_backend|upper }}"
-  when: debconf.stdout == "1"
 
 - name: Install slapd
   apt: name=slapd state=present
