@@ -6,6 +6,7 @@ playbook.retry
 playbook.production.yml
 make_CA.production.sh
 playbook.production-consumer.yml
+make_consumer_cert.3.production.sh
 *.pyc
 *.ldif.test
 *.~*

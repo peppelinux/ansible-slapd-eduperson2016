@@ -142,15 +142,15 @@ EOF
 
 If you instead want to have password encrypted without check the validity of the master encryption.
 For a stronger security add `starttls=critical tls_reqcert=demand tls_cacert="$path" tls_key="$path" tls_cert="$path"` to the following ldapmodify command
-to ensure data security and integrity in production context.  
+to ensure data security and integrity in production context.
 
 ````
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
 dn: olcDatabase={1}mdb,cn=config
 changetype: modify
 add: olcSyncRepl
-olcSyncRepl: rid=0
-    provider=ldaps://idm.$D2.$D1
+olcSyncRepl: rid=1
+    provider=ldaps://ldap.$D2.$D1
     bindmethod=simple
     binddn="uid=$USERUID,ou=repl,dc=$D2,dc=$D1"
     credentials=$USERPWD
@@ -163,8 +163,6 @@ olcSyncRepl: rid=0
     retry="60 +"
     syncdata=accesslog
 -
-add: olcUpdateRef
-olcUpdateRef: ldaps://idm.$D2.$D1
 EOF
 ````
 

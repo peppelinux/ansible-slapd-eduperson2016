@@ -183,7 +183,7 @@ lxc-start -n $CONTAINER_NAME
 lxc-ls --fancy
 
 # copy your configured ansible playbook
-cp -R ansible-slapd-eduperson2016/ $CONTAINER_PATH/lxc_debian10_slapd_master/rootfs/root/
+cp -R ansible-slapd-eduperson2016/ $CONTAINER_PATH/$CONTAINER_NAME/rootfs/root/
 
 # enter
 # lxc-attach $CONTAINER_NAME
@@ -191,7 +191,7 @@ cp -R ansible-slapd-eduperson2016/ $CONTAINER_PATH/lxc_debian10_slapd_master/roo
 # execute commands without enter
 lxc-attach $CONTAINER_NAME -- apt update
 lxc-attach $CONTAINER_NAME -- apt install python3-dev python3-setuptools \
-                                  python3-pip easy-rsa expect-dev git rsyslog
+                                  python3-pip easy-rsa expect-dev git rsyslog iputils-ping
 lxc-attach $CONTAINER_NAME -- pip3 install ansible
 lxc-attach $CONTAINER_NAME -- bash -c "cd /root/ansible-slapd-eduperson2016 && \
                               bash make_CA.production.sh && \
@@ -202,6 +202,44 @@ lxc-info $CONTAINER_NAME
 # server tuning
 /sys/fs/cgroup/memory/lxc/$CONTAINER_NAME
 ````
+
+
+### lxc readonly consumer
+Create a read-only replica with syncrepl.
+
+
+- rename and modify `playbook.production-consumer` to `playbook.production-consumer`
+- rename and modify `make_consumer_cert.3.sh` to `make_consumer_cert.3.production.sh`
+
+````
+CONTAINER_NAME="lxc_debian10_ldap1"
+CONTAINER_PATH='/var/lib/lxc/'
+
+# use -P /home/al/lxc to change installation path
+lxc-create -P $CONTAINER_PATH -t download -n $CONTAINER_NAME -- -d debian -r buster -a amd64
+
+# run the container
+lxc-start -n $CONTAINER_NAME
+
+# create playbook.production-consumer.yml and make_consumer_cert.3.production.sh
+# copy your configured ansible playbook
+cp -R ansible-slapd-eduperson2016/ $CONTAINER_PATH/$CONTAINER_NAME/rootfs/root/
+
+# enter
+# lxc-attach $CONTAINER_NAME
+
+# execute commands without enter
+lxc-attach $CONTAINER_NAME -- apt update
+lxc-attach $CONTAINER_NAME -- apt install python3-dev python3-setuptools \
+                                  python3-pip easy-rsa expect-dev git rsyslog iputils-ping
+lxc-attach $CONTAINER_NAME -- pip3 install ansible
+lxc-attach $CONTAINER_NAME -- bash -c "cd /root/ansible-slapd-eduperson2016 && \
+                              bash make_consumer_cert.3.production.sh && \
+                              ansible-playbook -i "localhost," -c local playbook.production-consumer.yml"
+
+# add ldap master fqdn in /etc/hosts if unavailable
+````
+Continue the replica configuration following `README.delta-syncrepl.md`
 
 
 Play with LDAP admin tasks
@@ -320,6 +358,14 @@ ldappasswd -H ldaps://ldap.testunical.it -D 'cn=admin,dc=testunical,dc=it' -w sl
 # change entries in a interactive way (using a console text editor as vi or nano)
 ldapvi -D "cn=admin,dc=testunical,dc=it" -w slapdsecret -b 'uid=gino,ou=people,dc=testunical,dc=it'
 
+````
+
+Made the LXC container be automatically started each every host reboot
+
+````
+echo "lxc.start.auto = 1" >>  /var/lib/lxc/$CONTAINER_NAME/config
+lxc-autostart --list
+lxc-autostart --all
 ````
 
 Remote connections
