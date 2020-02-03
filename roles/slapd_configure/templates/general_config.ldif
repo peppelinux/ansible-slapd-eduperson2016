@@ -12,8 +12,8 @@ dn: cn=config
 replace: olcTimeLimit
 olcTimeLimit: {{ olcTimeLimit }}
 
-dn: cn=config
-replace:  olcDbMaxSize
+dn: olcDatabase={1}{{ ldap_backend }},cn=config
+replace: olcDbMaxSize
 olcDbMaxSize: {{ olcDbMaxSize }}
 
 # olcLogFile is only used on Windows because it lacks syslog.

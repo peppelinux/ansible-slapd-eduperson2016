@@ -51,6 +51,7 @@ Table of contents
        * [Requirements](#requirements)
        * [Setup Certificates](#setup-certificates)
        * [Play this book](#play-this-book)
+       * [lxc image](#lxc)
    * #### LDAP admin tasks
       * [Play with LDAP admin tasks](#play-with-ldap-admin-tasks)
       * [Access Control lists debug](#access-control-lists-debug)
@@ -127,17 +128,75 @@ EOF
 
 Play this book
 --------------
-First of all remember to edit playbook.yml with your fqdn and all your desidered paramenters.
+
+````
+git clone https://github.com/peppelinux/ansible-slapd-eduperson2016.git
+cd ansible-slapd-eduperson2016
+````
+
+Edit playbook.yml with your fqdn and all your desidered paramenters.
 Check that your fqdns matches with those configured in your certs common name (CN).
 
 Running it locally
-__Please rename `playbook.yml` it to `playbook.production.yml` if you want to ignore your changes in the git tree__.
+__Please rename `playbook.yml` to `playbook.production.yml` if you want to ignore your changes in the git tree__.
 ````
 sudo ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
 
 # trick for a pretty print using expect's unbuffer, good for a good unit-test stdout
 unbuffer ansible-playbook -i "localhost," -c local playbook.yml | sed 's/\\n/\n/g'
 ````
+
+LXC
+---
+- rename and modify `playbook.yml` to `playbook.production.yml`
+- rename and modify `make_CA.3.sh` to `make_CA.production.sh`
+
+Install lxc `apt install lxc lxd-client` and configure in `/etc/lxc/default.conf` the following:
+````
+lxc.network.type = veth
+lxc.network.link = lxcbr0
+lxc.network.flags = up
+lxc.network.hwaddr = 00:16:3e:xx:xx:xx
+````
+Then put `USE_LXC_BRIDGE="true"` in `/etc/default/lxc-net` and your preferred configurations.
+
+
+````
+git clone https://github.com/peppelinux/ansible-slapd-eduperson2016.git
+# edit and copy make_CA.production.sh and playbook.production.yml
+
+sudo su
+
+CONTAINER_NAME="lxc_debian10_slapd_master"
+
+# use -P /home/al/lxc to change installation path
+lxc-create -t download -n $CONTAINER_NAME -- -d debian -r buster -a amd64
+
+# CONTAINER_ROOT_PASSWD="slapdsecret"
+# lxc-execute -n lxc_debian10_slapd_master -- echo -e "$CONTAINER_ROOT_PASSWD\n$CONTAINER_ROOT_PASSWD" | passwd root
+
+# run the container
+lxc-start -n $CONTAINER_NAME
+
+# some infos ...
+lxc-ls --fancy
+
+# copy your configured ansible playbook
+cp -R ansible-slapd-eduperson2016/ /var/lib/lxc/lxc_debian10_slapd_master/rootfs/root/
+
+# enter
+# lxc-attach $CONTAINER_NAME
+
+# execute commands without enter
+lxc-attach $CONTAINER_NAME -- apt update
+lxc-attach $CONTAINER_NAME -- apt install python3-dev python3-setuptools \
+                                  python3-pip easy-rsa expect-dev git rsyslog
+lxc-attach $CONTAINER_NAME -- pip3 install ansible
+lxc-attach $CONTAINER_NAME -- bash -c "cd /root/ansible-slapd-eduperson2016 && \
+                              bash make_CA.production.sh && \
+                              ansible-playbook -i "localhost," -c local playbook.production.yml"
+````
+
 
 Play with LDAP admin tasks
 --------------------------

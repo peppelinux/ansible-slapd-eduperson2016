@@ -53,7 +53,7 @@
   shell:
     cmd: |
       ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-      dn: olcDatabase={2}mdb,cn=config
+      dn: olcDatabase={2}{{ ldap_backend }},cn=config
       changeType: modify
       replace: olcAccess
       olcAccess: to * by dn.children="ou=repl,{{ ldap_basedc }}" read by * break
