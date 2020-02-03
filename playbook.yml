@@ -1,0 +1,102 @@
+# ansible-playbook playbook.yml -i hosts -v
+# or if you want to run specifieds roles:
+# ansible-playbook playbook.yml -i hosts -v --tag common
+
+---
+- name: OpenLDAP setup for R&S services
+  hosts: all
+  become: yes
+  vars:
+    org: testunical
+    # domain3: aai-test
+    domain2: testunical
+    domain1: it
+    # domain: "{{ domain3 }}.{{ domain2 }}.{{ domain1 }}"
+    domain: "{{ domain2 }}.{{ domain1 }}"
+
+    fqdn: "ldap.{{ domain }}"
+
+    # where certificates will be stored
+    cert_path: "/etc/ssl/certs/{{ domain }}"
+
+    # where certificates are
+    local_cert_path: "certs"
+    ldap_ca_cert: slapd-cacert.pem
+    ldap_server_cert: slapd-cert.pem
+    ldap_server_key: slapd-key.pem
+
+    ldap_backend: "mdb"
+    # ldap_basedc: "dc={{ domain3 }},dc={{ domain2 }},dc={{ domain1 }}"
+    ldap_basedc: "dc={{ domain2 }},dc={{ domain1 }}"
+    ldap_basedn: "ou=people,{{ ldap_basedc }}"
+    ldap_pw: slapdsecret
+    ldap_default_passwd_enc: "{SSHA512}"
+
+    enable_ldaps: true
+    disable_389_port: false
+
+    debug_level: 256
+    logfile: "/var/log/slapd.log"
+    syslog_system: rsyslog
+
+    # General config
+    # how many entries will be returned by default on each ldapsearch
+    # set to -1 for unlimited
+    olcSizeLimit: 1000
+    # maximum number of seconds (in real time) slapd will spend answering a search request
+    olcTimeLimit: 3600
+    # MDB max Database size: apt install lmdb-utils && mdb_stat -e /var/lib/ldap
+    olcDbMaxSize: 101073741824
+
+    # PPolicy module
+    ppolicy_overlay: true
+    # password expiration: default 6 month
+    pwdMaxAge : 15780000
+    # PPolicy Account Lockout
+    # how many failure before LockOut
+    pwdMinLength: 8
+    pwdMaxFailure: 8
+    # how many seconds an account will be blocked. 0 means infinite -> Pwd reset required
+    pwdLockoutDuration: 240
+    # Specify that cleartext passwords present in Add and Modify requests should be hashed before being stored in the database. This violates the X.500/LDAP information model, but may be needed to compensate for LDAP clients that don't use the Password Modify extended operation to manage passwords.
+    PPolicyHashCleartext: "TRUE"
+
+    # Accesslog module, it keep track of all or selected operations on a particular DIT (the target DIT)
+    accesslog_enabled: true
+    # read, write, all. See: https://linux.die.net/man/5/slapo-accesslog
+    accesslog_ops: writes bind
+    # scan the accesslog DB every day, and purge entries older than 7 days
+    accesslog_logpurge: "7+00:00 1+00:00"
+
+    # Syncrepl module enabled
+    syncrepl_enabled : true
+
+    # Monitor module
+    monitor: true
+    ldap_monitor_pw: slapdsecret
+
+    # dir where template will be rendered (also for debug purpose)
+    tmp_dir: /tmp/ansible-slapd-tmp
+
+    # import fake users declared in roles/slapd/templates/entries/entries-people.ldif
+    # you can even import them using csv file and csv2ldif.py script (modify attributes mapping if needed)
+    import_example_users: true
+    # filename to import, also available: entries-people.ldif
+    import_example_users_ldif: entries-people-extended-nosambaSID.ldif
+
+    sambaNTpassword_AttrType: true
+    # this is a modified schema with MAY on sambaSID (coupled with entries-people-extended-nosambaSID.ldif)
+    samba_schema: samba3-lightAccount.ldif
+
+    backup_folder: "backups/{{ lookup('pipe', 'date +%Y-%m-%d_%H%M') }}"
+    restore_ldif_path: "backups/example"
+    clean_temporary_dir: true
+
+  roles:
+    - { role: slapd_backup, tags: ["slapd_backup"] }
+    - { role: slapd_uninstall, tags: ["slapd_uninstall"] }
+    - { role: slapd_install, tags: ["slapd_install"] }
+    - { role: slapd_configure, tags: ["slapd_configure"] }
+    # use backup/example structure to restore a complete slapd configuration with entries
+    # - { role: slapd_restore_backup, tags: ["slapd_restore_backup"] }
+    - { role: slapd_test, tags: ["slapd_test"] }
