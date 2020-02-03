@@ -2,8 +2,8 @@
 export SLAPKEYNAME="slapd"
 export PEM_PATH="pki/pem"
 export CERT_PATH=`pwd`"/certs"
-export DOMAIN="garr.it"
-export SERVER_FQDN="ldap.aai-test.$DOMAIN"
+export DOMAIN="testunical.it"
+export SERVER_FQDN="ldap.$DOMAIN"
 
 # CA AUTHORITY
 export EASYRSA_REQ_CN="$SERVER_FQDN"
@@ -12,7 +12,7 @@ export EASYRSA_REQ_COUNTRY="IT"
 export EASYRSA_REQ_PROVINCE="Cosenza"
 export EASYRSA_REQ_CITY="Cosenza"
 export EASYRSA_REQ_ORG="$DOMAIN CERTIFICATE AUTHORITY"
-export EASYRSA_REQ_EMAIL="info@garr.it"
+export EASYRSA_REQ_EMAIL="info@$DOMAIN"
 export EASYRSA_REQ_OU="$DOMAIN CA"
 
 # export EASYRSA="$PWD"
@@ -23,8 +23,9 @@ export EASYRSA_REQ_OU="$DOMAIN CA"
 export EASYRSA_DN="cn_only"
 export EASYRSA_KEY_SIZE=2048
 export EASYRSA_ALGO=rsa
-export EASYRSA_CA_EXPIRE=75000
-export EASYRSA_CERT_EXPIRE=36500
+# 40 years before expiration ...
+export EASYRSA_CA_EXPIRE=14600
+export EASYRSA_CERT_EXPIRE=14600
 export EASYRSA_NS_SUPPORT="no"
 export EASYRSA_NS_COMMENT="$DOMAIN CERTIFICATE AUTHORITY"
 export EASYRSA_DIGEST="sha256"

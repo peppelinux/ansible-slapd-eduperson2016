@@ -34,9 +34,9 @@ Tested on
 - Debian 10
 - Ubuntu 16.04*
 
-*apparmor needs to have this added in `/etc/apparmor.d/usr.sbin.slapd`, where aai-test.garr must be your path:
+*apparmor needs to have this added in `/etc/apparmor.d/usr.sbin.slapd`, where testunical.it must be your path:
 ````
-/etc/ssl/certs/aai-test.garr.it/** rw,
+/etc/ssl/certs/testunical.it/** rw,
 ````
 
 then reload apparmor rules:
@@ -96,17 +96,17 @@ a self-signed certificate will suffice. To learn more about certificates see Ope
 
 First of all create your certificates and put them in roles/files/certs/ then
 configure the FQDN associated to it in playbook variables. A script named make_CA.3.sh can do this automatically,
-it will create your own self signed keys with easy-rsa (use make_CA.sh if you have easy-rsa2).
+it will create your own self signed keys with easy-rsa (use make_CA.sh if you have easy-rsa2). __Please rename it to `make_CA.production.sh` if you want to ignore your changes in the git tree__.
 
 _Remember_ that every client must have `slapd-cacert.pem` path configured in /etc/ldap/ldap.conf (pem file could be copied with scp or via web repository) or appending this information as environment variable:
 
-`LDAPTLS_CACERT=/path/cacert.pem ldapsearch -x -H ldaps://thathost.com -b dc=aai-test,dc=garr,dc=com 'uid=peppe' -d1`.
+`LDAPTLS_CACERT=/path/cacert.pem ldapsearch -x -H ldaps://thathost.com -b dc=testunical,dc=it 'uid=peppe' -d1`.
 
 If you don't want to validate the certificates in a ldaps:// connection just put `TLS_REQCERT never` in `/etc/ldap/ldap.conf`...;
 
 Check certificate validity with:
 
-`sudo openssl s_client -host idm.aai-test.garr.it -port 636 -CAfile /etc/ssl/certs/aai-test.garr.it/slapd-cacert.pem`
+`sudo openssl s_client -host ldap.testunical.it -port 636 -CAfile /etc/ssl/certs/testunical.it/slapd-cacert.pem`
 
 If you need to upgrade your certificates you can do as follow, without restart slapd (olc behaviour):
 
@@ -131,6 +131,7 @@ First of all remember to edit playbook.yml with your fqdn and all your desidered
 Check that your fqdns matches with those configured in your certs common name (CN).
 
 Running it locally
+__Please rename `playbook.yml` it to `playbook.production.yml` if you want to ignore your changes in the git tree__.
 ````
 sudo ansible-playbook -i "localhost," -c local playbook.yml [-vvv]
 
@@ -195,9 +196,9 @@ ldapsearch -H ldapi:// -Y EXTERNAL -b "olcDatabase={1}mdb,cn=config" -LLL -Q -s 
 ldapsearch -x -H ldapi:/// -b "" -LLL -s base supportedSASLMechanisms
 
 # view monitor statistics
-LDAPTLS_CACERT=/etc/ssl/certs/aai-test.garr.it/ca.crt  ldapsearch -LLL -H ldaps://ldap.aai-test.garr.it  -D 'cn=monitor,ou=monitor,dc=aai-test.garr,dc=it' -w monitosecret -b 'cn=Monitor' -s base '(objectClass=*)' '*' '+'
+LDAPTLS_CACERT=/etc/ssl/certs/testunical.it/ca.crt  ldapsearch -LLL -H ldaps://ldap.testunical.it  -D 'cn=monitor,ou=monitor,dc=aai-test.garr,dc=it' -w monitosecret -b 'cn=Monitor' -s base '(objectClass=*)' '*' '+'
 
-LDAPTLS_CACERT=/etc/ssl/certs/aai-test.garr.it/ca.crt  ldapsearch -LLL -H ldaps://ldap.aai-test.garr.it  -D "cn=monitor,ou=monitor,dc=aai-test.garr,dc=it"   -w monitorsecret -b "cn=monitor"
+LDAPTLS_CACERT=/etc/ssl/certs/testunical.it/ca.crt  ldapsearch -LLL -H ldaps://ldap.testunical.it  -D "cn=monitor,ou=monitor,dc=aai-test.garr,dc=it"   -w monitorsecret -b "cn=monitor"
 
 ````
 
@@ -209,18 +210,18 @@ Access Control lists debug
 ldapsearch -H ldapi:// -Y EXTERNAL -b "cn=config" -LLL olcDatabase=mdb olcAccess
 
 # test ACL
-slapacl -F /etc/ldap/slapd.d/  -b "dc=aai-test,dc=garr,dc=it" -D "cn=admin,dc=aai-test,dc=garr,dc=it"
+slapacl -F /etc/ldap/slapd.d/  -b "dc=testunical,dc=it" -D "cn=admin,dc=testunical,dc=it"
 
 # test if a normal user could read data of other users
-slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=mario,ou=people,dc=aai-test,dc=garr,dc=it" -d acl 'cn/read'
+slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=mario,ou=people,dc=testunical,dc=it" -d acl 'cn/read'
 
 # test special idp-user in ou=idp with more advanced query
-slapacl -F /etc/ldap/slapd.d/ -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=idp,ou=idp,dc=aai-test,dc=garr,dc=it" -d acl 'cn/read'
+slapacl -F /etc/ldap/slapd.d/ -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=idp,ou=idp,dc=testunical,dc=it" -d acl 'cn/read'
 
 # test single field read/write
-slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -d acl 'cn/write'
-slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -d acl 'userPassord/write'
-slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -D "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -d acl 'mail/write'
+slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=gino,ou=people,dc=testunical,dc=it" -d acl 'cn/write'
+slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=gino,ou=people,dc=testunical,dc=it" -d acl 'userPassord/write'
+slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=gino,ou=people,dc=testunical,dc=it" -d acl 'mail/write'
 
 ````
 
@@ -228,16 +229,16 @@ Play with content data
 ----------------------
 ````
 # query entry set
-ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=aai-test,dc=garr,dc=it" -LLL
+ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL
 
 # query entry set with operational metadata
-ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=aai-test,dc=garr,dc=it" -LLL "+"
+ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL "+"
 
 # the same as previous but with both informations
-ldapsearch -H ldapi:// -Y EXTERNAL -b "ou=people,dc=aai-test,dc=garr,dc=it" -LLL "*" +
+ldapsearch -H ldapi:// -Y EXTERNAL -b "ou=people,dc=testunical,dc=it" -LLL "*" +
 
 # complex query with filters
-ldapsearch -H ldapi:// -D "uid=peppe,ou=people,dc=aai-test,dc=garr,dc=it" -w pass  -b 'uid=peppe,ou=people,dc=aai-test,dc=garr,dc=it' '(&(objectClass=inetOrgPerson)(objectClass=organizationalPerson)(objectClass=person)(objectClass=userSecurityInformation)(objectClass=eduPerson)(objectClass=radiusprofile)(objectClass=sambaSamAccount)(objectClass=schacContactLocation)(objectClass=schacEmployeeInfo)(objectClass=schacEntryConfidentiality)(objectClass=schacEntryMetadata)(objectClass=schacExperimentalOC)(objectClass=schacGroupMembership)(objectClass=schacLinkageIdentifiers)(objectClass=schacPersonalCharacteristics)(objectClass=schacUserEntitlements)(&(pwdChangedTime>=20180701000000Z)(pwdChangedTime<=20180709000000Z)))'
+ldapsearch -H ldapi:// -D "uid=peppe,ou=people,dc=testunical,dc=it" -w pass  -b 'uid=peppe,ou=people,dc=testunical,dc=it' '(&(objectClass=inetOrgPerson)(objectClass=organizationalPerson)(objectClass=person)(objectClass=userSecurityInformation)(objectClass=eduPerson)(objectClass=radiusprofile)(objectClass=sambaSamAccount)(objectClass=schacContactLocation)(objectClass=schacEmployeeInfo)(objectClass=schacEntryConfidentiality)(objectClass=schacEntryMetadata)(objectClass=schacExperimentalOC)(objectClass=schacGroupMembership)(objectClass=schacLinkageIdentifiers)(objectClass=schacPersonalCharacteristics)(objectClass=schacUserEntitlements)(&(pwdChangedTime>=20180701000000Z)(pwdChangedTime<=20180709000000Z)))'
 
 # mixing two AND in one OR
 "(|(&(sn=aiello)(givenName=isabella))(&(sn=de marco)(givenName=giuseppe)))"
@@ -246,13 +247,13 @@ ldapsearch -H ldapi:// -D "uid=peppe,ou=people,dc=aai-test,dc=garr,dc=it" -w pas
 "(|(&(sn=aiello)(givenName=isabella))(&(sn=de marco)(schacPersonalUniqueCode=*DMRGPP*)))"
 
 # The subschema is a representation of the available classes and attributes.
-ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=aai-test,dc=garr,dc=it" -LLL subschemaSubentry
+ldapsearch -H ldapi:// -Y EXTERNAL -b "dc=testunical,dc=it" -LLL subschemaSubentry
 
 # change a normal ldap user password with admin privileges
-ldappasswd -H ldaps://ldap.aai-test.garr.it -D 'cn=admin,dc=aai-test,dc=garr,dc=it' -w slapdsecret  -S -x "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it"
+ldappasswd -H ldaps://ldap.testunical.it -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
 
 # change entries in a interactive way (using a console text editor as vi or nano)
-ldapvi -D "cn=admin,dc=aai-test,dc=garr,dc=it" -w slapdsecret -b 'uid=gino,ou=people,dc=aai-test,dc=garr,dc=it'
+ldapvi -D "cn=admin,dc=testunical,dc=it" -w slapdsecret -b 'uid=gino,ou=people,dc=testunical,dc=it'
 
 ````
 
@@ -260,19 +261,19 @@ Remote connections
 ------------------
 ````
 # bind to ldaps:// on local
-ldapsearch -H ldapi:/// -b "dc=aai-test,dc=garr,dc=it" -LLL -D "cn=admin,dc=aai-test,dc=garr,dc=it" -w slapdsecret
+ldapsearch -H ldapi:/// -b "dc=testunical,dc=it" -LLL -D "cn=admin,dc=testunical,dc=it" -w slapdsecret
 
 # remote client authentication test (ldap_ca_cert must be copied to clients, hostname must be resolvend at least in /etc/hosts by them)
-ldapsearch -H ldaps://ldap.aai-test.garr.it:636 -b "dc=aai-test,dc=garr,dc=it" -LLL -D "cn=admin,dc=aai-test,dc=garr,dc=it" -w slapdsecret -d 1
+ldapsearch -H ldaps://ldap.testunical.it:636 -b "dc=testunical,dc=it" -LLL -D "cn=admin,dc=testunical,dc=it" -w slapdsecret -d 1
 
 # test remote client connection
-ldapwhoami -x -H ldaps://ldap.aai-test.garr.it -D "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it" -w geu45 -d 1
+ldapwhoami -x -H ldaps://ldap.testunical.it -D "uid=gino,ou=people,dc=testunical,dc=it" -w geu45 -d 1
 
 # ldap user change his password by himself
-ldappasswd -H ldaps://ldap.aai-test.garr.it -D 'uid=gino,ou=people,dc=aai-test,dc=garr,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=aai-test,dc=garr,dc=it"
+ldappasswd -H ldaps://ldap.testunical.it -D 'uid=gino,ou=people,dc=testunical,dc=it' -w ginopassword  -S -x "uid=gino,ou=people,dc=testunical,dc=it"
 
 # better way, using also the old password to be prompted
-ldappasswd -H ldaps://ldap.aai-test.garr.it -D 'uid=peppelinux,ou=people,dc=aai-test,dc=garr,dc=it' -W -A  -S -x "uid=peppelinux,ou=people,dc=aai-test,dc=garr,dc=it"
+ldappasswd -H ldaps://ldap.testunical.it -D 'uid=peppelinux,ou=people,dc=testunical,dc=it' -W -A  -S -x "uid=peppelinux,ou=people,dc=testunical,dc=it"
 ````
 
 Backup and restore
@@ -319,37 +320,37 @@ If pwdAccountLockedTime is set to 000001010000Z, the user's account has been per
 ````
 # lock out an user
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-dn: uid=gino,ou=people,dc=aai-test,dc=garr,dc=it
+dn: uid=gino,ou=people,dc=testunical,dc=it
 add: pwdAccountLockedTime
 pwdAccountLockedTime: 20081021135537Z
 EOF
 
 # get all locket out accounts
-ldapsearch -LLL -H ldapi:// -D "cn=admin,dc=aai-test,dc=garr,dc=it" -b "ou=people,dc=aai-test,dc=garr,dc=it" "pwdAccountLockedTime=*" pwdAccountLockedTime
+ldapsearch -LLL -H ldapi:// -D "cn=admin,dc=testunical,dc=it" -b "ou=people,dc=testunical,dc=it" "pwdAccountLockedTime=*" pwdAccountLockedTime
 
 # unlock ldif
 ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
-dn: uid=gino,ou=people,dc=aai-test,dc=garr,dc=it
+dn: uid=gino,ou=people,dc=testunical,dc=it
 changetype: modify
 delete: pwdAccountLockedTime
 EOF
 
 # unlock with ldapvi
-ldapvi -D 'cn=admin,dc=aai-test,dc=garr,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=aai-test,dc=garr,dc=it' "pwdAccountLockedTime=*" pwdAccountLockedTime
+ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=testunical,dc=it' "pwdAccountLockedTime=*" pwdAccountLockedTime
 
 # or pwdReset. It must be then resetted using ldappasswd
-dn: cn=gino,ou=people,dc=aai-test,dc=garr,dc=it
+dn: cn=gino,ou=people,dc=testunical,dc=it
 changetype: modify
 add: pwdReset
 pwdReset: TRUE
 
 # force a pwdReset with ldapvi
 # WARNING: if admin will change a userpassword this way smbk5pwd overlay will not trigger sambaNTpassword update!
-ldapvi -D 'cn=admin,dc=aai-test,dc=garr,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=aai-test,dc=garr,dc=it' "pwdReset=*" pwdReset
+ldapvi -D 'cn=admin,dc=testunical,dc=it' -w slapdsecret -b 'uid=mario,ou=people,dc=testunical,dc=it' "pwdReset=*" pwdReset
 
 # a user that resets a password by his own
 # smbk5pwd will trigger sambaNTpassword update
-ldappasswd -D 'uid=mario,ou=people,dc=aai-test,dc=garr,dc=it' -a cimpa12 -w cimpa12 -s newpassword
+ldappasswd -D 'uid=mario,ou=people,dc=testunical,dc=it' -a cimpa12 -w cimpa12 -s newpassword
 
 ````
 
@@ -398,7 +399,7 @@ Because of its hierchical approach, the times when memberOf reference integrity 
 
 This intelligibly demostrates the top-down approach of the hierchical database.
 An also popular "trick" could be to remove all users from their groups and re-add them to force the syncronization.
-If you change or add a memberOf attribute in a member ldif, example: in uid=mario,ou=people,dc=aai-test,dc=garr,dc=it:
+If you change or add a memberOf attribute in a member ldif, example: in uid=mario,ou=people,dc=testunical,dc=it:
 
 - if the corresponding group does not exists the value will be added in a silly multi-valued way, even if it doesn't exists in ou=group (no way to raise exception here!);
 - if the cn exists in ou=groups it will be linked to memberOf top-down reference integrity.
@@ -534,27 +535,27 @@ python csv2ldif.py entries-people.csv
 
 It simply print the exported ldif format in stdout:
 ````
-dn: uid=mario,dc=aai-test,dc=garr,dc=it
+dn: uid=mario,dc=testunical,dc=it
 objectClass: inetOrgPerson
 objectClass: eduPerson
 uid: mario
 sn: Rossi
 givenName: mario
 cn: mario Rossi
-mail: mario.rossi@aai-test.garr.it
+mail: mario.rossi@testunical.it
 userPassword: cimpa12
 edupersonAffiliation: staff
 edupersonAffiliation: member
 
-dn: uid=peppe,dc=aai-test,dc=garr,dc=it
+dn: uid=peppe,dc=testunical,dc=it
 objectClass: inetOrgPerson
 objectClass: eduPerson
 uid: peppe
 sn: Grossi
 givenName: peppe
 cn: peppe Grossi
-mail: pgrossi@aai-test.garr.it
-mail: pgrossi@edu.aai-test.garr.it
+mail: pgrossi@testunical.it
+mail: pgrossi@edu.testunical.it
 userPassword: roll983
 edupersonAffiliation: faculty
 

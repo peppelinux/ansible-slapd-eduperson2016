@@ -3,7 +3,8 @@ easy-rsa/*
 certs/produzione
 CA/*
 playbook.retry
-playbook.production
+playbook.production.yml
+make_CA.production.sh
 playbook.production-consumer.yml
 *.pyc
 *.ldif.test

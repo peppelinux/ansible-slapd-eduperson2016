@@ -2,8 +2,8 @@
 export SLAPKEYNAME="slapd"
 export PEM_PATH="keys/pem"
 export CERT_PATH=`pwd`"/certs"
-export DOMAIN="garr.it"
-export SERVER_FQDN="aai-test.$DOMAIN"
+export DOMAIN="testunical.it"
+export SERVER_FQDN="ldap.$DOMAIN"
 
 apt install easy-rsa
 rm -f easy-rsa
