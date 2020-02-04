@@ -51,7 +51,7 @@ Table of contents
        * [Requirements](#requirements)
        * [Setup Certificates](#setup-certificates)
        * [Play this book](#play-this-book)
-       * [lxc image](#lxc)
+       * [LXC image](#lxc)
    * #### LDAP admin tasks
       * [Play with LDAP admin tasks](#play-with-ldap-admin-tasks)
       * [Access Control lists debug](#access-control-lists-debug)
@@ -191,7 +191,8 @@ cp -R ansible-slapd-eduperson2016/ $CONTAINER_PATH/$CONTAINER_NAME/rootfs/root/
 # execute commands without enter
 lxc-attach $CONTAINER_NAME -- apt update
 lxc-attach $CONTAINER_NAME -- apt install python3-dev python3-setuptools \
-                                  python3-pip easy-rsa expect-dev git rsyslog iputils-ping
+                                  python3-pip easy-rsa expect-dev git rsyslog \
+                                  iputils-ping ldap-utils
 lxc-attach $CONTAINER_NAME -- pip3 install ansible
 lxc-attach $CONTAINER_NAME -- bash -c "cd /root/ansible-slapd-eduperson2016 && \
                               bash make_CA.production.sh && \
@@ -231,7 +232,8 @@ cp -R ansible-slapd-eduperson2016/ $CONTAINER_PATH/$CONTAINER_NAME/rootfs/root/
 # execute commands without enter
 lxc-attach $CONTAINER_NAME -- apt update
 lxc-attach $CONTAINER_NAME -- apt install python3-dev python3-setuptools \
-                                  python3-pip easy-rsa expect-dev git rsyslog iputils-ping
+                                  python3-pip easy-rsa expect-dev git rsyslog \
+                                  iputils-ping ldap-utils
 lxc-attach $CONTAINER_NAME -- pip3 install ansible
 lxc-attach $CONTAINER_NAME -- bash -c "cd /root/ansible-slapd-eduperson2016 && \
                               bash make_consumer_cert.3.production.sh && \
