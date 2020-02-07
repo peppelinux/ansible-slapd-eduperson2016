@@ -151,7 +151,7 @@ LXC
 - rename and modify `playbook.yml` to `playbook.production.yml`
 - rename and modify `make_CA.3.sh` to `make_CA.production.sh`
 
-Install lxc `apt install lxc lxd-client` and configure in `/etc/lxc/default.conf` the following:
+Install lxc `apt install lxc lxctl` and configure in `/etc/lxc/default.conf` the following:
 ````
 lxc.network.type = veth
 lxc.network.link = lxcbr0
@@ -175,6 +175,10 @@ lxc-create -P $CONTAINER_PATH -t download -n $CONTAINER_NAME -- -d debian -r bus
 
 # CONTAINER_ROOT_PASSWD="slapdsecret"
 # lxc-execute -n lxc_debian10_slapd_master -- echo -e "$CONTAINER_ROOT_PASSWD\n$CONTAINER_ROOT_PASSWD" | passwd root
+
+# give optionally a static ip to the container or set a static lease into your dnsmasq local instance
+echo "lxc.network.ipv4 = 10.0.3.201/24 10.0.3.255" >> /var/lib/lxc/$CONTAINER_NAME/config
+echo "lxc.network.ipv4.gateway = 10.0.3.1" >> /var/lib/lxc/$CONTAINER_NAME/config
 
 # run the container
 lxc-start -n $CONTAINER_NAME
@@ -242,6 +246,15 @@ lxc-attach $CONTAINER_NAME -- bash -c "cd /root/ansible-slapd-eduperson2016 && \
 # add ldap master fqdn in /etc/hosts if unavailable
 ````
 Continue the replica configuration following `README.delta-syncrepl.md`
+
+
+Made the LXC container be automatically started each every host reboot
+
+````
+echo "lxc.start.auto = 1" >>  /var/lib/lxc/$CONTAINER_NAME/config
+lxc-autostart --list
+lxc-autostart --all
+````
 
 
 Play with LDAP admin tasks
@@ -360,14 +373,6 @@ ldappasswd -H ldaps://ldap.testunical.it -D 'cn=admin,dc=testunical,dc=it' -w sl
 # change entries in a interactive way (using a console text editor as vi or nano)
 ldapvi -D "cn=admin,dc=testunical,dc=it" -w slapdsecret -b 'uid=gino,ou=people,dc=testunical,dc=it'
 
-````
-
-Made the LXC container be automatically started each every host reboot
-
-````
-echo "lxc.start.auto = 1" >>  /var/lib/lxc/$CONTAINER_NAME/config
-lxc-autostart --list
-lxc-autostart --all
 ````
 
 Remote connections
