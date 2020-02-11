@@ -177,8 +177,8 @@ lxc-create -P $CONTAINER_PATH -t download -n $CONTAINER_NAME -- -d debian -r bus
 # lxc-execute -n lxc_debian10_slapd_master -- echo -e "$CONTAINER_ROOT_PASSWD\n$CONTAINER_ROOT_PASSWD" | passwd root
 
 # give optionally a static ip to the container or set a static lease into your dnsmasq local instance
-echo "lxc.network.ipv4 = 10.0.3.201/24 10.0.3.255" >> /var/lib/lxc/$CONTAINER_NAME/config
-echo "lxc.network.ipv4.gateway = 10.0.3.1" >> /var/lib/lxc/$CONTAINER_NAME/config
+echo "lxc.net.0.ipv4.address = 10.0.3.201/24 10.0.3.255" >> /var/lib/lxc/$CONTAINER_NAME/config
+echo "lxc.net.0.ipv4.gateway = 10.0.3.1" >> /var/lib/lxc/$CONTAINER_NAME/config
 
 # run the container
 lxc-start -n $CONTAINER_NAME
