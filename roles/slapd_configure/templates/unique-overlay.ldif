@@ -11,3 +11,5 @@ objectClass: olcUniqueConfig
 olcOverlay: unique
 olcUniqueAttribute: mail
 olcUniqueAttribute: schacPersonalUniqueID
+olcUniqueAttribute: schacPersonalUniqueCode
+olcUniqueAttribute: eduPersonPrincipalName
