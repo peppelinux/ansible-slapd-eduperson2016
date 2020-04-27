@@ -79,7 +79,7 @@ Table of contents
 Requirements
 ------------
 ````
-sudo apt install python3-dev python3-setuptools python3-pip easy-rsa expect-dev git
+sudo apt install python3-dev python3-setuptools python3-pip easy-rsa expect-dev git rsyslog
 sudo pip3 install ansible
 ````
 
