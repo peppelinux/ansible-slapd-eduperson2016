@@ -11,8 +11,7 @@ olcDatabase: {2}{{ ldap_backend }}
 olcDbDirectory: /var/lib/ldap/accesslog
 olcSuffix: cn=accesslog
 olcRootDN: cn=admin,{{ ldap_basedc }}
-# olcRootDN: cn=root
-# olcRootDN: cn=admin,cn=config
+olcDbMaxSize: {{ olcDbMaxSize }}
 olcDbIndex: default eq
 olcDbIndex: entryCSN,objectClass,reqEnd,reqResult,reqStart
 # olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external
