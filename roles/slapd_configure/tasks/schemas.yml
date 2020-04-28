@@ -46,6 +46,17 @@
   notify:
    - "Restart slapd"
 
+- name: "schac indexes"
+  shell:
+    cmd: |
+      ldapmodify -Y EXTERNAL -H ldapi:/// <<EOF
+      dn: olcDatabase={1}{{ ldap_backend }},cn=config
+      changetype: modify
+      add: olcDbIndex
+      olcDbIndex: schacPersonalUniqueID eq
+      olcDbIndex: schacPersonalUniqueCode eq
+      EOF
+
 # freeRadius
 - name: "Put freeRadius schema"
   shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f roles/{{ role_name }}/files/freeradius_schema/{{ item }}"
