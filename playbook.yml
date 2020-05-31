@@ -99,4 +99,5 @@
     - { role: slapd_configure, tags: ["slapd_configure"] }
     # use backup/example structure to restore a complete slapd configuration with entries
     # - { role: slapd_restore_backup, tags: ["slapd_restore_backup"] }
+    - { role: slapd_restore_backup_test, tags: ["slapd_backup_test"] }
     - { role: slapd_test, tags: ["slapd_test"] }

@@ -1,0 +1,23 @@
+# unit tests
+
+# remove definitions (not configuration) and
+# restore backup (data definitions, users, uo and groups)
+- set_fact:
+    backup_folder: "{{ backup_folder }}/tests"
+- debug: msg="Backup folder used to dumps everything from this test is '{{ backup_folder }}'"
+
+- name: "Create {{ tmp_dir }}"
+  file: path={{ backup_folder }} state=directory
+
+- name: "Dump configuration and entries"
+  include_role:
+    name: slapd_backup
+
+- set_fact:
+    restore_ldif_path: "{{ backup_folder }}"
+- debug: msg="Backup folder used to restore all is '{{restore_ldif_path }}'"
+
+- name: "Destroy configuration and entries and restore all"
+  include_role:
+    name: slapd_restore_backup
+

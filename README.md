@@ -55,6 +55,7 @@ Table of contents
    * #### LDAP admin tasks
       * [Play with LDAP admin tasks](#play-with-ldap-admin-tasks)
       * [Access Control lists debug](#access-control-lists-debug)
+      * [Unit tests](#unit-test)
       * [Play with content data](#play-with-content-data)
       * [Remote connections](#remote-connections)
       * [Backup and restore](#backup-and-restore)
@@ -341,6 +342,14 @@ slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "u
 slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=gino,ou=people,dc=testunical,dc=it" -d acl 'userPassord/write'
 slapacl -F /etc/ldap/slapd.d/  -b "uid=gino,ou=people,dc=testunical,dc=it" -D "uid=gino,ou=people,dc=testunical,dc=it" -d acl 'mail/write'
 
+````
+
+Unit tests
+----------
+
+To test only PPolicy and security things on a production server.
+````
+ansible-playbook -i "localhost," -c local playbook.yml --tags 'slapd_test'
 ````
 
 Play with content data
