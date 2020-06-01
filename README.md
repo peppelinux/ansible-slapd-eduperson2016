@@ -154,13 +154,15 @@ LXC
 
 Install lxc `apt install lxc lxctl` and configure in `/etc/lxc/default.conf` the following:
 ````
-lxc.network.type = veth
-lxc.network.link = lxcbr0
-lxc.network.flags = up
-lxc.network.hwaddr = 00:16:3e:xx:xx:xx
+lxc.net.0.type = veth
+lxc.net.0.link = lxcbr0
+lxc.net.0.flags = up
+lxc.net.0.hwaddr = 00:16:3e:xx:xx:xx
 ````
 Then put `USE_LXC_BRIDGE="true"` in `/etc/default/lxc-net` and your preferred configurations.
 
+:: Problem: ``` Could not generate persistent MAC address for lxcbr0: No such file or directory ```
+:: Solution: Edit `/etc/systemd/network/99-default.link` put `[Link]` `MACAddressPolicy` to none 
 
 ````
 git clone https://github.com/peppelinux/ansible-slapd-eduperson2016.git
