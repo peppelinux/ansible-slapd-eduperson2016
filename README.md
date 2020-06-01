@@ -162,7 +162,7 @@ lxc.net.0.hwaddr = 00:16:3e:xx:xx:xx
 Then put `USE_LXC_BRIDGE="true"` in `/etc/default/lxc-net` and your preferred configurations.
 
 :: Problem: ``` Could not generate persistent MAC address for lxcbr0: No such file or directory ```
-:: Solution: Edit `/etc/systemd/network/99-default.link` put `[Link]` `MACAddressPolicy` to none 
+:: Solution: Edit `/usr/lib/systemd/network/99-default.link` put `[Link]` `MACAddressPolicy` to none 
 
 ````
 git clone https://github.com/peppelinux/ansible-slapd-eduperson2016.git
