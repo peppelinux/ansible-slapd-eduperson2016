@@ -36,10 +36,10 @@ edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
-schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEmario
-schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
+schacPersonalUniqueID: urn:schac:personalUniqueID:it:CF:CODICEFISCALEmario
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:it:{{ domain }}:dipendent
  e:1237403
-schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:it:{{ domain }}:studente:
  1234er
 title: dottorando
 
@@ -80,10 +80,10 @@ edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
-schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEpeppe
-schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
+schacPersonalUniqueID: urn:schac:personalUniqueID:it:CF:CODICEFISCALEpeppe
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:it:{{ domain }}:dipendent
  e:121374
-schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:it:{{ domain }}:studente:
  12333dd
 title: studente
 
@@ -124,10 +124,10 @@ edupersonscopedaffiliation: member@{{ domain }}
 edupersonscopedaffiliation: member@altrodominio.it
 schachomeorganization: {{ domain }}
 schachomeorganizationtype: urn:schac:homeOrganizationType:eu:higherEducationalInstitution
-schacPersonalUniqueID: urn:schac:personalUniqueID:IT:CF:CODICEFISCALEgino
-schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:dipendent
+schacPersonalUniqueID: urn:schac:personalUniqueID:it:CF:CODICEFISCALEgino
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:it:{{ domain }}:dipendent
  e:15432
-schacPersonalUniqueCode: urn:schac:personalUniqueCode:IT:{{ domain }}:studente:
+schacPersonalUniqueCode: urn:schac:personalUniqueCode:it:{{ domain }}:studente:
  126145
 title: ospite
 
