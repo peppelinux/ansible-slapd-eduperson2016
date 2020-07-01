@@ -289,6 +289,7 @@ EOF
 References
 ----------
 
+- https://mishikal.wordpress.com/2019/04/23/configuring-mmr-using-delta-syncrepl-in-openldap-updating-an-existing-standalone-configuration/
 - https://icicimov.github.io/blog/devops/LDAP-replication-for-Directory-HA/
 - http://www.openldap.org/doc/admin24/guide.html#delta-syncrepl%20replication
 - http://www.zytrax.com/books/ldap/ch6/syncprov.html
