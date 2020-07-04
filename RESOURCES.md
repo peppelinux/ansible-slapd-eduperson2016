@@ -11,6 +11,10 @@ OLC reference
 Query, filters and tools
 - https://www.digitalocean.com/community/tutorials/how-to-manage-and-use-ldap-servers-with-openldap-utilities
 
+MDB database backend:
+- https://symas.com/understanding-lmdb-database-file-sizes-and-memory-utilization/
+- https://lmdb.readthedocs.io/en/release/
+
 Schemas used in this project
 ----------------------------
 - https://wiki.refeds.org/display/STAN/SCHAC+Releases
