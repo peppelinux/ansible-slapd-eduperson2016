@@ -630,6 +630,15 @@ Hints
 - Connect to a remote slapd server tcp/tls with a local socket, reachable via local ldapi socket:
   `socat -s UNIX-LISTEN:/var/run/ldapi,unlink-early,fork OPENSSL:ldap.local:8443,cafile=/etc/pki/ca-trust/source/anchors/ca.crt,verify=0,keepalive,reuseaddr`
 
+- See mdb space used:
+  ````
+  import lmdb
+  mdb = lmdb.open('/var/lib/ldap')
+  used_size = mdb.info()['map_size']
+  print('Size: {} MB'.format((used_size / 1024) / 1024))
+
+  ````
+
 Create fake users using CSV file
 --------------------------------
 It would be also possible to create your own custom fake users using a CSV file
