@@ -724,7 +724,7 @@ Knows bugs
 ----------
 
 #### Debian 10 2.4.47 Memory Leakage
-Install slapd from debian backports
+Found bugs in 2.4.47+dfsg-3+deb10u2, install slapd from debian backports as follow
 
 ````
 echo "deb http://deb.debian.org/debian buster-backports main contrib non-free" >/etc/apt/sources.list.d/backports.list 
