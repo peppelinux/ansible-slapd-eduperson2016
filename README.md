@@ -723,6 +723,16 @@ Tools to test and use before you die.
 Knows bugs
 ----------
 
+#### Debian 10 2.4.47 Memory Leakage
+Install slapd from debian backports
+
+````
+echo "deb http://deb.debian.org/debian buster-backports main contrib non-free" >/etc/apt/sources.list.d/backports.list 
+apt update
+apt -t buster-backports install slapd
+````
+
+
 It could be possible to experience this kind of exception at the end of the playbook execution:
 ````
 Exception ignored in: <function WeakValueDictionary.__init__.<locals>.remove at 0x7f7c3915dd08>
